@@ -1,0 +1,61 @@
+{
+  "id": "p1",
+  "number": 1,
+  "name": "Programming Fundamentals",
+  "topics": [
+    {
+      "id": "p1-variables-data-types-and-operators",
+      "name": "Variables, data types and operators",
+      "tag": "REVISE",
+      "core": true
+    },
+    {
+      "id": "p1-conditions-and-loops",
+      "name": "Conditions and loops",
+      "tag": "REVISE",
+      "core": true
+    },
+    {
+      "id": "p1-functions-and-methods",
+      "name": "Functions and methods",
+      "tag": "REVISE",
+      "core": true
+    },
+    {
+      "id": "p1-arrays-and-strings",
+      "name": "Arrays and strings",
+      "tag": "REVISE",
+      "core": true
+    },
+    {
+      "id": "p1-recursion",
+      "name": "Recursion",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p1-time-and-space-complexity",
+      "name": "Time and space complexity",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p1-searching-and-sorting",
+      "name": "Searching and sorting",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p1-linked-lists-stacks-queues-hash-maps-and-t",
+      "name": "Linked lists, stacks, queues, hash maps and trees",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p1-coding-problems",
+      "name": "Coding problems",
+      "tag": "TEST",
+      "core": true
+    }
+  ]
+}

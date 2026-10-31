@@ -1,0 +1,67 @@
+{
+  "id": "p6",
+  "number": 6,
+  "name": "JDBC, Hibernate and JPA",
+  "topics": [
+    {
+      "id": "p6-jdbc-architecture-and-drivers",
+      "name": "JDBC architecture and drivers",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p6-connection-statement-and-preparedstatement",
+      "name": "Connection, Statement and PreparedStatement",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p6-resultset-and-crud-operations",
+      "name": "ResultSet and CRUD operations",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p6-database-transactions-and-connection-pooli",
+      "name": "Database transactions and connection pooling",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p6-orm-concepts",
+      "name": "ORM concepts",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p6-jpa-entities-and-hibernate",
+      "name": "JPA entities and Hibernate",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p6-entity-relationships-and-mappings",
+      "name": "Entity relationships and mappings",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p6-spring-data-jpa-repositories",
+      "name": "Spring Data JPA repositories",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p6-jpql-and-lazy-eager-loading",
+      "name": "JPQL and lazy/eager loading",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p6-cascading-and-the-n-1-query-problem",
+      "name": "Cascading and the N+1 query problem",
+      "tag": "UNSET",
+      "core": true
+    }
+  ]
+}

@@ -1,11 +1,15 @@
 {
   "name": "revise-stack",
-  "version": "1.0.0",
-  "description": "Personal revision tracker for a Java Full Stack syllabus. Front-end only, data in localStorage.",
+  "version": "2.0.0",
+  "description": "Installable revision tracker for a Java Full Stack syllabus. Front end only, data in localStorage.",
   "private": true,
+  "type": "module",
+  "engines": { "node": ">=18" },
   "scripts": {
-    "syllabus": "node gen-syllabus.js syllabus.md",
-    "build": "node build.js",
-    "test": "node --test test/*.test.js"
+    "start": "node tools/serve.mjs",
+    "test": "node --test test/*.test.js",
+    "precache": "node tools/update-precache.mjs",
+    "syllabus": "node tools/generate-syllabus.mjs",
+    "icons": "python3 tools/make-icons.py"
   }
 }

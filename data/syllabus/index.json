@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "phases": [
+    "phase-01-programming-fundamentals.json",
+    "phase-02-core-java.json",
+    "phase-03-git-and-software-development-workflow.json",
+    "phase-04-sql-and-databases.json",
+    "phase-05-html-css-and-javascript.json",
+    "phase-06-jdbc-hibernate-and-jpa.json",
+    "phase-07-spring-boot-and-rest-apis.json",
+    "phase-08-security-and-testing.json",
+    "phase-09-react-and-typescript.json",
+    "phase-11-devops-and-cloud.json",
+    "phase-12-advanced-skills.json"
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "id": "p12",
+  "number": 12,
+  "name": "Advanced Skills",
+  "topics": [
+    {
+      "id": "p12-microservices-architecture",
+      "name": "Microservices architecture",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p12-api-gateway-and-service-discovery",
+      "name": "API Gateway and Service Discovery",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p12-inter-service-communication",
+      "name": "Inter-service communication",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p12-apache-kafka-or-rabbitmq",
+      "name": "Apache Kafka or RabbitMQ",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p12-redis-caching",
+      "name": "Redis caching",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p12-kubernetes-basics",
+      "name": "Kubernetes basics",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p12-distributed-tracing-and-circuit-breakers",
+      "name": "Distributed tracing and circuit breakers",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p12-system-design-fundamentals",
+      "name": "System design fundamentals",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p12-ai-api-integration",
+      "name": "AI API integration",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p12-github-copilot-and-responsible-ai-assisted",
+      "name": "GitHub Copilot and responsible AI-assisted coding",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p12-performance-optimization-and-maintenance",
+      "name": "Performance optimization and maintenance",
+      "tag": "UNSET",
+      "core": false
+    }
+  ]
+}

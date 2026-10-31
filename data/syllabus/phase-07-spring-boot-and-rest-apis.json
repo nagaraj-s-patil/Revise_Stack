@@ -1,0 +1,79 @@
+{
+  "id": "p7",
+  "number": 7,
+  "name": "Spring Boot and REST APIs",
+  "topics": [
+    {
+      "id": "p7-dependency-injection-and-inversion-of-cont",
+      "name": "Dependency Injection and Inversion of Control",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p7-spring-beans-and-configuration",
+      "name": "Spring Beans and configuration",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p7-spring-boot-project-structure",
+      "name": "Spring Boot project structure",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p7-spring-mvc-and-layered-architecture",
+      "name": "Spring MVC and layered architecture",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p7-controllers-services-and-repositories",
+      "name": "Controllers, services and repositories",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p7-rest-api-methods-and-status-codes",
+      "name": "REST API methods and status codes",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p7-dtos-and-request-response-handling",
+      "name": "DTOs and request/response handling",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p7-crud-apis-with-mysql",
+      "name": "CRUD APIs with MySQL",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p7-validation-and-exception-handling",
+      "name": "Validation and exception handling",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p7-pagination-and-sorting",
+      "name": "Pagination and sorting",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p7-swagger-openapi-documentation",
+      "name": "Swagger/OpenAPI documentation",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p7-logging-and-application-configuration",
+      "name": "Logging and application configuration",
+      "tag": "UNSET",
+      "core": true
+    }
+  ]
+}

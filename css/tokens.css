@@ -1,0 +1,39 @@
+/* Design tokens: colours and fonts. Light by default; dark follows the phone setting.
+   Text and badge colour pairs were checked for 4.5:1 contrast (WCAG AA) in both themes. */
+:root {
+  --bg: #F6F7F9;
+  --surface: #FFFFFF;
+  --line: #DDE1E8;
+  --fg: #1A1F2B;
+  --muted: #4B5563;
+  --accent: #2457D6;
+  --on-accent: #FFFFFF;
+  --weak: #B42318;
+  --weak-bg: #FDEDEB;
+  --ok: #9A4A06;
+  --ok-bg: #FDF2E3;
+  --strong: #067647;
+  --strong-bg: #E6F5EC;
+  --untested: #475467;
+  --untested-bg: #EDEFF3;
+  --focus: #2457D6;
+  --font-head: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0F1319; --surface: #171C24; --line: #2A313C; --fg: #E8ECF2; --muted: #A3ADBB;
+    --accent: #7AA2FF; --on-accent: #0B1020;
+    --weak: #FF8A7D; --weak-bg: #3A1B19; --ok: #F2B260; --ok-bg: #3A2A12;
+    --strong: #55D19A; --strong-bg: #11301F; --untested: #9AA4B2; --untested-bg: #232A34;
+    --focus: #9DBBFF; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0F1319; --surface: #171C24; --line: #2A313C; --fg: #E8ECF2; --muted: #A3ADBB;
+  --accent: #7AA2FF; --on-accent: #0B1020;
+  --weak: #FF8A7D; --weak-bg: #3A1B19; --ok: #F2B260; --ok-bg: #3A2A12;
+  --strong: #55D19A; --strong-bg: #11301F; --untested: #9AA4B2; --untested-bg: #232A34;
+  --focus: #9DBBFF; color-scheme: dark;
+}

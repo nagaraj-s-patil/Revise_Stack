@@ -1,0 +1,79 @@
+{
+  "id": "p5",
+  "number": 5,
+  "name": "HTML, CSS and JavaScript",
+  "topics": [
+    {
+      "id": "p5-html-elements-forms-tables-and-semantic-ht",
+      "name": "HTML elements, forms, tables and semantic HTML",
+      "tag": "REVISE",
+      "core": true
+    },
+    {
+      "id": "p5-css-selectors-box-model-flexbox-and-grid",
+      "name": "CSS selectors, box model, Flexbox and Grid",
+      "tag": "REVISE",
+      "core": true
+    },
+    {
+      "id": "p5-responsive-design-and-media-queries",
+      "name": "Responsive design and media queries",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p5-bootstrap-basics",
+      "name": "Bootstrap basics",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p5-javascript-variables-functions-arrays-and",
+      "name": "JavaScript variables, functions, arrays and objects",
+      "tag": "REVISE",
+      "core": true
+    },
+    {
+      "id": "p5-dom-manipulation-and-events",
+      "name": "DOM manipulation and events",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p5-array-methods-and-object-operations",
+      "name": "Array methods and object operations",
+      "tag": "REVISE",
+      "core": true
+    },
+    {
+      "id": "p5-promises-async-await-and-fetch-api",
+      "name": "Promises, async/await and Fetch API",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p5-scope-closures-hoisting-and-this",
+      "name": "Scope, closures, hoisting and this",
+      "tag": "TEST",
+      "core": true
+    },
+    {
+      "id": "p5-javascript-oop-and-prototypes",
+      "name": "JavaScript OOP and prototypes",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p5-json-http-methods-and-status-codes",
+      "name": "JSON, HTTP methods and status codes",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p5-browser-storage-and-modules",
+      "name": "Browser storage and modules",
+      "tag": "LEARN",
+      "core": true
+    }
+  ]
+}

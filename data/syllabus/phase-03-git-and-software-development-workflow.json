@@ -1,0 +1,55 @@
+{
+  "id": "p3",
+  "number": 3,
+  "name": "Git and Software Development Workflow",
+  "topics": [
+    {
+      "id": "p3-git-and-github",
+      "name": "Git and GitHub",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p3-commits-branches-merges-and-pull-requests",
+      "name": "Commits, branches, merges and pull requests",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p3-sdlc-and-agile",
+      "name": "SDLC and Agile",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p3-scrum-and-sprint-basics",
+      "name": "Scrum and sprint basics",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p3-requirements-analysis",
+      "name": "Requirements analysis",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p3-uml-diagrams-and-software-design",
+      "name": "UML diagrams and software design",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p3-debugging-and-code-reviews",
+      "name": "Debugging and code reviews",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p3-jira-and-confluence-basics",
+      "name": "Jira and Confluence basics",
+      "tag": "UNSET",
+      "core": true
+    }
+  ]
+}

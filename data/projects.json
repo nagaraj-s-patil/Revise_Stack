@@ -1,0 +1,35 @@
+{
+  "version": 1,
+  "projects": [
+    {
+      "id": "student-mgmt",
+      "name": "Student Management System",
+      "stack": "Java, JDBC and MySQL",
+      "needs": [
+        2,
+        4,
+        6
+      ]
+    },
+    {
+      "id": "employee-api",
+      "name": "Employee Management REST API",
+      "stack": "Spring Boot, JPA and MySQL",
+      "needs": [
+        4,
+        6,
+        7
+      ]
+    },
+    {
+      "id": "job-portal",
+      "name": "Full Stack Job Portal",
+      "stack": "React, TypeScript, Spring Boot and MySQL",
+      "needs": [
+        4,
+        7,
+        9
+      ]
+    }
+  ]
+}

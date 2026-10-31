@@ -1,0 +1,67 @@
+{
+  "id": "p9",
+  "number": 9,
+  "name": "React and TypeScript",
+  "topics": [
+    {
+      "id": "p9-typescript-types-interfaces-and-generics",
+      "name": "TypeScript types, interfaces and generics",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p9-react-components-and-jsx",
+      "name": "React components and JSX",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p9-props-state-and-events",
+      "name": "Props, state and events",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p9-usestate-useeffect-and-usecontext",
+      "name": "useState, useEffect and useContext",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p9-forms-and-validation",
+      "name": "Forms and validation",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p9-react-router",
+      "name": "React Router",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p9-api-integration-with-spring-boot",
+      "name": "API integration with Spring Boot",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p9-loading-and-error-states",
+      "name": "Loading and error states",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p9-typescript-with-react",
+      "name": "TypeScript with React",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p9-context-api-and-basic-performance-improvem",
+      "name": "Context API and basic performance improvements",
+      "tag": "UNSET",
+      "core": true
+    }
+  ]
+}

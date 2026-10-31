@@ -1,0 +1,73 @@
+{
+  "id": "p8",
+  "number": 8,
+  "name": "Security and Testing",
+  "topics": [
+    {
+      "id": "p8-spring-security",
+      "name": "Spring Security",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p8-authentication-and-authorization",
+      "name": "Authentication and authorization",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p8-password-hashing-and-role-based-access",
+      "name": "Password hashing and role-based access",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p8-jwt-authentication",
+      "name": "JWT authentication",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p8-oauth-2-0-and-openid-connect-basics",
+      "name": "OAuth 2.0 and OpenID Connect basics",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p8-cors-csrf-and-security-best-practices",
+      "name": "CORS, CSRF and security best practices",
+      "tag": "UNSET",
+      "core": false
+    },
+    {
+      "id": "p8-junit-and-mockito",
+      "name": "JUnit and Mockito",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p8-unit-testing",
+      "name": "Unit testing",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p8-integration-testing",
+      "name": "Integration testing",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p8-spring-boot-test",
+      "name": "Spring Boot Test",
+      "tag": "UNSET",
+      "core": true
+    },
+    {
+      "id": "p8-testcontainers",
+      "name": "Testcontainers",
+      "tag": "UNSET",
+      "core": true
+    }
+  ]
+}

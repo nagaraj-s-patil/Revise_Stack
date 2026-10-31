@@ -1,0 +1,69 @@
+{
+  "id": "p4",
+  "number": 4,
+  "name": "SQL and Databases",
+  "topics": [
+    {
+      "id": "p4-select-insert-update-and-delete",
+      "name": "SELECT, INSERT, UPDATE and DELETE",
+      "tag": "REVISE",
+      "core": true
+    },
+    {
+      "id": "p4-where-order-by-group-by-and-having",
+      "name": "WHERE, ORDER BY, GROUP BY and HAVING",
+      "tag": "REVISE",
+      "core": true
+    },
+    {
+      "id": "p4-joins-subqueries-and-aggregate-functions",
+      "name": "Joins, subqueries and aggregate functions",
+      "tag": "REVISE",
+      "core": true
+    },
+    {
+      "id": "p4-mysql-database-design-and-relationships",
+      "name": "MySQL database design and relationships",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p4-primary-keys-foreign-keys-and-constraints",
+      "name": "Primary keys, foreign keys and constraints",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p4-normalization-indexes-and-transactions",
+      "name": "Normalization, indexes and transactions",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p4-acid-properties",
+      "name": "ACID properties",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p4-postgresql-basics",
+      "name": "PostgreSQL basics",
+      "tag": "LEARN",
+      "core": true
+    },
+    {
+      "id": "p4-oracle-sql-and-pl-sql",
+      "name": "Oracle SQL and PL/SQL",
+      "tag": "LEARN",
+      "core": false,
+      "note": "only if required by target jobs"
+    },
+    {
+      "id": "p4-mongodb-and-redis",
+      "name": "MongoDB and Redis",
+      "tag": "LEARN",
+      "core": false,
+      "note": "later"
+    }
+  ]
+}
