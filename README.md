@@ -86,3 +86,13 @@ Topic ids are permanent: never rename one, or that topic's history disconnects. 
 - Results for a topic id that is removed from the syllabus stay in your data and backup but are not shown on screen.
 - Desktop uses one centred column with the bottom tabs.
 - Reminders are not possible from a web page. Set a daily alarm on your phone.
+
+## Online storage (Firebase)
+
+Progress is saved in Firebase (Firestore, one document per person) and kept in the browser as an offline copy.
+Until you fill in `js/cloud/config.js`, the app runs in local-only mode.
+
+1. Firebase console: create a project, add a Web app, copy the `firebaseConfig` values into `js/cloud/config.js` (apiKey, authDomain, projectId, appId). These are not secrets.
+2. Authentication: enable the Google provider. Add your site address (for example `nagaraj-s-patil.github.io`) under Authentication > Settings > Authorized domains.
+3. Firestore Database: create it, then paste `firestore.rules` into the Rules tab and publish. Without these rules your data is not protected.
+4. Open the app, sign in with Google. Existing progress in that browser is uploaded the first time.

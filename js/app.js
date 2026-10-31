@@ -6,6 +6,7 @@ import { watchPageLifecycle } from './ui/draft.js';
 import { setRenderer } from './ui/render.js';
 import { renderApp } from './shell.js';
 import { startPwa } from './pwa.js';
+import { startCloud } from './cloud/sync.js';
 
 async function start() {
   try {
@@ -22,6 +23,7 @@ async function start() {
   window.addEventListener('hashchange', renderApp);
   renderApp();
   startPwa();
+  startCloud();
 }
 
 start();

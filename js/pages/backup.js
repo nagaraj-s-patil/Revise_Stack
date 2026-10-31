@@ -6,6 +6,19 @@ import { ui } from '../state/session.js';
 import { fmt } from '../ui/format.js';
 import { setMsg, clearMsg, msgArea } from '../ui/messages.js';
 import { installCard } from '../ui/components/install-card.js';
+import { cloud, signOutNow } from '../cloud/sync.js';
+import { cloudEnabled } from '../cloud/config.js';
+
+const CLOUD_TEXT = { synced: 'Saved online', saving: 'Saving…', offline: 'Offline. Changes are kept here and sent when you are back online.', error: 'Could not save online. Your data is safe in this browser. Retrying on the next change.' };
+
+function cloudCard() {
+  if (!cloudEnabled() || !cloud.user) return null;
+  return h('section', { class: 'card', id: 'cloud-card' },
+    h('h3', null, 'Online storage (Firebase)'),
+    h('p', { class: 'small' }, 'Signed in as ' + (cloud.user.email || 'your Google account') + '.'),
+    h('p', { class: 'small muted', role: 'status', 'aria-live': 'polite' }, (CLOUD_TEXT[cloud.status] || '') + (cloud.message && cloud.status !== 'synced' ? ' (' + cloud.message + ')' : '')),
+    h('div', { class: 'btn-row' }, h('button', { class: 'btn small secondary', type: 'button', id: 'signout-btn', onclick: signOutNow }, 'Sign out')));
+}
 
 function daysAgoText(day) {
   if (!day) return 'You have not copied a backup yet.';
@@ -82,8 +95,11 @@ export function backupPage() {
   frag.appendChild(h('a', { class: 'back', href: '#today' }, '← Today'));
   frag.appendChild(h('div', null,
     h('h2', null, 'Backup and restore'),
-    h('p', { class: 'small muted' }, 'Your progress lives in this browser only. Clearing site data or switching phone or browser erases it. ' +
-      'Copy a backup now and then and keep the text in a notes app or a message to yourself.')));
+    h('p', { class: 'small muted' }, cloudEnabled()
+      ? 'Your progress is saved online in Firebase and kept in this browser as an offline copy. A manual backup is still a good extra safety copy.'
+      : 'Your progress lives in this browser only. Clearing site data or switching phone or browser erases it. Copy a backup now and then and keep the text in a notes app or a message to yourself.')));
+  const cl = cloudCard();
+  if (cl) frag.appendChild(cl);
   const install = installCard({ always: true });
   if (install) frag.appendChild(install);
   frag.appendChild(backupCard());

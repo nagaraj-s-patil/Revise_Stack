@@ -15,6 +15,8 @@ import { projectsPage } from './pages/projects.js';
 import { progressPage } from './pages/progress.js';
 import { interviewPage } from './pages/interview.js';
 import { backupPage } from './pages/backup.js';
+import { signInScreen } from './pages/signin.js';
+import { needsLogin } from './cloud/sync.js';
 
 const PAGES = {
   today: todayPage,
@@ -47,9 +49,13 @@ export function renderApp() {
   flushDraft();      // keep what was typed before the screen is rebuilt
   releaseDraft();    // the page being built binds its own box again
   const r = route();
+  const app = document.getElementById('app');
+  if (needsLogin()) {   // Firebase is on and nobody is signed in yet
+    app.textContent = ''; app.removeAttribute('data-loading'); app.appendChild(signInScreen());
+    return;
+  }
   onRouteChange(r);
 
-  const app = document.getElementById('app');
   const active = r.name === 'topic' ? ui.from : r.name;
   const wrap = h('main', { class: 'wrap' }, header());
   if (!store.storageOk) {

@@ -1,4 +1,5 @@
-// Everything the user has saved. One JSON document in localStorage.
+// Everything the user has saved. One JSON document: Firestore is the master copy (js/cloud/sync.js),
+// localStorage is the offline cache and the only copy while Firebase is not configured.
 //   results   every saved test (levels and due dates are worked out from these, never stored)
 //   projects  status, repository link and note per project id
 //   mocks     mock interview scores
@@ -43,10 +44,21 @@ export function loadStore() {
   store.data = read();
 }
 
-/** Write the store to localStorage. Returns false if the browser refused. */
+let saveHook = null;
+/** Cloud sync registers here so every save is also sent to Firebase. */
+export function setSaveHook(fn) { saveHook = fn; }
+
+/** Write the store to localStorage (the offline cache) and tell cloud sync. Returns false if the browser refused. */
 export function save() {
+  if (saveHook) saveHook();
   try { localStorage.setItem(KEY, JSON.stringify(store.data)); return true; }
   catch (e) { store.storageOk = false; return false; }
+}
+
+/** Use data that came from the cloud: update the browser copy without sending it back. */
+export function adoptData(next) {
+  store.data = next;
+  try { localStorage.setItem(KEY, JSON.stringify(next)); } catch (e) { store.storageOk = false; }
 }
 
 /** Replace everything (used by restore). Returns whether it could be saved. */
