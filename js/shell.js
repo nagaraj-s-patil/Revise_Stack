@@ -1,4 +1,4 @@
-// The app shell: picks the page for the current route, wraps it with the header and tab bar, and draws it.
+// The app shell: picks the page for the current route, wraps it with the sidebar, header and tab bar, and draws it.
 import { h } from './ui/dom.js';
 import { route } from './ui/router.js';
 import { ui } from './state/session.js';
@@ -7,17 +7,19 @@ import { context } from './state/context.js';
 import { suggestMode, topicState, today } from './core/index.js';
 import { flushDraft, releaseDraft } from './ui/draft.js';
 import { header } from './ui/components/header.js';
-import { navBar } from './ui/components/nav.js';
+import { navBar, sideBar } from './ui/components/nav.js';
 import { todayPage } from './pages/today.js';
 import { syllabusPage } from './pages/syllabus.js';
 import { topicPage } from './pages/topic.js';
 import { projectsPage } from './pages/projects.js';
 import { progressPage } from './pages/progress.js';
+import { interviewPage } from './pages/interview.js';
 import { backupPage } from './pages/backup.js';
 
 const PAGES = {
   today: todayPage,
   syllabus: syllabusPage,
+  interview: interviewPage,
   projects: projectsPage,
   progress: progressPage,
   backup: backupPage
@@ -48,7 +50,8 @@ export function renderApp() {
   onRouteChange(r);
 
   const app = document.getElementById('app');
-  const wrap = h('div', { class: 'wrap' }, header());
+  const active = r.name === 'topic' ? ui.from : r.name;
+  const wrap = h('main', { class: 'wrap' }, header());
   if (!store.storageOk) {
     wrap.appendChild(h('div', { class: 'banner', role: 'alert' },
       'Your browser is blocking storage. Progress will NOT be saved. Open the site in a normal window.'));
@@ -57,8 +60,8 @@ export function renderApp() {
 
   app.textContent = '';
   app.removeAttribute('data-loading');
-  app.appendChild(wrap);
-  app.appendChild(navBar(r.name === 'topic' ? ui.from : r.name));
+  app.appendChild(h('div', { class: 'shell' }, sideBar(active), wrap));
+  app.appendChild(navBar(active));
   if (ui.msg) {
     const box = document.getElementById('msg');
     if (box && box.scrollIntoView) box.scrollIntoView({ block: 'nearest' });

@@ -1,4 +1,4 @@
-// Today page: streak, one task (a due revision first, then a new topic), the study cards, and what else is due.
+// Today page: greeting, hero, numbers, learning path, projects, and one task (a due revision first, then a new topic) with its study cards.
 import { h } from '../ui/dom.js';
 import { buildQueue, streakInfo, shortTask, suggestMode, pickSurprise, projectReady, today } from '../core/index.js';
 import { context } from '../state/context.js';
@@ -9,22 +9,10 @@ import { render } from '../ui/render.js';
 import { fmt, LEVEL_LABEL } from '../ui/format.js';
 import { badge } from '../ui/components/badge.js';
 import { studyCards } from '../ui/components/study.js';
+import { greeting, hero, statTiles, pathCard, projectCards } from '../ui/components/dashboard.js';
 import { installCard } from '../ui/components/install-card.js';
 
 const linkButton = 'display:inline-flex;align-items:center;text-decoration:none';
-
-function streakCard(info) {
-  let note;
-  if (!store.data.results.length) note = 'Your streak starts with your first saved test.';
-  else if (info.studiedToday) note = 'Studied today. Anything more is a bonus.';
-  else if (info.missed > 0) note = info.missed + (info.missed === 1 ? ' day' : ' days') + ' missed. One short test today keeps you going.';
-  else note = 'Not studied yet today.';
-  return h('section', { class: 'summary', 'aria-label': 'Streak' },
-    h('div', { class: 'summary-head' },
-      h('h2', null, 'Streak: ' + info.streak + (info.streak === 1 ? ' day' : ' days')),
-      h('span', { class: 'small muted' }, 'Studied this week: ' + info.weekDays + '/7 days')),
-    h('p', { class: 'small muted' }, note));
-}
 
 /** Suggest starting a project once its skills are ready. */
 function buildNudge(st) {
@@ -86,7 +74,7 @@ function taskCard(task, queue, dueList, st, t) {
     }, 'Another topic'));
   }
 
-  return h('section', { class: 'card task', 'aria-label': 'Today’s task' },
+  return h('section', { class: 'card task', id: 'today-task', tabindex: '-1', 'aria-label': 'Today’s task' },
     intro ? h('p', { class: 'small muted' }, intro) : null,
     h('p', { class: 'kicker' }, kind),
     h('h2', null, task.topic.name),
@@ -118,39 +106,43 @@ function dueListCard(others, total) {
       h('li', null, h('a', { class: 'topic', href: '#t-' + q.topic.id, style: 'padding:0;min-height:44px' },
         h('span', { class: 'name' }, q.topic.name),
         h('span', { class: 'meta' }, h('span', { class: 'score' }, 'due ' + fmt(q.state.due)), badge(q.state.level)))))),
-    others.length > 6 ? h('p', { class: 'small muted' }, 'And ' + (others.length - 6) + ' more in the Syllabus (Due filter).') : null);
+    others.length > 6 ? h('p', { class: 'small muted' }, 'And ' + (others.length - 6) + ' more in the Learning Path (Due filter).') : null);
 }
 
 export function todayPage() {
   const t = today();
   const st = states();
   const queue = buildQueue(context.syllabus.phases, st, t);
+  const task = pickTask(queue, st);
   const frag = document.createDocumentFragment();
 
-  frag.appendChild(streakCard(streakInfo(store.data.results, t)));
+  frag.appendChild(greeting());
+  frag.appendChild(hero(!!task));
+  frag.appendChild(statTiles(st, streakInfo(store.data.results, t)));
   const install = installCard();
   if (install) frag.appendChild(install);
   const nudge = buildNudge(st);
   if (nudge) frag.appendChild(nudge);
 
-  const task = pickTask(queue, st);
+  const side = h('div', { class: 'dash-side' });
   if (!task) {
-    frag.appendChild(h('section', { class: 'card' },
+    side.appendChild(h('section', { class: 'card' },
       h('h2', null, 'Nothing to study right now'),
       h('p', null, 'Every topic is either done for today or not due yet. Revisions appear here on their due date.'),
-      h('p', { class: 'small muted' }, 'Want to look anyway? Open any topic from the Syllabus.')));
-    return frag;
+      h('p', { class: 'small muted' }, 'Want to look anyway? Open any topic from the Learning Path.')));
+  } else {
+    const dueList = queue.filter(q => q.kind === 'revision');
+    side.appendChild(taskCard(task, queue, dueList, st, t));
+    side.appendChild(studyCards(task.topic.id, true));
+    if (!dueList.length) {
+      const spot = spotCheckCard(st, t);
+      if (spot) side.appendChild(spot);
+    }
+    const others = dueList.filter(q => q.topic.id !== task.topic.id);
+    if (others.length) side.appendChild(dueListCard(others, dueList.length));
   }
-
-  const dueList = queue.filter(q => q.kind === 'revision');
-  frag.appendChild(taskCard(task, queue, dueList, st, t));
-  frag.appendChild(studyCards(task.topic.id, true));
-
-  if (!dueList.length) {
-    const spot = spotCheckCard(st, t);
-    if (spot) frag.appendChild(spot);
-  }
-  const others = dueList.filter(q => q.topic.id !== task.topic.id);
-  if (others.length) frag.appendChild(dueListCard(others, dueList.length));
+  frag.appendChild(h('div', { class: 'dash' },
+    h('div', { class: 'dash-main' }, pathCard(st), projectCards(st)),
+    side));
   return frag;
 }

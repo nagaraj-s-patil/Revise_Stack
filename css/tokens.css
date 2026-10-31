@@ -1,39 +1,71 @@
-/* Design tokens: colours and fonts. Light by default; dark follows the phone setting.
+/* Design tokens: colours, shape and fonts. Light by default; dark follows the phone setting.
    Text and badge colour pairs were checked for 4.5:1 contrast (WCAG AA) in both themes. */
 :root {
-  --bg: #F6F7F9;
+  color-scheme: light;
+  --page-bg: linear-gradient(135deg, #E3E9FF 0%, #EDEAFF 55%, #F3F0FF 100%);
+  --panel: #F7F8FE;
   --surface: #FFFFFF;
-  --line: #DDE1E8;
-  --fg: #1A1F2B;
-  --muted: #4B5563;
+  --surface-2: #EEF1FC;
+  --soft: #EEF1FF;            /* soft card, e.g. Today's task */
+  --track: #E1E6F8;           /* empty part of a progress bar */
+  --line: #E1E6F6;
+  --line-strong: #C3CFF5;
+  --field-line: #7C8DC4;       /* borders of inputs and chips: 3:1 against the surface */
+  --fg: #0F1838;
+  --muted: #526087;
   --accent: #2457D6;
+  --btn-bg: linear-gradient(180deg, #3468F0 0%, #2457D6 100%);
   --on-accent: #FFFFFF;
-  --weak: #B42318;
-  --weak-bg: #FDEDEB;
-  --ok: #9A4A06;
-  --ok-bg: #FDF2E3;
-  --strong: #067647;
-  --strong-bg: #E6F5EC;
-  --untested: #475467;
-  --untested-bg: #EDEFF3;
+  --weak: #B42318;   --weak-bg: #FDEDEB;
+  --ok: #9A4A06;     --ok-bg: #FDF2E3;
+  --strong: #067647; --strong-bg: #E6F5EC;
+  --untested: #475467; --untested-bg: #EDEFF3;
   --focus: #2457D6;
-  --font-head: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
-  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --shadow: 0 1px 2px rgba(20, 35, 90, .04), 0 8px 24px rgba(20, 35, 90, .06);
+  --radius: 16px;
+  --radius-sm: 12px;
+  /* sidebar and hero stay dark blue in both themes */
+  --side-bg: linear-gradient(180deg, #0F1D44 0%, #091431 100%);
+  --side-fg: #FFFFFF;
+  --side-muted: #B4C0E6;
+  --side-active: #2F62EA;
+  --hero-bg: linear-gradient(105deg, #0B1F7A 0%, #1A3BC4 55%, #3D5CE0 100%);
+  --hero-accent: #7CD4FF;
+  /* tinted icon chips */
+  --chip-orange-bg: #FFEBDD; --chip-orange: #D9480F;
+  --chip-green-bg: #DDF5E8;  --chip-green: #067647;
+  --chip-purple-bg: #ECE6FF; --chip-purple: #5B3FD6;
+  --chip-red-bg: #FFE3E8;    --chip-red: #C92A4B;
+  --chip-blue-bg: #E3EBFF;   --chip-blue: #2457D6;
+  --font-head: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
-    --bg: #0F1319; --surface: #171C24; --line: #2A313C; --fg: #E8ECF2; --muted: #A3ADBB;
-    --accent: #7AA2FF; --on-accent: #0B1020;
+    color-scheme: dark;
+    --page-bg: linear-gradient(135deg, #090F22 0%, #0D1530 55%, #111A3A 100%);
+    --panel: #0E1731; --surface: #152041; --surface-2: #1B2850; --soft: #1A2650; --track: #26345F;
+    --line: #2A3865; --line-strong: #3C4D85; --field-line: #5C6FA8; --fg: #EBF0FF; --muted: #AAB7DC;
+    --accent: #7DA2FF; --btn-bg: linear-gradient(180deg, #8DB0FF 0%, #7DA2FF 100%); --on-accent: #0A1230;
     --weak: #FF8A7D; --weak-bg: #3A1B19; --ok: #F2B260; --ok-bg: #3A2A12;
-    --strong: #55D19A; --strong-bg: #11301F; --untested: #9AA4B2; --untested-bg: #232A34;
-    --focus: #9DBBFF; color-scheme: dark;
+    --strong: #55D19A; --strong-bg: #11301F; --untested: #A9B3C7; --untested-bg: #232C45;
+    --focus: #A9C3FF; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+    --chip-orange-bg: #3A2412; --chip-orange: #FFA66B; --chip-green-bg: #11301F; --chip-green: #55D19A;
+    --chip-purple-bg: #2A2358; --chip-purple: #B4A3FF; --chip-red-bg: #3A1A28; --chip-red: #FF8CA5;
+    --chip-blue-bg: #1D2D5E; --chip-blue: #9DBBFF;
   }
 }
 :root[data-theme="dark"] {
-  --bg: #0F1319; --surface: #171C24; --line: #2A313C; --fg: #E8ECF2; --muted: #A3ADBB;
-  --accent: #7AA2FF; --on-accent: #0B1020;
+  color-scheme: dark;
+  --page-bg: linear-gradient(135deg, #090F22 0%, #0D1530 55%, #111A3A 100%);
+  --panel: #0E1731; --surface: #152041; --surface-2: #1B2850; --soft: #1A2650; --track: #26345F;
+  --line: #2A3865; --line-strong: #3C4D85; --field-line: #5C6FA8; --fg: #EBF0FF; --muted: #AAB7DC;
+  --accent: #7DA2FF; --btn-bg: linear-gradient(180deg, #8DB0FF 0%, #7DA2FF 100%); --on-accent: #0A1230;
   --weak: #FF8A7D; --weak-bg: #3A1B19; --ok: #F2B260; --ok-bg: #3A2A12;
-  --strong: #55D19A; --strong-bg: #11301F; --untested: #9AA4B2; --untested-bg: #232A34;
-  --focus: #9DBBFF; color-scheme: dark;
+  --strong: #55D19A; --strong-bg: #11301F; --untested: #A9B3C7; --untested-bg: #232C45;
+  --focus: #A9C3FF; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+  --chip-orange-bg: #3A2412; --chip-orange: #FFA66B; --chip-green-bg: #11301F; --chip-green: #55D19A;
+  --chip-purple-bg: #2A2358; --chip-purple: #B4A3FF; --chip-red-bg: #3A1A28; --chip-red: #FF8CA5;
+  --chip-blue-bg: #1D2D5E; --chip-blue: #9DBBFF;
 }

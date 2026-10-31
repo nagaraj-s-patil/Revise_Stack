@@ -3,16 +3,15 @@
 // The file list and the version are written by `npm run precache`. Do not edit between the markers.
 
 // BEGIN GENERATED
-const VERSION = "46eb29c8ce";
+const VERSION = "8621ca971f";
 const PRECACHE = [
   "./",
-  "assets/fonts/bricolage-grotesque-latin-600-normal.woff2",
-  "assets/fonts/bricolage-grotesque-latin-700-normal.woff2",
   "assets/fonts/jetbrains-mono-latin-400-normal.woff2",
   "assets/fonts/jetbrains-mono-latin-600-normal.woff2",
-  "assets/fonts/source-sans-3-latin-400-normal.woff2",
-  "assets/fonts/source-sans-3-latin-600-normal.woff2",
-  "assets/fonts/source-sans-3-latin-700-normal.woff2",
+  "assets/fonts/plus-jakarta-sans-latin-400-normal.woff2",
+  "assets/fonts/plus-jakarta-sans-latin-600-normal.woff2",
+  "assets/fonts/plus-jakarta-sans-latin-700-normal.woff2",
+  "assets/fonts/plus-jakarta-sans-latin-800-normal.woff2",
   "assets/icons/apple-touch-icon.png",
   "assets/icons/favicon-16.png",
   "assets/icons/favicon-32.png",
@@ -22,6 +21,7 @@ const PRECACHE = [
   "assets/icons/mark-96.png",
   "css/base.css",
   "css/components.css",
+  "css/dashboard.css",
   "css/fonts.css",
   "css/layout.css",
   "css/pages.css",
@@ -59,6 +59,7 @@ const PRECACHE = [
   "js/core/summary.js",
   "js/data/syllabus.js",
   "js/pages/backup.js",
+  "js/pages/interview.js",
   "js/pages/progress.js",
   "js/pages/projects.js",
   "js/pages/syllabus.js",
@@ -71,8 +72,11 @@ const PRECACHE = [
   "js/state/session.js",
   "js/state/store.js",
   "js/ui/components/badge.js",
+  "js/ui/components/dashboard.js",
   "js/ui/components/header.js",
+  "js/ui/components/hero-art.js",
   "js/ui/components/history.js",
+  "js/ui/components/icons.js",
   "js/ui/components/install-card.js",
   "js/ui/components/nav.js",
   "js/ui/components/result-flow.js",

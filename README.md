@@ -71,7 +71,7 @@ js/
   data/                 loads and checks the syllabus files
   state/                saved data (store), loaded syllabus (context), screen state (session)
   ui/                   dom helpers, router, messages, draft saving, shared components
-  pages/                today, syllabus, topic, projects, progress, backup
+  pages/                today (dashboard), syllabus (Learning Path), topic, interview, projects, progress, backup
 test/                   unit tests by area, file checks, helpers
 tools/                  serve, update-precache, generate-syllabus, make-icons
 ```

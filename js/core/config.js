@@ -18,3 +18,6 @@ export const PRIORITY = [1, 2, 4, 3, 6, 7, 5, 9, 8, 11, 12];
 export const BUILD_READY = 0.7;   // start a project when 70% of its skills are Strong or Done
 
 export const PROJECT_STATUS = ['notstarted', 'building', 'done'];
+
+// Name shown in the greeting and the sidebar.
+export const USER_NAME = 'Nagaraj S Patil';

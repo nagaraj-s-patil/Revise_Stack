@@ -1,6 +1,6 @@
 /* Page specific styles: syllabus list, topic page, today, progress, projects, backup. */
 /* phases */
-.phase { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; overflow: hidden; }
+.phase { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); overflow: hidden; }
 .phase > summary { list-style: none; cursor: pointer; padding: 14px 16px; min-height: 52px; display: flex; justify-content: space-between; align-items: center; gap: 12px; }
 .phase > summary::-webkit-details-marker { display: none; }
 .phase > summary::after { content: "+"; font-family: var(--font-mono); color: var(--muted); }
@@ -11,7 +11,7 @@
 .topics { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
 .topics li + li { border-top: 1px solid var(--line); }
 .topic { display: flex; align-items: center; gap: 12px; padding: 10px 16px; min-height: 56px; color: inherit; text-decoration: none; }
-a.topic:hover { background: var(--bg); }
+a.topic:hover { background: var(--surface-2); }
 .topic .name { flex: 1; min-width: 0; overflow-wrap: anywhere; }
 .topic .tag { font-family: var(--font-mono); font-size: 11px; letter-spacing: .06em; color: var(--muted); }
 .topic.locked { opacity: .6; }
@@ -27,6 +27,7 @@ a.topic:hover { background: var(--bg); }
 
 /* today */
 .kicker { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--accent); }
+.card.task { background: var(--soft); border-color: var(--line-strong); }
 .card.task h2 { font-size: 22px; }
 
 /* progress, projects, backup */

@@ -1,6 +1,6 @@
 /* Reusable pieces: cards, buttons, chips, level badges, forms, messages, history lists, progress bars. */
 /* summary */
-.summary { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.summary { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; display: flex; flex-direction: column; gap: 12px; }
 .summary-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; flex-wrap: wrap; }
 .bar { display: flex; height: 10px; border-radius: 99px; overflow: hidden; background: var(--untested-bg); }
 .bar span { display: block; height: 100%; }
@@ -13,7 +13,7 @@
 
 /* filters */
 .filters { display: flex; flex-wrap: wrap; gap: 8px; }
-.chip { min-height: 44px; padding: 0 16px; border-radius: 99px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; font-size: 15px; }
+.chip { min-height: 44px; padding: 0 16px; border-radius: 99px; border: 1px solid var(--field-line); background: var(--surface); cursor: pointer; font-size: 15px; }
 .chip[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
 
 
@@ -28,22 +28,23 @@
 @media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .lvl-done { color: #06210F; } }
 .lvl-untested { color: var(--untested); background: var(--untested-bg); }
 
-.card { background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 16px; display: flex; flex-direction: column; gap: 12px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .card h3 { display: flex; align-items: center; gap: 8px; }
 .stepno { font-family: var(--font-mono); font-size: 13px; background: var(--accent); color: var(--on-accent); width: 24px; height: 24px; border-radius: 50%; display: inline-grid; place-items: center; flex: none; }
 .modes { display: flex; flex-wrap: wrap; gap: 8px; border: 0; padding: 0; margin: 0; }
 .modes legend { padding: 0; margin-bottom: 8px; font-size: 14px; color: var(--muted); }
-.modes label { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--line); border-radius: 99px; cursor: pointer; gap: 8px; }
+.modes label { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--field-line); border-radius: 99px; cursor: pointer; gap: 8px; }
 .modes label:has(input:checked) { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
 .modes input { accent-color: var(--accent); }
 .modes label:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
-.btn { min-height: 48px; padding: 0 20px; border-radius: 12px; border: 1px solid var(--accent); background: var(--accent); color: var(--on-accent); font-weight: 700; cursor: pointer; font-size: 16px; }
-.btn.secondary { background: transparent; color: var(--accent); }
+.btn { min-height: 48px; padding: 0 20px; border-radius: 12px; border: 1px solid var(--accent); background: var(--btn-bg); display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: var(--on-accent); font-weight: 700; cursor: pointer; font-size: 16px; }
+.btn.secondary { background: var(--surface); color: var(--accent); }
+.btn.light { background: #fff; border-color: #fff; color: #17329E; }
 .btn.small { min-height: 44px; padding: 0 14px; font-size: 14px; }
-.btn.danger { border-color: var(--weak); color: var(--weak); background: transparent; }
+.btn.danger { border-color: var(--weak); color: var(--weak); background: var(--surface); }
 .btn:disabled { opacity: .5; cursor: not-allowed; }
 .btn-row { display: flex; flex-wrap: wrap; gap: 8px; }
-textarea, input[type="text"], input[type="number"], select { width: 100%; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); padding: 10px 12px; min-height: 44px; font-size: 16px; }
+textarea, input[type="text"], input[type="number"], select { width: 100%; border: 1px solid var(--field-line); border-radius: 12px; background: var(--surface); padding: 10px 12px; min-height: 44px; font-size: 16px; }
 textarea { min-height: 150px; resize: vertical; font-family: var(--font-mono); font-size: 14px; line-height: 1.45; }
 label.field { display: flex; flex-direction: column; gap: 4px; font-size: 14px; color: var(--muted); }
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
@@ -53,16 +54,16 @@ details.more > .inner { display: flex; flex-direction: column; gap: 12px; }
 .promptbox { font-size: 13px; min-height: 220px; }
 
 /* messages */
-.msg { border-radius: 12px; padding: 12px 14px; border: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; gap: 10px; }
+.msg { border-radius: var(--radius-sm); padding: 12px 14px; border: 1px solid var(--line); background: var(--surface); display: flex; flex-direction: column; gap: 10px; }
 .msg.error { border-color: var(--weak); background: var(--weak-bg); }
 .msg.success { border-color: var(--strong); background: var(--strong-bg); }
 .msg.warn { border-color: var(--ok); background: var(--ok-bg); }
 .msg p + p { margin-top: 2px; }
-.banner { border: 1px solid var(--ok); background: var(--ok-bg); border-radius: 12px; padding: 12px 14px; }
+.banner { border: 1px solid var(--ok); background: var(--ok-bg); border-radius: var(--radius-sm); padding: 12px 14px; }
 
 /* history */
 .history { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 12px; }
-.history li { border: 1px solid var(--line); border-radius: 10px; padding: 12px; display: flex; flex-direction: column; gap: 6px; }
+.history li { border: 1px solid var(--line); border-radius: var(--radius-sm); padding: 12px; display: flex; flex-direction: column; gap: 6px; }
 .hist-top { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; font-variant-numeric: tabular-nums; }
 .hist-top .grow { flex: 1; }
 .edited { font-size: 12px; font-style: italic; color: var(--muted); }

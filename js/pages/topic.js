@@ -14,7 +14,7 @@ export function topicPage(id) {
   const st = topicState(store.data.results, id, today());
   const frag = document.createDocumentFragment();
 
-  frag.appendChild(h('a', { class: 'back', href: '#' + ui.from }, ui.from === 'today' ? '← Today' : '← Syllabus'));
+  frag.appendChild(h('a', { class: 'back', href: '#' + ui.from }, ui.from === 'today' ? '← Today' : '← Learning Path'));
   frag.appendChild(h('div', null,
     h('h2', null, topic.name),
     h('p', { class: 'muted small' }, 'Phase ' + phase.number + ' · ' + phase.name + (topic.tag !== 'UNSET' ? ' · ' + topic.tag : ''))));

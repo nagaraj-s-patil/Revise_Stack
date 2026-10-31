@@ -25,3 +25,5 @@ export const fmtLong = s => parseDate(s).toLocaleDateString('en-GB', { day: 'num
 
 /** A short unique id for a saved result. */
 export const uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 7);
+
+export const STATUS_LABEL = { notstarted: 'Not started', building: 'Building', done: 'Done' };

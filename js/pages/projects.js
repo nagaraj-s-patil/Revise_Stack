@@ -4,8 +4,7 @@ import { projectReady, BUILD_READY } from '../core/index.js';
 import { context } from '../state/context.js';
 import { store, save } from '../state/store.js';
 import { states, projState } from '../state/selectors.js';
-
-const STATUS_LABEL = { notstarted: 'Not started', building: 'Building', done: 'Done' };
+import { STATUS_LABEL } from '../ui/format.js';
 
 function projectCard(project, st) {
   const saved = projState(project.id);
