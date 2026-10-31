@@ -13,7 +13,12 @@ let dirty = false;
 
 function set(status, message = '') { cloud.status = status; cloud.message = message; render(); }
 
-export const needsLogin = () => cloud.status === 'loading' || cloud.status === 'signedout';
+// A flag remembers that this browser was signed in, so the app opens straight away from its saved copy
+// while Firebase loads. The sign-in screen is only shown when nobody is signed in.
+const HINT = 'revise-stack-signed-in';
+const hint = (v) => { try { if (v === undefined) return localStorage.getItem(HINT) === '1'; v ? localStorage.setItem(HINT, '1') : localStorage.removeItem(HINT); } catch (e) { return false; } return v; };
+
+export const needsLogin = () => cloud.status === 'signedout' || (cloud.status === 'loading' && !hint());
 
 function docRef() { return fb.doc(fb.db, 'users', cloud.user.uid); }
 
@@ -83,7 +88,8 @@ export async function startCloud() {
       GoogleAuthProvider: auth.GoogleAuthProvider, signInWithPopup: auth.signInWithPopup, signOut: auth.signOut };
     auth.onAuthStateChanged(fb.auth, async user => {
       cloud.user = user;
-      if (!user) { set('signedout'); return; }
+      if (!user) { hint(false); set('signedout'); return; }
+      hint(true);
       try { await pull(); set('synced'); } catch (e) { set(navigator.onLine ? 'error' : 'offline', e.message); }
     });
   } catch (e) {

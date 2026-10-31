@@ -3,7 +3,7 @@
 // The file list and the version are written by `npm run precache`. Do not edit between the markers.
 
 // BEGIN GENERATED
-const VERSION = "012ba1d895";
+const VERSION = "a49c7774d4";
 const PRECACHE = [
   "./",
   "assets/fonts/jetbrains-mono-latin-400-normal.woff2",
@@ -114,6 +114,11 @@ self.addEventListener('fetch', event => {
   const request = event.request;
   if (request.method !== 'GET') return;
   const url = new URL(request.url);
+  if (url.href.startsWith('https://www.gstatic.com/firebasejs/')) {   // versioned Firebase code: keep it, load it fast
+    event.respondWith(caches.open(CACHE).then(cache => cache.match(request).then(hit => hit ||
+      fetch(request).then(response => { if (response.ok) cache.put(request, response.clone()); return response; }))));
+    return;
+  }
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
