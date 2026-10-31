@@ -9,9 +9,16 @@ export const cloud = { status: 'off', user: null, message: '' };
 
 let fb = null;         // loaded SDK pieces
 let timer = null;
-let dirty = false;
+const DIRTY = 'revise-stack-unsent';
+let dirty = (() => { try { return localStorage.getItem(DIRTY) === '1'; } catch (e) { return false; } })();
+function setDirty(v) { dirty = v; try { v ? localStorage.setItem(DIRTY, '1') : localStorage.removeItem(DIRTY); } catch (e) { /* ignore */ } }
 
-function set(status, message = '') { cloud.status = status; cloud.message = message; render(); }
+// The screen is rebuilt only when it shows sync state (sign-in screen, Backup page). Otherwise saving would redraw the page while you type.
+function set(status, message = '') {
+  const before = needsLogin();
+  cloud.status = status; cloud.message = message;
+  if (before || needsLogin() || location.hash === '#backup') render();
+}
 
 // A flag remembers that this browser was signed in, so the app opens straight away from its saved copy
 // while Firebase loads. The sign-in screen is only shown when nobody is signed in.
@@ -27,22 +34,29 @@ async function push() {
   try {
     set('saving');
     await fb.setDoc(docRef(), { json: JSON.stringify(store.data), updatedAt: Date.now() });
-    dirty = false;
+    setDirty(false);
     set('synced');
   } catch (e) {
-    dirty = true;
+    setDirty(true);
     set(navigator.onLine ? 'error' : 'offline', e.message);
   }
 }
 
 function pushSoon() {
-  dirty = true;
+  setDirty(true);
   if (!cloud.user) return;
   clearTimeout(timer);
   timer = setTimeout(push, 1500);
 }
 
-/** After sign-in: the cloud copy wins. If there is none yet, the browser copy is uploaded. */
+const byId = (a, b) => { const m = new Map(); for (const x of [...a, ...b]) m.set(x.id, x); return [...m.values()]; };
+/** Unsent offline work plus the cloud copy: keep every result and mock from both, and this device's project edits. */
+function merge(remote, local) {
+  return { ...remote, results: byId(remote.results, local.results), mocks: byId(remote.mocks || [], local.mocks || []),
+    projects: { ...(remote.projects || {}), ...(local.projects || {}) }, drafts: local.drafts || {}, lastExport: local.lastExport || remote.lastExport || null };
+}
+
+/** After sign-in: the cloud copy wins, unless this device has changes not sent yet (then both are merged). If there is none yet, the browser copy is uploaded. */
 async function pull() {
   const snap = await fb.getDoc(docRef());
   const local = store.data;
@@ -56,6 +70,7 @@ async function pull() {
       }
       remote.drafts = remote.drafts || {}; remote.projects = remote.projects || {};
       remote.mocks = Array.isArray(remote.mocks) ? remote.mocks : [];
+      if (dirty) { adoptData(merge(remote, local)); await push(); return; }
       adoptData(remote);
       return;
     }
@@ -90,7 +105,7 @@ export async function startCloud() {
       cloud.user = user;
       if (!user) { hint(false); set('signedout'); return; }
       hint(true);
-      try { await pull(); set('synced'); } catch (e) { set(navigator.onLine ? 'error' : 'offline', e.message); }
+      try { await pull(); set('synced'); render(); } catch (e) { set(navigator.onLine ? 'error' : 'offline', e.message); }
     });
   } catch (e) {
     // The Firebase code could not load (offline, or blocked). Keep working from the browser copy.
