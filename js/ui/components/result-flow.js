@@ -83,6 +83,9 @@ function showSaved(topicId, rec, ok, wasEdit) {
   const lines = [name + ': ' + rec.score + '/' + rec.total + ', ' + LEVEL_LABEL[st.level][1] + (wasEdit ? ' (edited)' : '') + '.'];
   if (rec.weakPoints.length) lines.push('Weak points: ' + rec.weakPoints.join('; '));
   if (rec.nextStep) lines.push('Next step: ' + rec.nextStep);
+  const NEXT = { weak: 'What next: choose Learn first on this topic, study the weak points, then test again.', ok: 'What next: revise the weak points, then test again on the due date.' };
+  if (NEXT[st.level]) lines.push(NEXT[st.level]);
+  else if (st.level === 'strong' && rec.total < 10) lines.push('What next: take a Full test (10 questions) to reach Done.');
   lines.push(st.level === 'done' ? 'Done. Revision continues on ' + fmt(st.due) + '.' : 'Next revision: ' + fmt(st.due) + '.');
   if (!ok) lines.push('Could not save to this browser. Progress will be lost when you close the page.');
   if (topicId !== currentDraftId()) lines.push('Saved under ' + name + '. Open it from the syllabus to see its history.');

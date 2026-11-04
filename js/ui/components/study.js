@@ -9,7 +9,8 @@ import { TAG_HINT } from '../format.js';
 import { msgArea } from '../messages.js';
 import { onSavePaste, manualForm } from './result-flow.js';
 
-const MODES = [['learn', 'Learn first (about 20 min)'], ['quick', 'Quick test (5 questions)'], ['full', 'Full test (10 questions)']];
+const modesFor = tested => [['learn', 'Learn first (about 20 min)'], [ 'quick', tested ? 'Quick test (5 questions)' : 'Pre-test (5 questions)'], ['full', 'Full test (10 questions)']];
+const PRETEST_HINT = 'Start with a pre-test: 5 questions to see what you already know. Weak result: learn it first. OK or Strong: just revise.';
 
 /**
  * twoStep (Today): the paste card stays hidden until the prompt has been copied,
@@ -48,7 +49,8 @@ export function studyCards(id, twoStep) {
   });
 
   const modes = h('fieldset', { class: 'modes' }, h('legend', null, 'Mode'));
-  for (const [value, label] of MODES) {
+  const tested = store.data.results.some(r => r.topicId === id);
+  for (const [value, label] of modesFor(tested)) {
     const input = h('input', { type: 'radio', name: 'mode', value, id: 'mode-' + value });
     input.checked = ui.mode === value;
     input.addEventListener('change', () => { ui.mode = value; promptEl.value = currentPrompt(); });
@@ -57,7 +59,7 @@ export function studyCards(id, twoStep) {
 
   frag.appendChild(h('section', { class: 'card' },
     h('h3', null, h('span', { class: 'stepno', 'aria-hidden': 'true' }, '1'), 'Copy the prompt'),
-    h('p', { class: 'small muted' }, TAG_HINT[topic.tag] || TAG_HINT.UNSET),
+    h('p', { class: 'small muted' }, tested ? (TAG_HINT[topic.tag] || TAG_HINT.UNSET) : PRETEST_HINT),
     modes, copyBtn, copyNote, details));
 
   frag.appendChild(msgArea());

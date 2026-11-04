@@ -2,7 +2,7 @@
 import { PRIORITY, STRONG } from './config.js';
 import { pct } from './levels.js';
 
-// REVISE topics start with a Quick test, LEARN topics start with teaching, TEST topics start with a Full test.
+// Tag-based starting mode. The app no longer uses it for a first attempt (see suggestMode), only as a reference.
 export function suggestedMode(tag) {
   if (tag === 'LEARN') return 'learn';
   if (tag === 'TEST') return 'full';
@@ -48,9 +48,10 @@ export function buildQueue(phases, states, today) {
   return due.concat(fresh);
 }
 
-// A strong result from a Quick test needs a Full test to reach Done, so suggest Full then.
+// A topic never tested starts with a pre-test (5 questions) whatever its tag, so the result decides
+// whether to learn first. A strong result from a Quick test needs a Full test to reach Done, so suggest Full then.
 export function suggestMode(topic, state) {
-  if (!state || !state.last) return suggestedMode(topic.tag);
+  if (!state || !state.last) return 'quick';
   if (pct(state.last) >= STRONG && state.last.total < 10) return 'full';
   return 'quick';
 }
