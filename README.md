@@ -9,6 +9,10 @@ You take the tests in ChatGPT or Claude. Revise Stack plans your day, records yo
 - Progress is saved in **Firebase** (Google sign-in) and also kept on the device, so you can study without internet and it syncs later.
 - No server of your own and no build step. Plain HTML, CSS and JavaScript.
 
+## App map
+
+<p align="center"><img src="docs/app-map.png" alt="Revise Stack app map: Overview, Learning Path, Interview Prep, Projects, Progress and Backup, the study flow, levels and cloud sync" width="900"></p>
+
 ## How it works
 
 1. **Overview** (Today) shows one task: a due revision first, then a new topic.
