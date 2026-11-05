@@ -36,11 +36,11 @@
   /* hover and press */
   .card, .tile, .proj, .phase { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
   @media (hover: hover) {
-    .tile:hover, .proj:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(30, 50, 140, .16); }
-    .card:hover { box-shadow: 0 12px 30px rgba(30, 50, 140, .12); }
+    .tile:hover, .proj:hover { transform: translateY(-3px); box-shadow: 0 14px 34px var(--shadow-lift); }
+    .card:hover { box-shadow: 0 12px 30px var(--shadow-lift); }
   }
   .btn { transition: transform .15s ease, box-shadow .2s ease, filter .2s ease; }
-  .btn:hover:not(:disabled) { filter: brightness(1.06); box-shadow: 0 8px 20px rgba(36, 87, 214, .28); }
+  .btn:hover:not(:disabled) { filter: brightness(1.06); box-shadow: 0 8px 20px var(--glow); }
   .btn:active:not(:disabled) { transform: scale(.97); }
   .chip, .modes label, .top-action, .tabs a svg { transition: background-color .2s ease, color .2s ease, transform .15s ease; }
   .chip:active, .modes label:active { transform: scale(.96); }

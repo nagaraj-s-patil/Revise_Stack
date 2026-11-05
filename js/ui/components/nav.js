@@ -20,7 +20,7 @@ const initials = name => name.split(/\s+/).map(w => w[0]).slice(0, 2).join('').t
 export function sideBar(active) {
   return h('aside', { class: 'side' },
     h('div', { class: 'side-brand' },
-      h('img', { src: 'assets/icons/mark-96.png', width: '40', height: '40', alt: '' }),
+      h('img', { src: 'assets/icons/mark-96.png?v=2', width: '40', height: '40', alt: '' }),
       h('span', null, 'Revise Stack')),
     h('nav', { class: 'side-nav', 'aria-label': 'Main' }, SIDE.map(item => link(active, item))),
     h('div', { class: 'side-note' },

@@ -7,7 +7,7 @@ import { cloudEnabled } from '../../cloud/config.js';
 export function header() {
   return h('header', { class: 'top' },
     h('div', { class: 'brand' },
-      h('img', { class: 'brand-mark', src: 'assets/icons/mark-96.png', width: '40', height: '40', alt: '' }),
+      h('img', { class: 'brand-mark', src: 'assets/icons/mark-96.png?v=2', width: '40', height: '40', alt: '' }),
       h('h1', null, 'Revise Stack')),
     h('div', { class: 'top-actions' },
       h('a', { href: '#backup', class: 'top-action', 'aria-label': 'Backup and restore' }, icon('backup', 22)),

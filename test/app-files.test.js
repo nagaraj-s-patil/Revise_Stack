@@ -34,7 +34,7 @@ test('manifest: installable fields and real icon files with the declared sizes',
 
 test('index.html: every local file it links to exists', () => {
   const html = read('index.html');
-  const refs = [...html.matchAll(/(?:href|src)="([^"#]+)"/g)].map(x => x[1]).filter(x => !/^(https?:)?\/\//.test(x));
+  const refs = [...html.matchAll(/(?:href|src)="([^"#]+)"/g)].map(x => x[1]).filter(x => !/^(https?:)?\/\//.test(x)).map(x => x.split('?')[0]);
   assert.ok(refs.length >= 10);
   for (const ref of refs) assert.ok(exists(ref), ref + ' is missing');
   assert.match(html, /<meta name="viewport"[^>]*viewport-fit=cover/);

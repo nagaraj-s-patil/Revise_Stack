@@ -1,42 +1,47 @@
-/* Design tokens: colours, shape and fonts. Light by default; dark follows the phone setting.
-   Text and badge colour pairs were checked for 4.5:1 contrast (WCAG AA) in both themes. */
+/* Design tokens: colours, shape and fonts. Orange and black from the logo. Light by default; dark follows the phone setting.
+   Text and badge colour pairs were checked for 4.5:1 contrast (WCAG AA) in both themes.
+   --accent is for orange TEXT and borders (dark enough on white). --accent-fill is for orange backgrounds, with dark text on top. */
 :root {
   color-scheme: light;
-  --page-bg: linear-gradient(135deg, #E3E9FF 0%, #EDEAFF 55%, #F3F0FF 100%);
-  --panel: #F7F8FE;
+  --page-bg: linear-gradient(135deg, #FFF3E4 0%, #FFEAD6 55%, #FFF7EE 100%);
+  --panel: #FFF8F1;
   --surface: #FFFFFF;
-  --surface-2: #EEF1FC;
-  --soft: #EEF1FF;            /* soft card, e.g. Today's task */
-  --track: #E1E6F8;           /* empty part of a progress bar */
-  --line: #E1E6F6;
-  --line-strong: #C3CFF5;
-  --field-line: #7C8DC4;       /* borders of inputs and chips: 3:1 against the surface */
-  --fg: #0F1838;
-  --muted: #526087;
-  --accent: #2457D6;
-  --btn-bg: linear-gradient(180deg, #3468F0 0%, #2457D6 100%);
-  --on-accent: #FFFFFF;
+  --surface-2: #FFF1E3;
+  --soft: #FFF1E2;            /* soft card, e.g. Today's task */
+  --track: #F2DFCB;           /* empty part of a progress bar */
+  --line: #F0DDC9;
+  --line-strong: #E3C4A0;
+  --field-line: #A8794A;       /* borders of inputs and chips: 3:1 against the surface */
+  --fg: #1B130B;
+  --muted: #6B5A48;
+  --accent: #B93A08;           /* links and outlines: dark orange, 5:1 on white */
+  --btn-bg: linear-gradient(180deg, #FF8E26 0%, #FF7A00 100%);
+  --on-btn: #1A1208;           /* dark text on the orange button, 7:1 */
+  --on-accent: #1A1208;        /* dark text on an orange fill */
+  --accent-fill: #FF7A00;      /* orange backgrounds (chips, bars, step numbers) */
+  --glow: rgba(255, 122, 0, .3);
+  --shadow-lift: rgba(110, 60, 10, .16);
   --weak: #B42318;   --weak-bg: #FDEDEB;
   --ok: #9A4A06;     --ok-bg: #FDF2E3;
   --strong: #067647; --strong-bg: #E6F5EC;
   --untested: #475467; --untested-bg: #EDEFF3;
-  --focus: #2457D6;
-  --shadow: 0 1px 2px rgba(20, 35, 90, .04), 0 8px 24px rgba(20, 35, 90, .06);
+  --focus: #B93A08;
+  --shadow: 0 1px 2px rgba(80, 40, 0, .05), 0 8px 24px rgba(80, 40, 0, .07);
   --radius: 16px;
   --radius-sm: 12px;
-  /* sidebar and hero stay dark blue in both themes */
-  --side-bg: linear-gradient(180deg, #0F1D44 0%, #091431 100%);
+  /* sidebar and hero stay black in both themes */
+  --side-bg: linear-gradient(180deg, #1A1713 0%, #0B0A08 100%);
   --side-fg: #FFFFFF;
-  --side-muted: #B4C0E6;
-  --side-active: #2F62EA;
-  --hero-bg: linear-gradient(105deg, #0B1F7A 0%, #1A3BC4 55%, #3D5CE0 100%);
-  --hero-accent: #7CD4FF;
+  --side-muted: #D2C6B8;
+  --side-active: #FF7A00;
+  --hero-bg: linear-gradient(105deg, #121212 0%, #2A1808 55%, #7A3A00 100%);
+  --hero-accent: #FFB347;
   /* tinted icon chips */
-  --chip-orange-bg: #FFEBDD; --chip-orange: #D9480F;
+  --chip-orange-bg: #FFE9D2; --chip-orange: #C2410C;
   --chip-green-bg: #DDF5E8;  --chip-green: #067647;
   --chip-purple-bg: #ECE6FF; --chip-purple: #5B3FD6;
   --chip-red-bg: #FFE3E8;    --chip-red: #C92A4B;
-  --chip-blue-bg: #E3EBFF;   --chip-blue: #2457D6;
+  --chip-blue-bg: #FFE9D2;   --chip-blue: #B93A08;
   --font-head: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
   --font-body: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
@@ -44,28 +49,28 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --page-bg: linear-gradient(135deg, #090F22 0%, #0D1530 55%, #111A3A 100%);
-    --panel: #0E1731; --surface: #152041; --surface-2: #1B2850; --soft: #1A2650; --track: #26345F;
-    --line: #2A3865; --line-strong: #3C4D85; --field-line: #5C6FA8; --fg: #EBF0FF; --muted: #AAB7DC;
-    --accent: #7DA2FF; --btn-bg: linear-gradient(180deg, #8DB0FF 0%, #7DA2FF 100%); --on-accent: #0A1230;
+    --page-bg: linear-gradient(135deg, #0E0B08 0%, #15100B 55%, #1B140D 100%);
+    --panel: #17120D; --surface: #1F1812; --surface-2: #2A2118; --soft: #2A2016; --track: #3B2F22;
+    --line: #3B2F22; --line-strong: #5A452F; --field-line: #8F7656; --fg: #FBF3EA; --muted: #CDBBA6;
+    --accent: #FF9A3D; --btn-bg: linear-gradient(180deg, #FF8E26 0%, #FF7A00 100%); --on-btn: #1A1208; --on-accent: #1A1208; --accent-fill: #FF7A00; --glow: rgba(255, 122, 0, .35); --shadow-lift: rgba(0, 0, 0, .45);
     --weak: #FF8A7D; --weak-bg: #3A1B19; --ok: #F2B260; --ok-bg: #3A2A12;
     --strong: #55D19A; --strong-bg: #11301F; --untested: #A9B3C7; --untested-bg: #232C45;
-    --focus: #A9C3FF; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+    --focus: #FFB36B; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .3);
     --chip-orange-bg: #3A2412; --chip-orange: #FFA66B; --chip-green-bg: #11301F; --chip-green: #55D19A;
     --chip-purple-bg: #2A2358; --chip-purple: #B4A3FF; --chip-red-bg: #3A1A28; --chip-red: #FF8CA5;
-    --chip-blue-bg: #1D2D5E; --chip-blue: #9DBBFF;
+    --chip-blue-bg: #3A2412; --chip-blue: #FFA66B;
   }
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --page-bg: linear-gradient(135deg, #090F22 0%, #0D1530 55%, #111A3A 100%);
-  --panel: #0E1731; --surface: #152041; --surface-2: #1B2850; --soft: #1A2650; --track: #26345F;
-  --line: #2A3865; --line-strong: #3C4D85; --field-line: #5C6FA8; --fg: #EBF0FF; --muted: #AAB7DC;
-  --accent: #7DA2FF; --btn-bg: linear-gradient(180deg, #8DB0FF 0%, #7DA2FF 100%); --on-accent: #0A1230;
+  --page-bg: linear-gradient(135deg, #0E0B08 0%, #15100B 55%, #1B140D 100%);
+  --panel: #17120D; --surface: #1F1812; --surface-2: #2A2118; --soft: #2A2016; --track: #3B2F22;
+  --line: #3B2F22; --line-strong: #5A452F; --field-line: #8F7656; --fg: #FBF3EA; --muted: #CDBBA6;
+  --accent: #FF9A3D; --btn-bg: linear-gradient(180deg, #FF8E26 0%, #FF7A00 100%); --on-btn: #1A1208; --on-accent: #1A1208; --accent-fill: #FF7A00; --glow: rgba(255, 122, 0, .35); --shadow-lift: rgba(0, 0, 0, .45);
   --weak: #FF8A7D; --weak-bg: #3A1B19; --ok: #F2B260; --ok-bg: #3A2A12;
   --strong: #55D19A; --strong-bg: #11301F; --untested: #A9B3C7; --untested-bg: #232C45;
-  --focus: #A9C3FF; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .25);
+  --focus: #FFB36B; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .3);
   --chip-orange-bg: #3A2412; --chip-orange: #FFA66B; --chip-green-bg: #11301F; --chip-green: #55D19A;
   --chip-purple-bg: #2A2358; --chip-purple: #B4A3FF; --chip-red-bg: #3A1A28; --chip-red: #FF8CA5;
-  --chip-blue-bg: #1D2D5E; --chip-blue: #9DBBFF;
+  --chip-blue-bg: #3A2412; --chip-blue: #FFA66B;
 }

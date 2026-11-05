@@ -14,7 +14,7 @@
 /* filters */
 .filters { display: flex; flex-wrap: wrap; gap: 8px; }
 .chip { min-height: 44px; padding: 0 16px; border-radius: 99px; border: 1px solid var(--field-line); background: var(--surface); cursor: pointer; font-size: 15px; }
-.chip[aria-pressed="true"] { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.chip[aria-pressed="true"] { background: var(--accent-fill); color: var(--on-accent); border-color: var(--accent-fill); font-weight: 700; }
 
 
 /* level badges: icon + text, never colour alone */
@@ -30,16 +30,16 @@
 
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }
 .card h3 { display: flex; align-items: center; gap: 8px; }
-.stepno { font-family: var(--font-mono); font-size: 13px; background: var(--accent); color: var(--on-accent); width: 24px; height: 24px; border-radius: 50%; display: inline-grid; place-items: center; flex: none; }
+.stepno { font-family: var(--font-mono); font-size: 13px; background: var(--accent-fill); color: var(--on-accent); font-weight: 700; width: 24px; height: 24px; border-radius: 50%; display: inline-grid; place-items: center; flex: none; }
 .modes { display: flex; flex-wrap: wrap; gap: 8px; border: 0; padding: 0; margin: 0; }
 .modes legend { padding: 0; margin-bottom: 8px; font-size: 14px; color: var(--muted); }
 .modes label { display: inline-flex; align-items: center; min-height: 44px; padding: 0 16px; border: 1px solid var(--field-line); border-radius: 99px; cursor: pointer; gap: 8px; }
-.modes label:has(input:checked) { border-color: var(--accent); background: var(--accent); color: var(--on-accent); }
-.modes input { accent-color: var(--accent); }
+.modes label:has(input:checked) { border-color: var(--accent-fill); background: var(--accent-fill); color: var(--on-accent); font-weight: 700; }
+.modes input { accent-color: #141414; }
 .modes label:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
-.btn { min-height: 48px; padding: 0 20px; border-radius: 12px; border: 1px solid var(--accent); background: var(--btn-bg); display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: var(--on-accent); font-weight: 700; cursor: pointer; font-size: 16px; }
-.btn.secondary { background: var(--surface); color: var(--accent); }
-.btn.light { background: #fff; border-color: #fff; color: #17329E; }
+.btn { min-height: 48px; padding: 0 20px; border-radius: 12px; border: 1px solid var(--accent-fill); background: var(--btn-bg); display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: var(--on-btn); font-weight: 700; cursor: pointer; font-size: 16px; }
+.btn.secondary { background: var(--surface); color: var(--accent); border-color: var(--accent); }
+.btn.light { background: var(--btn-bg); border-color: var(--accent-fill); color: #141414; }
 .btn.small { min-height: 44px; padding: 0 14px; font-size: 14px; }
 .btn.danger { border-color: var(--weak); color: var(--weak); background: var(--surface); }
 .btn:disabled { opacity: .5; cursor: not-allowed; }

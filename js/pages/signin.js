@@ -16,7 +16,7 @@ export function signInScreen() {
     h('span', { class: 'blob b1', 'aria-hidden': 'true' }), h('span', { class: 'blob b2', 'aria-hidden': 'true' }), h('span', { class: 'blob b3', 'aria-hidden': 'true' }),
     h('section', { class: 'signin-card' },
       h('div', { class: 'signin-art' },
-        h('img', { src: 'assets/icons/mark-96.png', width: '56', height: '56', alt: '' }),
+        h('img', { src: 'assets/icons/mark-96.png?v=2', width: '56', height: '56', alt: '' }),
         h('h1', null, 'Revise Stack'),
         h('p', null, 'Revise what you forgot. Practice what you need. Be ready for your next role.'),
         heroArt()),
