@@ -3,33 +3,65 @@
 # Revise Stack
 
 An installable revision tracker for a Java Full Stack syllabus (117 topics, 3 projects).
-It runs in the browser, saves progress on your phone (localStorage) and works offline. There is no backend and no login.
+You take the tests in ChatGPT or Claude. Revise Stack plans your day, records your level and keeps your progress safe.
 
-You take the tests in ChatGPT or Claude. Revise Stack plans your day and records your level.
+- Runs in the browser and installs on your phone like an app. Works offline.
+- Progress is saved in **Firebase** (Google sign-in) and also kept on the device, so you can study without internet and it syncs later.
+- No server of your own and no build step. Plain HTML, CSS and JavaScript.
 
 ## How it works
 
-1. **Today** shows one task: a due revision first, then a new topic.
-2. **Copy test prompt** (Learn, Quick or Full), paste it into an AI chat and take the test.
+1. **Overview** (Today) shows one task: a due revision first, then a new topic.
+2. **Pre-test first.** A topic you have never tested starts with a **Pre-test**: 5 questions, no teaching, to see what you already know. Copy the test prompt, paste it into an AI chat and take the test. (You can also choose **Learn first** or a **Full test** under Mode.)
 3. **Paste the AI reply** back. The app reads the `RESULT_START ... RESULT_END` block and saves the score. A manual score form is the backup.
-4. The app works out the level from the score:
-   - Weak: below 6/10 · OK: 6 to 7 · Strong: 8 or more
-   - **Done:** 2 tests on 2 different days, both Strong, at least one a Full test (10 questions)
+4. The app works out the level from the score and tells you **what next**:
+   - **Weak** (below 6/10): choose Learn first, study the weak points, then test again.
+   - **OK** (6 to 7): revise the weak points, test again on the due date.
+   - **Strong** (8 or more): after a 5-question test, take a Full test to reach Done.
+   - **Done:** 2 tests on 2 different days, both Strong, at least one a Full test (10 questions).
 5. Revisions come back 1, 3, 7 and 14 days after the first test of a passing run. A result under 60% resets the schedule.
 6. Streak: any saved test counts. One missed day per week is forgiven.
 
-Other pages: Syllabus, Projects, Progress (readiness checks, weakest topics, repeated mistakes, mock interview, progress summary for the AI) and Backup (copy and restore as text, install help).
+## Pages
 
+| Page | What it has |
+|---|---|
+| Overview | Greeting, goal banner, four numbers (streak, topics completed, studied this week, job target), learning path, projects, today's task and test steps |
+| Learning Path | All phases and topics with levels, filters and each topic's history |
+| Interview Prep | Mock interview prompt on your weakest topics and your saved mock scores |
+| Projects | Status, repository link and note for each project |
+| Progress | Core progress, apply-readiness checks, weakest topics, repeated mistakes, progress summary to paste into an AI |
+| Backup | Sign-in status, copy and restore as text, install help |
+
+On a wide screen the pages sit next to a left sidebar. On a phone the sidebar becomes a bottom bar.
 The levels, the 70% thresholds and the study order are suggestions, not facts. They live in `js/core/config.js`.
+
+## Online storage (Firebase)
+
+Progress is saved in Firestore, one document per person (`users/<your id>`), after you sign in with Google.
+The device keeps a copy so the app opens fast and works offline.
+
+- **Offline:** changes are kept on the device and marked as unsent, even if you close the app.
+- **Back online:** unsent changes are merged with the cloud copy (every test from both is kept) and uploaded.
+- **New device:** sign in and your progress appears. The cloud copy wins unless that device has unsent changes.
+- If a test is deleted offline, the merge can bring it back. Delete it again once you are online.
+- Until `js/cloud/config.js` has your Firebase values, the app runs in local-only mode.
+
+Set it up once:
+
+1. Firebase console: create a project, add a Web app, copy `apiKey`, `authDomain`, `projectId` and `appId` into `js/cloud/config.js`. These are not secrets.
+2. Authentication: enable the **Google** provider. Under Settings > Authorized domains add your site address (for example `nagaraj-s-patil.github.io`).
+3. Firestore Database: create it in Production mode, open the Rules tab, paste `firestore.rules` and publish. Without these rules your data is not protected.
+4. Open the app and sign in with Google. Progress already saved in that browser is uploaded the first time.
 
 ## Install on your phone
 
-Open the site's web address on your phone.
+Open the site's web address on your phone and sign in once.
 
-- **Android (Chrome):** tap **Install app** on the Today card, or the browser menu, then **Install app**.
+- **Android (Chrome):** tap **Install app** on the Overview card, or the browser menu, then **Install app**.
 - **iPhone (Safari):** tap Share, then **Add to Home Screen**.
 
-Progress is stored per browser and per web address. Copy a backup from the **Backup** page now and then, and again before changing address or phone.
+Use one web address only. Copy a backup from the **Backup** page now and then as an extra safety copy.
 
 ## Run it on your computer
 
@@ -54,12 +86,13 @@ After changing any app file, run `npm run precache` and commit `sw.js` too. It r
 index.html              page shell
 manifest.webmanifest    install details (name, icons, colours)
 sw.js                   offline support (file list generated by npm run precache)
+firestore.rules         Firestore security rules (paste into the Firebase console)
 assets/
   brand/                full logo
-  icons/                app icons (192, 512, maskable, Apple, favicons, header mark)
-  fonts/                self-hosted fonts and their licences
+  icons/                app icons (192, 512, maskable, Apple, favicons, logo mark)
+  fonts/                self-hosted fonts (Plus Jakarta Sans, JetBrains Mono) and licences
 css/
-  fonts.css  tokens.css  base.css  layout.css  components.css  pages.css
+  fonts.css  tokens.css  base.css  layout.css  components.css  pages.css  dashboard.css
 data/
   syllabus/             index.json and one JSON file per phase
   projects.json         the portfolio projects
@@ -68,10 +101,13 @@ js/
   app.js  shell.js  pwa.js  boot-guard.js
   core/                 pure logic, no page code: levels, parser, prompts, plan, streak,
                         progress, summary, backup, mistakes, mock, spot check, config
+  cloud/                Firebase: config.js (your project values), sync.js (sign-in and sync)
   data/                 loads and checks the syllabus files
   state/                saved data (store), loaded syllabus (context), screen state (session)
-  ui/                   dom helpers, router, messages, draft saving, shared components
-  pages/                today (dashboard), syllabus (Learning Path), topic, interview, projects, progress, backup
+  ui/                   dom helpers, router, messages, draft saving
+  ui/components/        sidebar and tabs, header, dashboard pieces, icons, study steps, install card
+  pages/                today (Overview), syllabus (Learning Path), topic, interview, projects,
+                        progress, backup, signin
 test/                   unit tests by area, file checks, helpers
 tools/                  serve, update-precache, generate-syllabus, make-icons
 ```
@@ -84,15 +120,5 @@ Topic ids are permanent: never rename one, or that topic's history disconnects. 
 ## Known gaps
 
 - Results for a topic id that is removed from the syllabus stay in your data and backup but are not shown on screen.
-- Desktop uses one centred column with the bottom tabs.
 - Reminders are not possible from a web page. Set a daily alarm on your phone.
-
-## Online storage (Firebase)
-
-Progress is saved in Firebase (Firestore, one document per person) and kept in the browser as an offline copy.
-Until you fill in `js/cloud/config.js`, the app runs in local-only mode.
-
-1. Firebase console: create a project, add a Web app, copy the `firebaseConfig` values into `js/cloud/config.js` (apiKey, authDomain, projectId, appId). These are not secrets.
-2. Authentication: enable the Google provider. Add your site address (for example `nagaraj-s-patil.github.io`) under Authentication > Settings > Authorized domains.
-3. Firestore Database: create it, then paste `firestore.rules` into the Rules tab and publish. Without these rules your data is not protected.
-4. Open the app, sign in with Google. Existing progress in that browser is uploaded the first time.
+- Sync was tested with a simulated Firebase. Check it on your own phone after the first sign-in.
