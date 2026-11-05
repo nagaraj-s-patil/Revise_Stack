@@ -5,7 +5,7 @@ import { store, setSaveHook, adoptData, wipeLocal } from '../state/store.js';
 import { render } from '../ui/render.js';
 
 // status: off (local only) | loading | signedout | synced | saving | offline | error
-export const cloud = { status: 'off', user: null, message: '' };
+export const cloud = { status: 'off', user: null, message: '', syncing: false };
 
 let fb = null;         // loaded SDK pieces
 let timer = null;
@@ -25,14 +25,17 @@ function set(status, message = '') {
 const HINT = 'revise-stack-signed-in';
 const hint = (v) => { try { if (v === undefined) return localStorage.getItem(HINT) === '1'; v ? localStorage.setItem(HINT, '1') : localStorage.removeItem(HINT); } catch (e) { return false; } return v; };
 
-export const needsLogin = () => cloud.status === 'signedout' || (cloud.status === 'loading' && !hint());
+// cloud.syncing: a device with nothing saved is waiting for its first download. Show a loading screen, not an empty dashboard.
+export const needsLogin = () => cloud.status === 'signedout' || (cloud.status === 'loading' && !hint()) || (!!cloud.user && cloud.syncing);
 
+let fsReady = null;   // the small Firestore code loads in the background; only saving and loading wait for it
 function docRef() { return fb.doc(fb.db, 'users', cloud.user.uid); }
 
 async function push() {
   if (!cloud.user || !fb) return;
   try {
     set('saving');
+    await fsReady;
     await fb.setDoc(docRef(), { json: JSON.stringify(store.data), updatedAt: Date.now() });
     setDirty(false);
     set('synced');
@@ -58,6 +61,7 @@ function merge(remote, local) {
 
 /** After sign-in: the cloud copy wins, unless this device has changes not sent yet (then both are merged). If there is none yet, the browser copy is uploaded. */
 async function pull() {
+  await fsReady;
   const snap = await fb.getDoc(docRef());
   const local = store.data;
   if (snap.exists()) {
@@ -109,17 +113,21 @@ export async function startCloud() {
   setSaveHook(pushSoon);
   set('loading');
   try {
-    const [app, auth, fs] = await Promise.all([
-      import(FIREBASE_SDK + 'firebase-app.js'), import(FIREBASE_SDK + 'firebase-auth.js'), import(FIREBASE_SDK + 'firebase-firestore.js')
-    ]);
+    // Sign-in needs only app + auth. Firestore (lite build: we only read and write one document) loads alongside.
+    const fsLoad = import(FIREBASE_SDK + 'firebase-firestore-lite.js');
+    fsLoad.catch(() => {});
+    const [app, auth] = await Promise.all([import(FIREBASE_SDK + 'firebase-app.js'), import(FIREBASE_SDK + 'firebase-auth.js')]);
     const a = app.initializeApp(FIREBASE_CONFIG);
-    fb = { auth: auth.getAuth(a), db: fs.getFirestore(a), doc: fs.doc, getDoc: fs.getDoc, setDoc: fs.setDoc,
-      GoogleAuthProvider: auth.GoogleAuthProvider, signInWithPopup: auth.signInWithPopup, signOut: auth.signOut };
+    fb = { auth: auth.getAuth(a), GoogleAuthProvider: auth.GoogleAuthProvider, signInWithPopup: auth.signInWithPopup, signOut: auth.signOut };
+    fsReady = fsLoad.then(fs => { fb.db = fs.getFirestore(a); fb.doc = fs.doc; fb.getDoc = fs.getDoc; fb.setDoc = fs.setDoc; });
     auth.onAuthStateChanged(fb.auth, async user => {
       cloud.user = user;
-      if (!user) { hint(false); set('signedout'); return; }
+      if (!user) { hint(false); cloud.syncing = false; set('signedout'); return; }
       hint(true);
-      try { await pull(); set('synced'); render(); } catch (e) { set(navigator.onLine ? 'error' : 'offline', e.message); }
+      cloud.syncing = !store.data.results.length;
+      if (cloud.syncing) render();
+      try { await pull(); cloud.syncing = false; set('synced'); render(); }
+      catch (e) { cloud.syncing = false; set(navigator.onLine ? 'error' : 'offline', e.message); render(); }
     });
   } catch (e) {
     // The Firebase code could not load (offline, or blocked). Keep working from the browser copy.

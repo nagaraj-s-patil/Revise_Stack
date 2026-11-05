@@ -11,7 +11,7 @@ const FEATURES = [
 ];
 
 export function signInScreen() {
-  const loading = cloud.status === 'loading';
+  const loading = cloud.status === 'loading' || cloud.syncing;
   return h('main', { class: 'signin' },
     h('span', { class: 'blob b1', 'aria-hidden': 'true' }), h('span', { class: 'blob b2', 'aria-hidden': 'true' }), h('span', { class: 'blob b3', 'aria-hidden': 'true' }),
     h('section', { class: 'signin-card' },
@@ -29,6 +29,6 @@ export function signInScreen() {
             h('span', null, h('strong', null, title), h('small', { class: 'muted' }, text))))),
         cloud.message ? h('p', { class: 'small', style: 'color:var(--weak)', role: 'alert' }, cloud.message) : null,
         h('button', { class: 'btn big', type: 'button', id: 'signin-btn', disabled: loading, onclick: signIn },
-          loading ? h('span', { class: 'spin', 'aria-hidden': 'true' }) : icon('arrow', 20), loading ? 'Loading…' : 'Continue with Google'),
+          loading ? h('span', { class: 'spin', 'aria-hidden': 'true' }) : icon('arrow', 20), cloud.syncing ? 'Loading your progress…' : loading ? 'Please wait…' : 'Continue with Google'),
         h('p', { class: 'small muted' }, 'Your Google account is only used to keep your progress private to you.'))));
 }
