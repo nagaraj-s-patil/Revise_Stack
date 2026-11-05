@@ -12,6 +12,7 @@ const PATHS = {
   check: '<circle cx="12" cy="12" r="9"/><path d="M8 12.500l3 3 5-6"/>',
   calendar: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
   target: '<circle cx="12" cy="12" r="9"/><circle cx="12" cy="12" r="5"/><circle cx="12" cy="12" r="1.5"/>',
+  logout: '<path d="M9 4H5a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h4"/><path d="M16 8l4 4-4 4M20 12H9"/>',
   arrow: '<path d="M5 12h14M13 6l6 6-6 6"/>',
   lightbulb: '<path d="M9 18h6M10 21h4"/><path d="M12 3a6 6 0 0 0-3.500 10.900c.6.500 1 1.2 1 2.100h5c0-.9.400-1.600 1-2.100A6 6 0 0 0 12 3z"/>'
 };

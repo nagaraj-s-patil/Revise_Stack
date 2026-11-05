@@ -1,7 +1,7 @@
 // Cloud sync: Firebase Google sign-in plus one Firestore document per person (users/<uid>).
 // The browser copy stays as a cache, so the app still opens offline. Firestore is the master copy.
 import { FIREBASE_CONFIG, FIREBASE_SDK, cloudEnabled } from './config.js';
-import { store, setSaveHook, adoptData } from '../state/store.js';
+import { store, setSaveHook, adoptData, wipeLocal } from '../state/store.js';
 import { render } from '../ui/render.js';
 
 // status: off (local only) | loading | signedout | synced | saving | offline | error
@@ -87,7 +87,21 @@ export async function signIn() {
   }
 }
 
-export async function signOutNow() { await fb.signOut(fb.auth); }
+/** Sign out. Unsent changes are uploaded first; if that fails, stay signed in so nothing is lost. Then the device copy is cleared. */
+export async function signOutNow() {
+  if (!cloud.user || !fb) return;
+  if (!confirm('Sign out of Revise Stack? Your progress stays safe online.')) return;
+  clearTimeout(timer);
+  if (dirty) {
+    await push();
+    if (dirty) { alert('Some changes are not saved online yet. Connect to the internet and try again, so nothing is lost.'); return; }
+  }
+  await fb.signOut(fb.auth);
+  wipeLocal();
+  render();
+}
+
+export const displayName = fallback => (cloud.user && (cloud.user.displayName || cloud.user.email)) || fallback;
 
 /** Call once at start, after the browser copy is loaded. */
 export async function startCloud() {

@@ -7,7 +7,8 @@
 .brand { display: flex; align-items: center; gap: 10px; }
 .brand-mark { width: 40px; height: 40px; border-radius: 10px; flex: none; }
 .brand h1 { font-size: 20px; }
-.top-action { width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); color: var(--fg); box-shadow: var(--shadow); }
+.top-actions { display: flex; gap: 8px; }
+.top-action { cursor: pointer; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); color: var(--fg); box-shadow: var(--shadow); }
 
 /* bottom tabs */
 .tabs {
@@ -29,7 +30,7 @@
   .tabs { display: none; }
   /* the h1 stays for screen readers, the sidebar shows the brand */
   .top { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-  .top-action { display: none; }
+  .top-actions { display: none; }
 
   .side {
     display: flex; flex-direction: column; gap: 24px; position: sticky; top: 0; height: 100vh; overflow-y: auto;
@@ -46,8 +47,11 @@
   .side-note strong { color: #fff; font-size: 16px; }
   .side-note svg { color: #FFD166; }
   .side-user { display: flex; align-items: center; gap: 12px; padding: 12px 8px 0; border-top: 1px solid rgba(255, 255, 255, .12); }
-  .side-user span:last-child { display: flex; flex-direction: column; line-height: 1.3; }
+  .side-user > span:nth-child(2) { display: flex; flex-direction: column; line-height: 1.3; min-width: 0; }
   .side-user small { color: var(--side-muted); }
+  .side-user strong { overflow-wrap: anywhere; }
+  .signout { margin-left: auto; flex: none; width: 44px; height: 44px; display: grid; place-items: center; border-radius: 12px; border: 0; background: rgba(255, 255, 255, .1); color: var(--side-muted); cursor: pointer; }
+  .signout:hover { background: rgba(255, 255, 255, .2); color: #fff; }
   .avatar { width: 40px; height: 40px; border-radius: 50%; background: var(--side-active); display: grid; place-items: center; font-weight: 800; font-size: 14px; flex: none; }
 }
 @media (max-width: 420px) { .row2 { grid-template-columns: 1fr; } }

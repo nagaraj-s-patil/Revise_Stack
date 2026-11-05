@@ -46,7 +46,7 @@ function taskCard(task, queue, dueList, st, t) {
   const { phases } = context.syllabus;
   const coreDone = phases.every(p => p.topics.every(x => !x.core || ['strong', 'done'].includes(st[x.id].level)));
   let intro = null;
-  if (!store.data.results.length) intro = 'Welcome. Start with a Quick test (5 questions). It shows where you stand before you pick what to revise.';
+  if (!store.data.results.length) intro = 'Welcome. Start with a pre-test (5 questions). It shows where you stand before you pick what to revise.';
   else if (ui.short) intro = 'Minimum day: one test is enough to keep your streak.';
   else if (task.kind === 'new' && !dueList.length) intro = coreDone ? 'Core is done. Next up: ' + task.topic.name + '.' : 'No revisions due. Here is a new topic.';
 

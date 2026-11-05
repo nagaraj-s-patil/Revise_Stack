@@ -2,6 +2,8 @@
 import { h } from '../dom.js';
 import { icon } from './icons.js';
 import { USER_NAME } from '../../core/index.js';
+import { cloud, signOutNow, displayName } from '../../cloud/sync.js';
+import { cloudEnabled } from '../../cloud/config.js';
 
 const SIDE = [
   ['today', 'Overview', 'home'], ['syllabus', 'Learning Path', 'path'], ['interview', 'Interview Prep', 'interview'],
@@ -26,8 +28,11 @@ export function sideBar(active) {
       h('strong', null, 'Keep going!'),
       h('span', null, 'Every test you take today is one less topic to forget.')),
     h('div', { class: 'side-user' },
-      h('span', { class: 'avatar', 'aria-hidden': 'true' }, initials(USER_NAME)),
-      h('span', null, h('strong', null, USER_NAME), h('small', null, 'Java Full Stack'))));
+      h('span', { class: 'avatar', 'aria-hidden': 'true' }, initials(displayName(USER_NAME))),
+      h('span', null, h('strong', null, displayName(USER_NAME)), h('small', null, 'Java Full Stack')),
+      cloudEnabled() && cloud.user
+        ? h('button', { class: 'signout', type: 'button', id: 'signout-side', onclick: signOutNow, 'aria-label': 'Sign out', title: 'Sign out' }, icon('logout', 20))
+        : null));
 }
 
 /** Bottom tab bar (phones). */

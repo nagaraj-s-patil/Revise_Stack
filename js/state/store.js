@@ -66,3 +66,9 @@ export function replaceData(next) {
   store.data = next;
   return save();
 }
+
+/** Remove everything saved on this device (used after sign-out, so the next person on a shared phone sees nothing). */
+export function wipeLocal() {
+  store.data = emptyData();
+  try { localStorage.removeItem(KEY); localStorage.removeItem('revise-stack-unsent'); } catch (e) { /* ignore */ }
+}

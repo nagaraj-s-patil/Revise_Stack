@@ -33,6 +33,8 @@ You take the tests in ChatGPT or Claude. Revise Stack plans your day, records yo
 | Progress | Core progress, apply-readiness checks, weakest topics, repeated mistakes, progress summary to paste into an AI |
 | Backup | Sign-in status, copy and restore as text, install help |
 
+Sign out is the arrow button next to your name in the sidebar (top bar on a phone). It uploads unsent changes first, and if that fails it keeps you signed in so nothing is lost. After signing out, the saved copy on that device is cleared, so a shared phone shows nothing to the next person.
+
 On a wide screen the pages sit next to a left sidebar. On a phone the sidebar becomes a bottom bar.
 Pages fade in, bars fill up and cards lift on hover (`css/motion.css`). All motion turns off when the phone is set to reduce motion.
 The levels, the 70% thresholds and the study order are suggestions, not facts. They live in `js/core/config.js`.
