@@ -34,6 +34,7 @@ You take the tests in ChatGPT or Claude. Revise Stack plans your day, records yo
 | Backup | Sign-in status, copy and restore as text, install help |
 
 On a wide screen the pages sit next to a left sidebar. On a phone the sidebar becomes a bottom bar.
+Pages fade in, bars fill up and cards lift on hover (`css/motion.css`). All motion turns off when the phone is set to reduce motion.
 The levels, the 70% thresholds and the study order are suggestions, not facts. They live in `js/core/config.js`.
 
 ## Online storage (Firebase)
@@ -92,7 +93,7 @@ assets/
   icons/                app icons (192, 512, maskable, Apple, favicons, logo mark)
   fonts/                self-hosted fonts (Plus Jakarta Sans, JetBrains Mono) and licences
 css/
-  fonts.css  tokens.css  base.css  layout.css  components.css  pages.css  dashboard.css
+  fonts.css  tokens.css  base.css  layout.css  components.css  pages.css  dashboard.css  signin.css  motion.css
 data/
   syllabus/             index.json and one JSON file per phase
   projects.json         the portfolio projects

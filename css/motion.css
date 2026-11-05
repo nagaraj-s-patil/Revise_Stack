@@ -1,0 +1,70 @@
+/* Motion. Everything here is switched off when the phone asks for reduced motion (last block).
+   Entrance animations run only when the page changes ([data-enter]), never on a redraw, so typing is not disturbed. */
+@keyframes rise { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes pop { from { opacity: 0; transform: scale(.92); } to { opacity: 1; transform: none; } }
+@keyframes grow { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
+@keyframes drift { 0%, 100% { transform: translate(0, 0) scale(1); } 50% { transform: translate(40px, 30px) scale(1.12); } }
+@keyframes sweep { 0% { transform: translateX(-120%); } 60%, 100% { transform: translateX(220%); } }
+@keyframes spin { to { transform: rotate(360deg); } }
+@keyframes slidein { from { opacity: 0; transform: translateY(-8px); } to { opacity: 1; transform: none; } }
+@keyframes twinkle { 0%, 100% { opacity: .5; } 50% { opacity: 1; } }
+
+@media (prefers-reduced-motion: no-preference) {
+  /* page entrance, one block after another */
+  .wrap[data-enter] > * { animation: rise .5s cubic-bezier(.2, .7, .2, 1) both; }
+  .wrap[data-enter] > :nth-child(2) { animation-delay: .05s; }
+  .wrap[data-enter] > :nth-child(3) { animation-delay: .10s; }
+  .wrap[data-enter] > :nth-child(4) { animation-delay: .15s; }
+  .wrap[data-enter] > :nth-child(5) { animation-delay: .20s; }
+  .wrap[data-enter] > :nth-child(n+6) { animation-delay: .25s; }
+  .wrap[data-enter] .tile { animation: pop .45s cubic-bezier(.2, .8, .3, 1.2) both; }
+  .wrap[data-enter] .tile:nth-child(2) { animation-delay: .08s; }
+  .wrap[data-enter] .tile:nth-child(3) { animation-delay: .16s; }
+  .wrap[data-enter] .tile:nth-child(4) { animation-delay: .24s; }
+  .wrap[data-enter] .proj { animation: pop .45s ease-out both; }
+  .wrap[data-enter] .proj:nth-child(2) { animation-delay: .1s; }
+  .wrap[data-enter] .proj:nth-child(3) { animation-delay: .2s; }
+  .wrap[data-enter] .pbar span, .wrap[data-enter] .bar span { transform-origin: left; animation: grow .9s .25s cubic-bezier(.2, .7, .2, 1) both; }
+
+  /* hero: floating picture, light sweep, twinkling stars */
+  .hero-art { animation: bob 5s ease-in-out infinite; }
+  .hero::after { content: ""; position: absolute; inset: 0; width: 40%; background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .14), transparent); animation: sweep 7s ease-in-out infinite; pointer-events: none; }
+  .hero { position: relative; }
+  .hero-art circle, .hero-art path:last-child { animation: twinkle 2.4s ease-in-out infinite; }
+
+  /* hover and press */
+  .card, .tile, .proj, .phase { transition: transform .2s ease, box-shadow .2s ease, border-color .2s ease; }
+  @media (hover: hover) {
+    .tile:hover, .proj:hover { transform: translateY(-3px); box-shadow: 0 14px 34px rgba(30, 50, 140, .16); }
+    .card:hover { box-shadow: 0 12px 30px rgba(30, 50, 140, .12); }
+  }
+  .btn { transition: transform .15s ease, box-shadow .2s ease, filter .2s ease; }
+  .btn:hover:not(:disabled) { filter: brightness(1.06); box-shadow: 0 8px 20px rgba(36, 87, 214, .28); }
+  .btn:active:not(:disabled) { transform: scale(.97); }
+  .chip, .modes label, .top-action, .tabs a svg { transition: background-color .2s ease, color .2s ease, transform .15s ease; }
+  .chip:active, .modes label:active { transform: scale(.96); }
+  .side-nav a { transition: background-color .2s ease, color .2s ease, transform .2s ease; }
+  .side-nav a:hover { transform: translateX(3px); }
+  .tabs a[aria-current="page"] svg { animation: pop .3s ease-out; }
+  .topic { transition: background-color .15s ease, padding-left .2s ease; }
+  a.topic:hover { padding-left: 22px; }
+  .msg { animation: slidein .3s ease-out; }
+  .phase[open] > .topics { animation: slidein .25s ease-out; }
+
+  /* sign-in screen */
+  .blob.b1 { animation: drift 14s ease-in-out infinite; }
+  .blob.b2 { animation: drift 18s ease-in-out infinite reverse; }
+  .blob.b3 { animation: drift 22s ease-in-out infinite; }
+  .signin-card { animation: rise .7s cubic-bezier(.2, .7, .2, 1) both; }
+  .features li { animation: rise .5s ease-out both; }
+  .features li:nth-child(1) { animation-delay: .35s; }
+  .features li:nth-child(2) { animation-delay: .45s; }
+  .features li:nth-child(3) { animation-delay: .55s; }
+  .btn.big { position: relative; overflow: hidden; }
+  .btn.big::after { content: ""; position: absolute; inset: 0; width: 40%; background: linear-gradient(100deg, transparent, rgba(255, 255, 255, .35), transparent); animation: sweep 3.5s 1s ease-in-out infinite; }
+  .spin { animation: spin .8s linear infinite; }
+}
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { animation: none !important; transition: none !important; }
+}

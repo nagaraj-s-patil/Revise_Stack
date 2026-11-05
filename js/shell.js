@@ -32,7 +32,7 @@ let lastRouteKey = null;
 /** Reset the one-off screen state when the person moves to a different page. */
 function onRouteChange(r) {
   const key = r.name + ':' + (r.id || '');
-  if (key === lastRouteKey) return;
+  if (key === lastRouteKey) return false;
   const previous = lastRouteKey ? lastRouteKey.split(':')[0] : null;
   lastRouteKey = key;
   ui.msg = null; ui.editing = null; ui.manualOpen = false; ui.promptOpen = false; ui.copied = false;
@@ -43,6 +43,7 @@ function onRouteChange(r) {
   }
   if (r.name === 'today') { ui.todayId = null; ui.todayIdx = 0; ui.short = false; }
   window.scrollTo(0, 0);
+  return true;
 }
 
 export function renderApp() {
@@ -54,10 +55,10 @@ export function renderApp() {
     app.textContent = ''; app.removeAttribute('data-loading'); app.appendChild(signInScreen());
     return;
   }
-  onRouteChange(r);
+  const entered = onRouteChange(r);   // true when the page just changed: the entrance animation plays only then
 
   const active = r.name === 'topic' ? ui.from : r.name;
-  const wrap = h('main', { class: 'wrap' }, header());
+  const wrap = h('main', { class: 'wrap', 'data-enter': entered ? '' : null }, header());
   if (!store.storageOk) {
     wrap.appendChild(h('div', { class: 'banner', role: 'alert' },
       'Your browser is blocking storage. Progress will NOT be saved. Open the site in a normal window.'));
