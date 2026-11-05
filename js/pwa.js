@@ -40,7 +40,17 @@ export async function promptInstall() {
 
 function registerServiceWorker() {
   if (!('serviceWorker' in navigator) || !/^https?:$/.test(location.protocol)) return;
-  navigator.serviceWorker.register('sw.js').catch(err => console.warn('Offline support is off:', err.message));
+  const hadController = !!navigator.serviceWorker.controller;
+  let reloaded = false;
+  // A new version took over: reload once so the screen shows it, instead of waiting for the next visit.
+  navigator.serviceWorker.addEventListener('controllerchange', () => {
+    if (!hadController || reloaded) return;
+    reloaded = true;
+    location.reload();
+  });
+  navigator.serviceWorker.register('sw.js')
+    .then(reg => reg.update())
+    .catch(err => console.warn('Offline support is off:', err.message));
 }
 
 /** Call once at start. */

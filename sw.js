@@ -3,7 +3,7 @@
 // The file list and the version are written by `npm run precache`. Do not edit between the markers.
 
 // BEGIN GENERATED
-const VERSION = "00099543f3";
+const VERSION = "84b3027250";
 const PRECACHE = [
   "./",
   "assets/fonts/jetbrains-mono-latin-400-normal.woff2",
@@ -124,7 +124,7 @@ self.addEventListener('fetch', event => {
   if (url.origin !== self.location.origin) return;
 
   event.respondWith(
-    fetch(request)
+    fetch(request, { cache: 'no-cache' })   // always ask the server if the file changed, so a new version shows up at once
       .then(response => {
         if (response.ok) {
           const copy = response.clone();
