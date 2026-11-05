@@ -8,6 +8,7 @@ import { states, projState } from '../state/selectors.js';
 import { render } from '../ui/render.js';
 import { fmt, LEVEL_LABEL } from '../ui/format.js';
 import { badge } from '../ui/components/badge.js';
+import { icon } from '../ui/components/icons.js';
 import { studyCards } from '../ui/components/study.js';
 import { greeting, hero, statTiles, pathCard, projectCards } from '../ui/components/dashboard.js';
 import { installCard } from '../ui/components/install-card.js';
@@ -82,8 +83,10 @@ function taskCard(task, queue, dueList, st, t) {
     h('div', { class: 'meta', style: 'justify-content:flex-start' },
       badge(task.state.level),
       task.state.last ? h('span', { class: 'score' }, 'Last ' + task.state.last.score + '/' + task.state.last.total + ' on ' + fmt(task.state.last.date)) : null,
-      h('a', { href: '#t-' + task.topic.id, class: 'small', style: 'color:var(--accent)' }, 'Open topic page')),
-    actions.length ? h('div', { class: 'btn-row' }, actions) : null);
+    ),
+    h('div', { class: 'btn-row' },
+      h('a', { href: '#t-' + task.topic.id, class: 'btn small dark', id: 'open-topic' }, 'Open topic', icon('arrow', 16)),
+      actions));
 }
 
 function spotCheckCard(st, t) {

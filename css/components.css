@@ -39,6 +39,8 @@
 .modes label:has(input:focus-visible) { outline: 3px solid var(--focus); outline-offset: 2px; }
 .btn { min-height: 48px; padding: 0 20px; border-radius: 12px; border: 1px solid var(--accent-fill); background: var(--btn-bg); display: inline-flex; align-items: center; justify-content: center; gap: 8px; color: var(--on-btn); font-weight: 700; cursor: pointer; font-size: 16px; }
 .btn.secondary { background: var(--surface); color: var(--accent); border-color: var(--accent); }
+.btn.dark { background: var(--fg); border-color: var(--fg); color: var(--surface); }
+a.btn { text-decoration: none; }
 .btn.light { background: var(--btn-bg); border-color: var(--accent-fill); color: #141414; }
 .btn.small { min-height: 44px; padding: 0 14px; font-size: 14px; }
 .btn.danger { border-color: var(--weak); color: var(--weak); background: var(--surface); }
