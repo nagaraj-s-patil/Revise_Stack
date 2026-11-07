@@ -9,8 +9,10 @@ import { TAG_HINT } from '../format.js';
 import { msgArea } from '../messages.js';
 import { onSavePaste, manualForm } from './result-flow.js';
 
-const modesFor = tested => [['learn', 'Learn first (about 20 min)'], [ 'quick', tested ? 'Quick test (5 questions)' : 'Pre-test (5 questions)'], ['full', 'Full test (10 questions)']];
-const PRETEST_HINT = 'Start with a pre-test: 5 questions to see what you already know. Weak result: learn it first. OK or Strong: just revise.';
+const modesFor = tested => tested
+  ? [['learn', 'Learn first (about 20 min)'], ['quick', 'Quick test (5 questions)'], ['full', 'Full test (10 questions)']]
+  : [['learn', 'Learn first (about 20 min)'], ['pre', 'Pre-test (5 questions, not counted in revision)'], ['quick', 'Quick test (5 questions, starts revision)'], ['full', 'Full test (10 questions, starts revision)']];
+const PRETEST_HINT = 'A pre-test shows what you already know. It is not counted in your level or revision. Weak or OK: learn it first. Your first Quick or Full test after that starts the revision schedule.';
 
 /**
  * twoStep (Today): the paste card stays hidden until the prompt has been copied,
@@ -49,7 +51,7 @@ export function studyCards(id, twoStep) {
   });
 
   const modes = h('fieldset', { class: 'modes' }, h('legend', null, 'Mode'));
-  const tested = store.data.results.some(r => r.topicId === id);
+  const tested = store.data.results.some(r => r.topicId === id && r.mode !== 'pre');
   for (const [value, label] of modesFor(tested)) {
     const input = h('input', { type: 'radio', name: 'mode', value, id: 'mode-' + value });
     input.checked = ui.mode === value;

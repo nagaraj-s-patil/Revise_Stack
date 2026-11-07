@@ -1,4 +1,4 @@
-// Builds the Learn, Quick and Full test prompts that you paste into an AI chat.
+// Builds the Learn, Pre-test, Quick and Full test prompts that you paste into an AI chat.
 
 export const FORMAT_RULES =
   'Do not write a level such as Weak, OK or Strong. My tracker works that out from the score.\n' +
@@ -57,6 +57,12 @@ export function buildPrompt(topic, phase, mode, prevWeak) {
       'Mode: FULL TEST. Ask exactly 10 questions: 6 interview-style concept questions, ' +
       '2 output-prediction questions, and 2 short coding tasks. Start easy and finish hard.\n\n' +
       rules + FORMAT_RULES + '\n\n' + ending + block(topic, 'full', 10);
+  }
+  if (mode === 'pre') {
+    return head +
+      'Mode: PRE-TEST. This only shows where I stand before I study. Ask exactly 5 questions: 3 interview-style concept questions and 2 small code or output questions. ' +
+      'Cover different parts of the topic, from easy to hard.\n\n' +
+      rules + FORMAT_RULES + '\n\n' + ending + block(topic, 'pre', 5);
   }
   return head +
     'Mode: QUICK TEST. Ask exactly 5 questions: 3 interview-style concept questions and 2 small code or output questions. ' +

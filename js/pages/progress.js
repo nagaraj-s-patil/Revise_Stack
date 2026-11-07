@@ -2,13 +2,13 @@
 // and the progress summary to paste into an AI chat.
 import { h, copyText } from '../ui/dom.js';
 import {
-  allTopics, countLevels, applyChecks, weakestTopics, repeatedMistakes, buildSummary, streakInfo, today, DEADLINE
+  allTopics, countLevels, applyChecks, weakestTopics, learnFirst, repeatedMistakes, buildSummary, streakInfo, today, DEADLINE
 } from '../core/index.js';
 import { context } from '../state/context.js';
 import { store } from '../state/store.js';
 import { ui } from '../state/session.js';
 import { states } from '../state/selectors.js';
-import { badge } from '../ui/components/badge.js';
+import { badge, preBadge } from '../ui/components/badge.js';
 
 const SUMMARY_TIMES = ['30 minutes', '1 hour', '2 hours', '3 hours or more'];
 const rowLink = 'padding:0;min-height:44px';
@@ -73,6 +73,23 @@ function weakestCard(weakest) {
   return card;
 }
 
+/** Topics whose pre-test was Weak or OK and that have no real test yet: what to learn first. */
+function learnFirstCard(st) {
+  const list = learnFirst(context.syllabus.phases, st);
+  const card = h('section', { class: 'card', 'aria-label': 'Learn first' }, h('h3', null, 'Learn first (from your pre-tests)'),
+    h('p', { class: 'small muted' }, 'Lowest pre-test score first. Pre-tests are not counted in progress or revision.'));
+  if (!list.length) {
+    card.appendChild(h('p', { class: 'empty' }, 'Nothing yet. Take a pre-test on a topic and, if it is Weak or OK, it shows here.'));
+    return card;
+  }
+  card.appendChild(h('ul', { class: 'history' }, list.slice(0, 10).map(x =>
+    h('li', null, h('a', { class: 'topic', href: '#t-' + x.topic.id, style: 'padding:0;min-height:44px' },
+      h('span', { class: 'name' }, x.topic.name),
+      h('span', { class: 'meta' }, h('span', { class: 'score' }, x.state.pre.last.score + '/' + x.state.pre.last.total), preBadge(x.state.pre)))))));
+  if (list.length > 10) card.appendChild(h('p', { class: 'small muted' }, 'And ' + (list.length - 10) + ' more. Use the Learning Path to see all.'));
+  return card;
+}
+
 function repeatedCard() {
   const repeated = repeatedMistakes(context.syllabus.phases, store.data.results, 5);
   const card = h('section', { class: 'card' }, h('h3', null, 'Mistakes that keep coming back'));
@@ -133,6 +150,7 @@ export function progressPage() {
   frag.appendChild(h('h2', null, 'Progress'));
   frag.appendChild(overviewCard(st));
   frag.appendChild(readinessCard(st));
+  frag.appendChild(learnFirstCard(st));
   frag.appendChild(weakestCard(weakest));
   frag.appendChild(repeatedCard());
   frag.appendChild(summaryCard(st));

@@ -7,7 +7,7 @@ import { ui } from '../state/session.js';
 import { states, projState } from '../state/selectors.js';
 import { render } from '../ui/render.js';
 import { fmt, LEVEL_LABEL } from '../ui/format.js';
-import { badge } from '../ui/components/badge.js';
+import { badge, preBadge } from '../ui/components/badge.js';
 import { icon } from '../ui/components/icons.js';
 import { studyCards } from '../ui/components/study.js';
 import { greeting, hero, statTiles, pathCard, projectCards } from '../ui/components/dashboard.js';
@@ -49,6 +49,7 @@ function taskCard(task, queue, dueList, st, t) {
   let intro = null;
   if (!store.data.results.length) intro = 'Welcome. Start with a pre-test (5 questions). It shows where you stand before you pick what to revise.';
   else if (ui.short) intro = 'Minimum day: one test is enough to keep your streak.';
+  else if (task.state.pre) intro = 'Pre-test said ' + LEVEL_LABEL[task.state.pre.level][1] + ' (' + task.state.pre.last.score + '/' + task.state.pre.last.total + '). ' + (task.state.pre.level === 'strong' ? 'Confirm it with a Full test.' : 'Learn it first, then take a Quick test to start revision.');
   else if (task.kind === 'new' && !dueList.length) intro = coreDone ? 'Core is done. Next up: ' + task.topic.name + '.' : 'No revisions due. Here is a new topic.';
 
   const kind = task.kind === 'revision'
@@ -81,7 +82,7 @@ function taskCard(task, queue, dueList, st, t) {
     h('h2', null, task.topic.name),
     h('p', { class: 'small muted' }, 'Phase ' + task.phase.number + ' · ' + task.phase.name + (task.topic.tag !== 'UNSET' ? ' · ' + task.topic.tag : '')),
     h('div', { class: 'meta', style: 'justify-content:flex-start' },
-      badge(task.state.level),
+      task.state.pre ? preBadge(task.state.pre) : badge(task.state.level),
       task.state.last ? h('span', { class: 'score' }, 'Last ' + task.state.last.score + '/' + task.state.last.total + ' on ' + fmt(task.state.last.date)) : null,
     ),
     h('div', { class: 'btn-row' },

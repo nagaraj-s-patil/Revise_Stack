@@ -17,14 +17,17 @@ You take the tests in ChatGPT or Claude. Revise Stack plans your day, records yo
 ## How it works
 
 1. **Overview** (Today) shows one task: a due revision first, then a new topic.
-2. **Pre-test first.** A topic you have never tested starts with a **Pre-test**: 5 questions, no teaching, to see what you already know. Copy the test prompt, paste it into an AI chat and take the test. (You can also choose **Learn first** or a **Full test** under Mode.)
+2. **Pre-test first.** A topic you have never tested starts with a **Pre-test**: 5 questions, no teaching, to see what you already know. Copy the test prompt, paste it into an AI chat and take the test. (You can also choose **Learn first**, a **Quick test** or a **Full test** under Mode.)
+   - **A pre-test is only a starting check.** It is not counted in the level, in Done, in your progress numbers or in revision. It never makes a topic due. You can pre-test the whole syllabus in one go and the revision list stays empty.
+   - What it does: Weak and OK pre-tests move those topics to the front of your new topics (weakest first), and they appear in **Progress > Learn first** with a "Pre-test" badge. Strong pre-tests go to the back and get a Full test to confirm.
+   - After you learn a topic, your first **Quick or Full test** is the first real test. That is when the level is set and the revision schedule starts.
 3. **Paste the AI reply** back. The app reads the `RESULT_START ... RESULT_END` block and saves the score. A manual score form is the backup.
-4. The app works out the level from the score and tells you **what next**:
+4. The app works out the level from the score of real tests (not pre-tests) and tells you **what next**:
    - **Weak** (below 6/10): choose Learn first, study the weak points, then test again.
    - **OK** (6 to 7): revise the weak points, test again on the due date.
    - **Strong** (8 or more): after a 5-question test, take a Full test to reach Done.
    - **Done:** 2 tests on 2 different days, both Strong, at least one a Full test (10 questions).
-5. Revisions come back 1, 3, 7 and 14 days after the first test of a passing run. A result under 60% resets the schedule.
+5. Revisions (standard spaced revision) come back 1, 3, 7 and 14 days after the first real test of a passing run. A result under 60% resets the schedule.
 6. Streak: any saved test counts. One missed day per week is forgiven.
 
 ## Pages
@@ -35,7 +38,7 @@ You take the tests in ChatGPT or Claude. Revise Stack plans your day, records yo
 | Learning Path | All phases and topics with levels, filters and each topic's history |
 | Interview Prep | Mock interview prompt on your weakest topics and your saved mock scores |
 | Projects | Status, repository link and note for each project |
-| Progress | Core progress, apply-readiness checks, weakest topics, repeated mistakes, progress summary to paste into an AI |
+| Progress | Core progress, apply-readiness checks, Learn first list (from pre-tests), weakest topics, repeated mistakes, progress summary to paste into an AI |
 | Backup | Sign-in status, copy and restore as text, install help |
 
 Sign in is one button ("Continue with Google"). Sign out is the arrow button next to your name in the sidebar (top bar on a phone). It uploads unsent changes first, and if that fails it keeps you signed in so nothing is lost. After signing out, the saved copy on that device is cleared, so a shared phone shows nothing to the next person.

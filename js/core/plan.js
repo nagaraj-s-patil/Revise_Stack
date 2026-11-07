@@ -37,6 +37,7 @@ export function buildQueue(phases, states, today) {
       if (!t.core && !unlocked) return;
       var s = states[t.id];
       if (s.last && s.last.date === today) return;
+      if (s.pre && s.pre.last.date === today) return;   // pre-tested today: next topic
       if (s.level === 'untested') fresh.push({ topic: t, phase: p, state: s, kind: 'new' });
       else if (s.isDue) due.push({ topic: t, phase: p, state: s, kind: 'revision' });
     });
@@ -45,13 +46,33 @@ export function buildQueue(phases, states, today) {
   due.sort(function (a, b) {
     return (rank[a.state.level] - rank[b.state.level]) || (a.state.due < b.state.due ? -1 : a.state.due > b.state.due ? 1 : 0);
   });
+  // New topics: what the pre-test says to learn first (Weak), then not pre-tested yet, then OK, then Strong (needs a real test to confirm).
+  var preRank = { weak: 0, none: 1, ok: 2, strong: 3 };
+  var rankOf = function (q) { return q.state.pre ? preRank[q.state.pre.level] : preRank.none; };
+  fresh.forEach(function (q, i) { q.order = i; });
+  fresh.sort(function (a, b) { return (rankOf(a) - rankOf(b)) || (a.order - b.order); });
   return due.concat(fresh);
 }
 
-// A topic never tested starts with a pre-test (5 questions) whatever its tag, so the result decides
-// whether to learn first. A strong result from a Quick test needs a Full test to reach Done, so suggest Full then.
+// Topics whose pre-test was Weak or OK and that have no real test yet: what to learn first, lowest score first.
+export function learnFirst(phases, states) {
+  var out = [];
+  orderedPhases(phases).forEach(function (p) {
+    p.topics.forEach(function (t) {
+      var s = states[t.id];
+      if (s.level === 'untested' && s.pre && s.pre.level !== 'strong') out.push({ topic: t, phase: p, state: s, order: out.length });
+    });
+  });
+  return out.sort(function (a, b) { return (pct(a.state.pre.last) - pct(b.state.pre.last)) || (a.order - b.order); });
+}
+
+// A topic never tested starts with a pre-test (5 questions) whatever its tag. After a pre-test: Weak or OK means
+// learn first, Strong means a Full test to confirm. A strong Quick test needs a Full test to reach Done, so suggest Full then.
 export function suggestMode(topic, state) {
-  if (!state || !state.last) return 'quick';
+  if (!state || !state.last) {
+    if (state && state.pre) return state.pre.level === 'strong' ? 'full' : 'learn';
+    return 'pre';
+  }
   if (pct(state.last) >= STRONG && state.last.total < 10) return 'full';
   return 'quick';
 }

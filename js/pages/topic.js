@@ -5,7 +5,7 @@ import { context } from '../state/context.js';
 import { store } from '../state/store.js';
 import { ui } from '../state/session.js';
 import { fmt } from '../ui/format.js';
-import { badge } from '../ui/components/badge.js';
+import { badge, preBadge } from '../ui/components/badge.js';
 import { studyCards } from '../ui/components/study.js';
 import { mistakesCard, historyCard } from '../ui/components/history.js';
 
@@ -27,7 +27,7 @@ export function topicPage(id) {
     ]
     : [h('span', { class: 'small muted' }, 'No test yet.')];
   frag.appendChild(h('section', { class: 'card', 'aria-label': 'Status' },
-    h('div', { class: 'meta', style: 'justify-content:flex-start' }, badge(st.level), status)));
+    h('div', { class: 'meta', style: 'justify-content:flex-start' }, st.pre ? preBadge(st.pre) : badge(st.level), status)));
 
   frag.appendChild(studyCards(id, false));
   const mistakes = mistakesCard(id);

@@ -49,9 +49,18 @@ export function nextDue(list) {
 }
 
 // State of one topic, calculated from results (nothing is stored).
+// Pre-test results (mode 'pre') are a starting check only: they never set the level, count towards Done or start revision.
+// A topic with only pre-tests stays 'untested' and carries `pre` (its last pre-test and that result's level) so the
+// planner can show what to learn first.
 export function topicState(results, topicId, today) {
-  var list = resultsFor(results, topicId);
-  if (!list.length) return { level: 'untested', last: null, count: 0, due: null, isDue: false, doneProgress: 0 };
+  var all = resultsFor(results, topicId);
+  var list = all.filter(function (r) { return r.mode !== 'pre'; });
+  var pre = null;
+  if (!list.length) {
+    var pres = all.filter(function (r) { return r.mode === 'pre'; });
+    if (pres.length) { var pl = pres[pres.length - 1]; pre = { last: pl, level: levelFromPct(pct(pl)) }; }
+    return { level: 'untested', last: null, count: 0, due: null, isDue: false, doneProgress: 0, pre: pre };
+  }
   var last = list[list.length - 1];
   var done = isDone(list);
   var due = nextDue(list);
@@ -61,7 +70,8 @@ export function topicState(results, topicId, today) {
     count: list.length,
     due: due,
     isDue: !!today && due <= today,
-    doneProgress: doneProgress(list)
+    doneProgress: doneProgress(list),
+    pre: null
   };
 }
 

@@ -10,7 +10,7 @@ export const LEVEL_LABEL = {
   untested: ['–', 'Untested']
 };
 
-export const MODE_LABEL = { learn: 'Learn first', quick: 'Quick test', full: 'Full test' };
+export const MODE_LABEL = { learn: 'Learn first', quick: 'Quick test', full: 'Full test', pre: 'Pre-test' };
 
 export const TAG_HINT = {
   REVISE: 'You studied this before, so a Quick test is suggested.',

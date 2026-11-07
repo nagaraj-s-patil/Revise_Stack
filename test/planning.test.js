@@ -41,7 +41,7 @@ test('suggestMode: strong quick result asks for a Full test', () => {
   assert.equal(L.suggestMode(t, st), 'full');
   const st2 = L.topicState([res('a1', '2026-10-27', 6, 10)], 'a1', '2026-10-29');
   assert.equal(L.suggestMode(t, st2), 'quick');
-  assert.equal(L.suggestMode(phasesFixture[0].topics[1], L.topicState([], 'a2', '2026-10-29')), 'quick');   // LEARN tag: still a pre-test first
+  assert.equal(L.suggestMode(phasesFixture[0].topics[1], L.topicState([], 'a2', '2026-10-29')), 'pre');   // LEARN tag: still a pre-test first
 });
 test('shortTask: prefers a revision, then a new topic that is not LEARN', () => {
   const fresh = L.buildQueue(phasesFixture, statesOf([], '2026-10-29'), '2026-10-29');

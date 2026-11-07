@@ -5,15 +5,15 @@ import { context } from '../state/context.js';
 import { states } from '../state/selectors.js';
 import { ui } from '../state/session.js';
 import { render } from '../ui/render.js';
-import { badge } from '../ui/components/badge.js';
+import { badge, preBadge } from '../ui/components/badge.js';
 
 const FILTERS = [['all', 'All'], ['weak', 'Weak'], ['due', 'Due'], ['untested', 'Untested']];
 
 function topicRow(topic, s, locked) {
   const meta = h('span', { class: 'meta' },
     s.isDue ? h('span', { class: 'duepill' }, 'Due') : null,
-    s.last ? h('span', { class: 'score' }, s.last.score + '/' + s.last.total) : null,
-    badge(s.level));
+    s.last ? h('span', { class: 'score' }, s.last.score + '/' + s.last.total) : s.pre ? h('span', { class: 'score' }, s.pre.last.score + '/' + s.pre.last.total) : null,
+    s.pre ? preBadge(s.pre) : badge(s.level));
   const name = h('span', { class: 'name' }, topic.name,
     h('span', { class: 'tag', style: 'display:block' }, topic.tag === 'UNSET' ? '' : topic.tag));
   return h('li', null, locked

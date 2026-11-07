@@ -1,7 +1,7 @@
 // Saving a test result: read the pasted AI reply (or the manual form), warn about wrong topic or duplicates,
 // save, then show the outcome with Undo and Edit. Also the manual score form, which doubles as the edit form.
 import { h } from '../dom.js';
-import { parseResult, splitList, topicState, today } from '../../core/index.js';
+import { parseResult, splitList, topicState, levelFromPct, pct, today } from '../../core/index.js';
 import { context } from '../../state/context.js';
 import { store, save } from '../../state/store.js';
 import { ui, resetToday } from '../../state/session.js';
@@ -80,13 +80,21 @@ function commit(topicId, d) {
 function showSaved(topicId, rec, ok, wasEdit) {
   const st = topicState(store.data.results, topicId, today());
   const name = context.byId[topicId].topic.name;
-  const lines = [name + ': ' + rec.score + '/' + rec.total + ', ' + LEVEL_LABEL[st.level][1] + (wasEdit ? ' (edited)' : '') + '.'];
+  const isPre = rec.mode === 'pre';
+  const shownLevel = isPre ? levelFromPct(pct(rec)) : st.level;
+  const lines = [name + (isPre ? ' pre-test: ' : ': ') + rec.score + '/' + rec.total + ', ' + LEVEL_LABEL[shownLevel][1] + (wasEdit ? ' (edited)' : '') + '.'];
   if (rec.weakPoints.length) lines.push('Weak points: ' + rec.weakPoints.join('; '));
   if (rec.nextStep) lines.push('Next step: ' + rec.nextStep);
+  const PRE_NEXT = { weak: 'Learn this first: choose Learn first, then take a Quick test. That test starts your revision schedule.', ok: 'Learn the weak points first (Learn first), then take a Quick test. That test starts your revision schedule.', strong: 'Strong start. Take a Full test (10 questions) to confirm. Revision starts from your first Quick or Full test.' };
   const NEXT = { weak: 'What next: choose Learn first on this topic, study the weak points, then test again.', ok: 'What next: revise the weak points, then test again on the due date.' };
-  if (NEXT[st.level]) lines.push(NEXT[st.level]);
-  else if (st.level === 'strong' && rec.total < 10) lines.push('What next: take a Full test (10 questions) to reach Done.');
-  lines.push(st.level === 'done' ? 'Done. Revision continues on ' + fmt(st.due) + '.' : 'Next revision: ' + fmt(st.due) + '.');
+  if (isPre) {
+    lines.push('Pre-test only: it is not counted in your level or revision.');
+    lines.push('What next: ' + PRE_NEXT[shownLevel]);
+  } else {
+    if (NEXT[st.level]) lines.push(NEXT[st.level]);
+    else if (st.level === 'strong' && rec.total < 10) lines.push('What next: take a Full test (10 questions) to reach Done.');
+    lines.push(st.level === 'done' ? 'Done. Revision continues on ' + fmt(st.due) + '.' : 'Next revision: ' + fmt(st.due) + '.');
+  }
   if (!ok) lines.push('Could not save to this browser. Progress will be lost when you close the page.');
   if (topicId !== currentDraftId()) lines.push('Saved under ' + name + '. Open it from the syllabus to see its history.');
   const actions = [];
@@ -140,7 +148,7 @@ export function manualForm(topicId) {
       showSaved(rec.topicId, rec, ok, true);
     } else {
       ui.manualOpen = false;
-      commit(topicId, { source: 'manual', mode: tt >= 10 ? 'full' : 'quick', score: sc, total: tt, weakPoints: wp, nextStep: ns });
+      commit(topicId, { source: 'manual', mode: tt >= 10 ? 'full' : ui.mode === 'pre' ? 'pre' : 'quick', score: sc, total: tt, weakPoints: wp, nextStep: ns });
     }
   });
 

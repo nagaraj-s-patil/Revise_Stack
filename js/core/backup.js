@@ -20,7 +20,7 @@ export function validateBackup(text) {
         r.total < 1 || r.total > 50 || r.score < 0 || r.score > r.total) { dropped++; return; }
     results.push({
       id: typeof r.id === 'string' && r.id ? r.id : 'imp' + i + r.date,
-      topicId: r.topicId, date: r.date, mode: r.mode === 'full' ? 'full' : 'quick', score: r.score, total: r.total,
+      topicId: r.topicId, date: r.date, mode: r.mode === 'full' ? 'full' : r.mode === 'pre' ? 'pre' : 'quick', score: r.score, total: r.total,
       weakPoints: Array.isArray(r.weakPoints) ? r.weakPoints.filter(function (x) { return typeof x === 'string'; }) : [],
       nextStep: typeof r.nextStep === 'string' ? r.nextStep : '', edited: !!r.edited, source: typeof r.source === 'string' ? r.source : 'import'
     });
