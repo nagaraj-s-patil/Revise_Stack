@@ -61,7 +61,7 @@ The device keeps a copy so the app opens fast and works offline.
 
 Set it up once:
 
-1. Firebase console: create a project, add a Web app, copy `apiKey`, `authDomain`, `projectId` and `appId` into `js/cloud/config.js`. These are not secrets.
+1. Firebase console: create a project, add a Web app, copy `apiKey`, `authDomain`, `projectId` and `appId` into `js/cloud/config.js`. These are not secrets. Also set `FIREBASE_DATABASE` to the database ID shown in Firestore: `(default)` is the standard name; if the console shows `default` without brackets, use `default`.
 2. Authentication: enable the **Google** provider. Under Settings > Authorized domains add your site address (for example `nagaraj-s-patil.github.io`).
 3. Firestore Database: create it in Production mode, open the Rules tab, paste `firestore.rules` and publish. Without these rules your data is not protected.
 4. Open the app and sign in with Google. Progress already saved in that browser is uploaded the first time.

@@ -1,6 +1,6 @@
 // Cloud sync: Firebase Google sign-in plus one Firestore document per person (users/<uid>).
 // The browser copy stays as a cache, so the app still opens offline. Firestore is the master copy.
-import { FIREBASE_CONFIG, FIREBASE_SDK, cloudEnabled } from './config.js';
+import { FIREBASE_CONFIG, FIREBASE_DATABASE, FIREBASE_SDK, cloudEnabled } from './config.js';
 import { store, setSaveHook, adoptData, wipeLocal } from '../state/store.js';
 import { render } from '../ui/render.js';
 
@@ -119,7 +119,7 @@ export async function startCloud() {
     const [app, auth] = await Promise.all([import(FIREBASE_SDK + 'firebase-app.js'), import(FIREBASE_SDK + 'firebase-auth.js')]);
     const a = app.initializeApp(FIREBASE_CONFIG);
     fb = { auth: auth.getAuth(a), GoogleAuthProvider: auth.GoogleAuthProvider, signInWithPopup: auth.signInWithPopup, signOut: auth.signOut };
-    fsReady = fsLoad.then(fs => { fb.db = fs.getFirestore(a); fb.doc = fs.doc; fb.getDoc = fs.getDoc; fb.setDoc = fs.setDoc; });
+    fsReady = fsLoad.then(fs => { fb.db = FIREBASE_DATABASE && FIREBASE_DATABASE !== '(default)' ? fs.getFirestore(a, FIREBASE_DATABASE) : fs.getFirestore(a); fb.doc = fs.doc; fb.getDoc = fs.getDoc; fb.setDoc = fs.setDoc; });
     auth.onAuthStateChanged(fb.auth, async user => {
       cloud.user = user;
       if (!user) { hint(false); cloud.syncing = false; set('signedout'); return; }

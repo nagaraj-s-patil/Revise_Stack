@@ -8,5 +8,9 @@ export const FIREBASE_CONFIG = {
   appId: '1:450871820612:web:dff3e7894d9d6f1f60d711'
 };
 
+// Name of the Firestore database. Shown in the console as "(default)" for the standard one.
+// Yours was created with the ID "default" (no brackets), so that is the name used here.
+export const FIREBASE_DATABASE = 'default';
+
 export const FIREBASE_SDK = 'https://www.gstatic.com/firebasejs/10.14.1/';
 export const cloudEnabled = () => !!(FIREBASE_CONFIG.apiKey && FIREBASE_CONFIG.projectId && FIREBASE_CONFIG.authDomain);
