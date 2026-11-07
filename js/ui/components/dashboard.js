@@ -3,10 +3,10 @@ import { h } from '../dom.js';
 import { icon } from './icons.js';
 import { heroArt } from './hero-art.js';
 import { fmtLong, STATUS_LABEL } from '../format.js';
-import { allTopics, countLevels, projectReady, parseDate, today, DEADLINE, PRIORITY, USER_NAME } from '../../core/index.js';
+import { allTopics, countLevels, projectReady, parseDate, today, PRIORITY } from '../../core/index.js';
 import { context } from '../../state/context.js';
 import { store } from '../../state/store.js';
-import { projState } from '../../state/selectors.js';
+import { projState, me } from '../../state/selectors.js';
 
 const pct = share => Math.round(share * 100);
 
@@ -19,18 +19,18 @@ export function greeting() {
   const hour = new Date().getHours();
   const part = hour < 12 ? 'morning' : hour < 17 ? 'afternoon' : 'evening';
   return h('div', { class: 'greet' },
-    h('h2', null, 'Good ' + part + ', ' + USER_NAME.split(' ')[0] + ' 👋'),
+    h('h2', null, 'Good ' + part + ', ' + me().first + ' 👋'),
     h('p', { class: 'muted' }, 'Small steps today. Big dreams tomorrow.'));
 }
 
 export function daysLeft() {
-  return Math.round((parseDate(DEADLINE) - parseDate(today())) / 86400000);
+  return Math.round((parseDate(me().deadline) - parseDate(today())) / 86400000);
 }
 
 /** Blue banner. The button jumps to today's task card, when there is one. */
 export function hero(hasTask) {
   const days = daysLeft();
-  const goal = days >= 0 ? 'Ready to apply by ' + fmtLong(DEADLINE) + ' · ' + days + ' days left' : 'Target date ' + fmtLong(DEADLINE) + ' has passed';
+  const goal = days >= 0 ? 'Ready to apply by ' + fmtLong(me().deadline) + ' · ' + days + ' days left' : 'Target date ' + fmtLong(me().deadline) + ' has passed';
   const go = () => {
     const el = document.getElementById('today-task');
     if (el) { el.scrollIntoView({ block: 'start' }); el.focus({ preventScroll: true }); }
@@ -64,7 +64,7 @@ export function statTiles(st, info) {
     tile('orange', 'flame', 'Streak', info.streak + (info.streak === 1 ? ' day' : ' days'), streakNote(info)),
     tile('green', 'check', 'Topics Completed', done + '/' + core.length, 'Core topics Done'),
     tile('purple', 'calendar', 'Studied This Week', info.weekDays + '/7 days', 'Days with a saved test'),
-    tile('red', 'target', 'Job Target', fmtLong(DEADLINE), days >= 0 ? days + ' days left' : 'Date passed'));
+    tile('red', 'target', 'Job Target', fmtLong(me().deadline), days >= 0 ? days + ' days left' : 'Date passed'));
 }
 
 function sectionHead(title, href, linkText) {

@@ -14,6 +14,8 @@ import { topicPage } from './pages/topic.js';
 import { projectsPage } from './pages/projects.js';
 import { progressPage } from './pages/progress.js';
 import { interviewPage } from './pages/interview.js';
+import { analysisPage } from './pages/analysis.js';
+import { profilePage } from './pages/profile.js';
 import { backupPage } from './pages/backup.js';
 import { signInScreen } from './pages/signin.js';
 import { needsLogin } from './cloud/sync.js';
@@ -24,6 +26,8 @@ const PAGES = {
   interview: interviewPage,
   projects: projectsPage,
   progress: progressPage,
+  analysis: analysisPage,
+  profile: profilePage,
   backup: backupPage
 };
 

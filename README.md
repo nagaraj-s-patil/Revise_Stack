@@ -39,9 +39,11 @@ You take the tests in ChatGPT or Claude. Revise Stack plans your day, records yo
 | Interview Prep | Mock interview prompt on your weakest topics and your saved mock scores |
 | Projects | Status, repository link and note for each project |
 | Progress | Core progress, apply-readiness checks, Learn first list (from pre-tests), weakest topics, repeated mistakes, progress summary to paste into an AI |
+| Analysis | Pick a phase and Good / Needs work / Not started. Headline numbers, plain-words insights, pace to your apply-by date, phase bars, topic list with trend, tests per week, average score per week, test mix. Each chart has a table view. Pre-tests count as activity only, never as a score |
+| Profile | Name, target role, city, apply-by date, study hours per day (saved with your data, so Firebase and backups carry them). Account: Upload now, Backup link, Sign out |
 | Backup | Sign-in status, copy and restore as text, install help |
 
-**Upload now** (cloud button in the sidebar, in the phone top bar and on the Backup page) sends this device's data to Firebase straight away and shows a message with the result. It replaces the online copy with this device's data, and it refuses if this device has no results while the online copy has some. Sign in is one button ("Continue with Google"). Sign out is the arrow button next to your name in the sidebar (top bar on a phone). It uploads unsent changes first, and if that fails it keeps you signed in so nothing is lost. After signing out, the saved copy on that device is cleared, so a shared phone shows nothing to the next person.
+**Upload now** (cloud button in the sidebar, in the phone top bar and on the Backup page) sends this device's data to Firebase straight away and shows a message with the result. It replaces the online copy with this device's data, and it refuses if this device has no results while the online copy has some. Sign in is one button ("Continue with Google"). Sign out is the arrow button next to your name in the sidebar, or the Sign out button on the Profile page (the phone top bar has the Analysis and Profile icons). It uploads unsent changes first, and if that fails it keeps you signed in so nothing is lost. After signing out, the saved copy on that device is cleared, so a shared phone shows nothing to the next person.
 
 On a wide screen the pages sit next to a left sidebar. On a phone the sidebar becomes a bottom bar.
 Pages fade in, bars fill up and cards lift on hover (`css/motion.css`). All motion turns off when the phone is set to reduce motion.
@@ -115,13 +117,13 @@ docs/app-map.png        the picture of the whole app shown at the top of this fi
 js/
   app.js  shell.js  pwa.js  boot-guard.js
   core/                 pure logic, no page code: levels, parser, prompts, plan, streak,
-                        progress, summary, backup, mistakes, mock, spot check, config
+                        progress, summary, backup, mistakes, mock, spot check, profile, analysis, config
   cloud/                Firebase: config.js (your project values), sync.js (sign-in and sync)
   data/                 loads and checks the syllabus files
   state/                saved data (store), loaded syllabus (context), screen state (session)
   ui/                   dom helpers, router, messages, draft saving
   ui/components/        sidebar and tabs, header, dashboard pieces, icons, study steps, install card
-  pages/                today (Overview), syllabus (Learning Path), topic, interview, projects,
+  pages/                today (Overview), syllabus (Learning Path), topic, interview, projects, analysis, profile,
                         progress, backup, signin
 test/                   unit tests by area, file checks, helpers
 tools/                  serve, update-precache, generate-syllabus, make-icons (rebuilds every icon from assets/brand/logo-source.png)

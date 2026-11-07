@@ -12,3 +12,5 @@ export * from './backup.js';
 export * from './mistakes.js';
 export * from './mock.js';
 export * from './spotcheck.js';
+export * from './profile.js';
+export * from './analysis.js';

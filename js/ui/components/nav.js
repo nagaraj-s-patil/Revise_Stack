@@ -1,13 +1,13 @@
 // Navigation: a sidebar on wide screens and a bottom bar on phones. Both list the same pages.
 import { h } from '../dom.js';
 import { icon } from './icons.js';
-import { USER_NAME } from '../../core/index.js';
-import { cloud, signOutNow, syncNow, displayName } from '../../cloud/sync.js';
+import { me } from '../../state/selectors.js';
+import { cloud, signOutNow, syncNow } from '../../cloud/sync.js';
 import { cloudEnabled } from '../../cloud/config.js';
 
 const SIDE = [
   ['today', 'Overview', 'home'], ['syllabus', 'Learning Path', 'path'], ['interview', 'Interview Prep', 'interview'],
-  ['projects', 'Projects', 'projects'], ['progress', 'Progress', 'progress'], ['backup', 'Backup', 'backup']
+  ['projects', 'Projects', 'projects'], ['progress', 'Progress', 'progress'], ['analysis', 'Analysis', 'analysis'], ['profile', 'Profile', 'profile'], ['backup', 'Backup', 'backup']
 ];
 const TABS = [['today', 'Home', 'home'], ['syllabus', 'Learning', 'path'], ['interview', 'Interview', 'interview'], ['projects', 'Projects', 'projects'], ['progress', 'Progress', 'progress']];
 
@@ -28,8 +28,9 @@ export function sideBar(active) {
       h('strong', null, 'Keep going!'),
       h('span', null, 'Every test you take today is one less topic to forget.')),
     h('div', { class: 'side-user' },
-      h('span', { class: 'avatar', 'aria-hidden': 'true' }, initials(displayName(USER_NAME))),
-      h('span', null, h('strong', null, displayName(USER_NAME)), h('small', null, 'Java Full Stack')),
+      h('a', { class: 'side-me', href: '#profile', 'aria-label': 'Open your profile' },
+        h('span', { class: 'avatar', 'aria-hidden': 'true' }, initials(me().name)),
+        h('span', null, h('strong', null, me().name), h('small', null, me().role))),
       cloudEnabled() && cloud.user
         ? h('div', { class: 'side-actions' },
           h('button', { class: 'signout', type: 'button', id: 'upload-side', onclick: syncNow, title: 'Upload now' }, icon('cloudup', 20), h('span', null, 'Upload now')),

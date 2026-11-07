@@ -4,6 +4,7 @@
 //   projects  status, repository link and note per project id
 //   mocks     mock interview scores
 //   drafts    unsaved pasted AI replies, so an app switch does not lose them
+//   profile   name, role, city, apply-by date and daily hours (js/core/profile.js)
 //   lastExport  day of the last backup copy
 // The storage key keeps its first name on purpose, so earlier progress is still found.
 
@@ -12,7 +13,7 @@ const KEY = 'jfs-tracker-v1';
 export const store = { data: emptyData(), storageOk: true };
 
 export function emptyData() {
-  return { version: 1, results: [], projects: {}, mocks: [], drafts: {}, lastExport: null };
+  return { version: 1, results: [], projects: {}, mocks: [], drafts: {}, lastExport: null, profile: {} };
 }
 
 function probe() {
@@ -30,6 +31,7 @@ function read() {
     d.drafts = d.drafts || {};
     d.projects = d.projects || {};
     d.mocks = Array.isArray(d.mocks) ? d.mocks : [];
+    d.profile = d.profile && typeof d.profile === 'object' ? d.profile : {};
     return d;
   } catch (e) {
     // keep the unreadable data instead of overwriting it

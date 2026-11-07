@@ -1,10 +1,11 @@
 // Backup export and safe restore. Pasted backups are validated before anything is replaced.
+import { cleanProfile } from './profile.js';
 import { PROJECT_STATUS } from './config.js';
 import { localDate, parseDate } from './dates.js';
 
 // Backup text and restore check.
 export function exportBackup(data, today) {
-  return JSON.stringify({ version: 1, exportedOn: today, results: data.results, projects: data.projects, mocks: data.mocks || [] }, null, 1);
+  return JSON.stringify({ version: 1, exportedOn: today, results: data.results, projects: data.projects, mocks: data.mocks || [], profile: data.profile || {} }, null, 1);
 }
 
 export function validDate(s) { return typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s) && localDate(parseDate(s)) === s; }
@@ -43,6 +44,6 @@ export function validateBackup(text) {
       };
     });
   }
-  return { ok: true, data: { version: 1, results: results, projects: projects, mocks: mocks, drafts: {}, lastExport: null },
+  return { ok: true, data: { version: 1, results: results, projects: projects, mocks: mocks, drafts: {}, lastExport: null, profile: cleanProfile(obj.profile) },
     stats: { results: results.length, mocks: mocks.length, dropped: dropped, projects: Object.keys(projects).length, exportedOn: typeof obj.exportedOn === 'string' ? obj.exportedOn : null } };
 }

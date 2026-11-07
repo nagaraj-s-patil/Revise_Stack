@@ -2,12 +2,12 @@
 // and the progress summary to paste into an AI chat.
 import { h, copyText } from '../ui/dom.js';
 import {
-  allTopics, countLevels, applyChecks, weakestTopics, learnFirst, repeatedMistakes, buildSummary, streakInfo, today, DEADLINE
+  allTopics, countLevels, applyChecks, weakestTopics, learnFirst, repeatedMistakes, buildSummary, streakInfo, today
 } from '../core/index.js';
 import { context } from '../state/context.js';
 import { store } from '../state/store.js';
 import { ui } from '../state/session.js';
-import { states } from '../state/selectors.js';
+import { states, me } from '../state/selectors.js';
 import { badge, preBadge } from '../ui/components/badge.js';
 
 const SUMMARY_TIMES = ['30 minutes', '1 hour', '2 hours', '3 hours or more'];
@@ -116,7 +116,7 @@ function summaryCard(st) {
   const sumEl = h('textarea', { id: 'sumbox', class: 'promptbox mono', readonly: true, 'aria-label': 'Progress summary' });
   const text = () => buildSummary({
     phases, states: st, results: store.data.results, projectState: store.data.projects, projectList: projects, byId: topics,
-    today: t, deadline: DEADLINE, timeText: timeSel.value, streak: streakInfo(store.data.results, t), mocks: store.data.mocks
+    today: t, deadline: me().deadline, timeText: timeSel.value, streak: streakInfo(store.data.results, t), mocks: store.data.mocks
   });
   sumEl.value = text();
   timeSel.addEventListener('change', () => { ui.summaryTime = timeSel.value; sumEl.value = text(); });
@@ -148,6 +148,7 @@ export function progressPage() {
   const weakest = weakestTopics(context.syllabus.phases, st, 5);
   const frag = document.createDocumentFragment();
   frag.appendChild(h('h2', null, 'Progress'));
+  frag.appendChild(h('p', null, h('a', { href: '#analysis' }, 'Open the full Analysis (trends, pace, choose a phase) →')));
   frag.appendChild(overviewCard(st));
   frag.appendChild(readinessCard(st));
   frag.appendChild(learnFirstCard(st));

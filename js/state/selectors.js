@@ -1,5 +1,6 @@
 // Small read helpers that combine the syllabus and the saved data.
-import { topicState, today } from '../core/index.js';
+import { topicState, today, profileOf, USER_NAME } from '../core/index.js';
+import { cloud } from '../cloud/sync.js';
 import { context } from './context.js';
 import { store } from './store.js';
 
@@ -14,4 +15,12 @@ export function states() {
 /** Saved state of one project, with defaults for a project you have not touched. */
 export function projState(id) {
   return store.data.projects[id] || { status: 'notstarted', link: '', note: '' };
+}
+
+/** The profile with defaults, plus the name to show: the one typed in Profile, else the Google name, else the default. */
+export function me() {
+  const p = profileOf(store.data);
+  const google = cloud.user && (cloud.user.displayName || cloud.user.email);
+  const name = p.name || google || USER_NAME;
+  return { ...p, name, first: name.split(/\s+/)[0], google: google || '' };
 }
