@@ -3,9 +3,10 @@
 import { FIREBASE_CONFIG, FIREBASE_DATABASE, FIREBASE_SDK, cloudEnabled } from './config.js';
 import { store, setSaveHook, adoptData, wipeLocal } from '../state/store.js';
 import { render } from '../ui/render.js';
+import { toast } from '../ui/components/toast.js';
 
 // status: off (local only) | loading | signedout | synced | saving | offline | error
-export const cloud = { status: 'off', user: null, message: '', syncing: false };
+export const cloud = { status: 'off', user: null, message: '', syncing: false, lastSync: null };
 
 let fb = null;         // loaded SDK pieces
 let timer = null;
@@ -38,6 +39,7 @@ async function push() {
     await fsReady;
     await fb.setDoc(docRef(), { json: JSON.stringify(store.data), updatedAt: Date.now() });
     setDirty(false);
+    cloud.lastSync = new Date();
     set('synced');
   } catch (e) {
     setDirty(true);
@@ -103,6 +105,28 @@ export async function signOutNow() {
   await fb.signOut(fb.auth);
   wipeLocal();
   render();
+}
+
+/** "Upload now": send this device's data to Firebase right now. It replaces the online copy with this device's data. */
+export async function syncNow() {
+  if (!cloud.user || !fb) return;
+  if (!navigator.onLine) { set('offline'); toast('No internet. Your data is safe on this device. Try again when you are online.', 'error'); return; }
+  clearTimeout(timer);
+  try {
+    await fsReady;
+    if (!store.data.results.length) {   // never wipe the online copy with an empty device
+      const snap = await fb.getDoc(docRef());
+      let online = null;
+      try { online = snap.exists() ? JSON.parse(snap.data().json) : null; } catch (e) { online = null; }
+      if (online && online.results && online.results.length) {
+        toast('This device has no results, but your online copy has ' + online.results.length + '. Not uploaded, so nothing is erased. Sign out and sign in to download it.', 'error');
+        return;
+      }
+    }
+  } catch (e) { toast('Could not reach Firebase: ' + e.message, 'error'); return; }
+  await push();
+  if (dirty) toast('Could not upload: ' + (cloud.message || 'unknown error') + '. Your data is safe on this device.', 'error');
+  else toast('Uploaded to Firebase (' + store.data.results.length + ' results).');
 }
 
 export const displayName = fallback => (cloud.user && (cloud.user.displayName || cloud.user.email)) || fallback;

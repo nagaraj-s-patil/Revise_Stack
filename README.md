@@ -41,7 +41,7 @@ You take the tests in ChatGPT or Claude. Revise Stack plans your day, records yo
 | Progress | Core progress, apply-readiness checks, Learn first list (from pre-tests), weakest topics, repeated mistakes, progress summary to paste into an AI |
 | Backup | Sign-in status, copy and restore as text, install help |
 
-Sign in is one button ("Continue with Google"). Sign out is the arrow button next to your name in the sidebar (top bar on a phone). It uploads unsent changes first, and if that fails it keeps you signed in so nothing is lost. After signing out, the saved copy on that device is cleared, so a shared phone shows nothing to the next person.
+**Upload now** (cloud button in the sidebar, in the phone top bar and on the Backup page) sends this device's data to Firebase straight away and shows a message with the result. It replaces the online copy with this device's data, and it refuses if this device has no results while the online copy has some. Sign in is one button ("Continue with Google"). Sign out is the arrow button next to your name in the sidebar (top bar on a phone). It uploads unsent changes first, and if that fails it keeps you signed in so nothing is lost. After signing out, the saved copy on that device is cleared, so a shared phone shows nothing to the next person.
 
 On a wide screen the pages sit next to a left sidebar. On a phone the sidebar becomes a bottom bar.
 Pages fade in, bars fill up and cards lift on hover (`css/motion.css`). All motion turns off when the phone is set to reduce motion.

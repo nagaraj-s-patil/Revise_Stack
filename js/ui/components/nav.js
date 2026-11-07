@@ -2,7 +2,7 @@
 import { h } from '../dom.js';
 import { icon } from './icons.js';
 import { USER_NAME } from '../../core/index.js';
-import { cloud, signOutNow, displayName } from '../../cloud/sync.js';
+import { cloud, signOutNow, syncNow, displayName } from '../../cloud/sync.js';
 import { cloudEnabled } from '../../cloud/config.js';
 
 const SIDE = [
@@ -31,7 +31,9 @@ export function sideBar(active) {
       h('span', { class: 'avatar', 'aria-hidden': 'true' }, initials(displayName(USER_NAME))),
       h('span', null, h('strong', null, displayName(USER_NAME)), h('small', null, 'Java Full Stack')),
       cloudEnabled() && cloud.user
-        ? h('button', { class: 'signout', type: 'button', id: 'signout-side', onclick: signOutNow, 'aria-label': 'Sign out', title: 'Sign out' }, icon('logout', 20))
+        ? h('div', { class: 'side-actions' },
+          h('button', { class: 'signout', type: 'button', id: 'upload-side', onclick: syncNow, title: 'Upload now' }, icon('cloudup', 20), h('span', null, 'Upload now')),
+          h('button', { class: 'signout', type: 'button', id: 'signout-side', onclick: signOutNow, title: 'Sign out', 'aria-label': 'Sign out' }, icon('logout', 20)))
         : null));
 }
 

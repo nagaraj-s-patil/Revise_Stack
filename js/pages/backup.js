@@ -6,7 +6,8 @@ import { ui } from '../state/session.js';
 import { fmt } from '../ui/format.js';
 import { setMsg, clearMsg, msgArea } from '../ui/messages.js';
 import { installCard } from '../ui/components/install-card.js';
-import { cloud, signOutNow } from '../cloud/sync.js';
+import { cloud, signOutNow, syncNow } from '../cloud/sync.js';
+import { icon } from '../ui/components/icons.js';
 import { cloudEnabled } from '../cloud/config.js';
 
 const CLOUD_TEXT = { synced: 'Saved online', saving: 'Saving…', offline: 'Offline. Changes are kept here and sent when you are back online.', error: 'Could not save online. Your data is safe in this browser. Retrying on the next change.' };
@@ -17,7 +18,10 @@ function cloudCard() {
     h('h3', null, 'Online storage (Firebase)'),
     h('p', { class: 'small' }, 'Signed in as ' + (cloud.user.email || 'your Google account') + '.'),
     h('p', { class: 'small muted', role: 'status', 'aria-live': 'polite' }, (CLOUD_TEXT[cloud.status] || '') + (cloud.message && cloud.status !== 'synced' ? ' (' + cloud.message + ')' : '')),
-    h('div', { class: 'btn-row' }, h('button', { class: 'btn small secondary', type: 'button', id: 'signout-btn', onclick: signOutNow }, 'Sign out')));
+    cloud.lastSync ? h('p', { class: 'small muted' }, 'Last upload: ' + cloud.lastSync.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) + '.') : null,
+    h('div', { class: 'btn-row' },
+      h('button', { class: 'btn small', type: 'button', id: 'upload-btn', onclick: syncNow }, icon('cloudup', 18), 'Upload now'),
+      h('button', { class: 'btn small secondary', type: 'button', id: 'signout-btn', onclick: signOutNow }, 'Sign out')));
 }
 
 function daysAgoText(day) {

@@ -72,3 +72,10 @@ details.more > .inner { display: flex; flex-direction: column; gap: 12px; }
 .empty { color: var(--muted); font-size: 15px; }
 
 @media (prefers-reduced-motion: no-preference) { .bar span { transition: width .3s; } }
+
+/* toast: short message at the bottom, above the phone tab bar */
+.toast { position: fixed; left: 50%; bottom: calc(84px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); z-index: 20; max-width: min(92vw, 520px);
+  padding: 12px 18px; border-radius: 14px; background: #1B130B; color: #fff; font-size: 14px; box-shadow: 0 12px 30px rgba(0, 0, 0, .3); text-align: center; }
+.toast.error { background: var(--weak); }
+@media (min-width: 960px) { .toast { bottom: 28px; } }
+@media (prefers-reduced-motion: no-preference) { .toast { animation: toastin .25s ease-out; } @keyframes toastin { from { opacity: 0; transform: translate(-50%, 10px); } to { opacity: 1; transform: translate(-50%, 0); } } }
