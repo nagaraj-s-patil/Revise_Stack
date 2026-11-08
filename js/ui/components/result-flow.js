@@ -1,7 +1,7 @@
 // Saving a test result: read the pasted AI reply (or the manual form), warn about wrong topic or duplicates,
 // save, then show the outcome with Undo and Edit. Also the manual score form, which doubles as the edit form.
 import { h, hideLabel } from '../dom.js';
-import { parseResult, splitList, topicState, levelFromPct, pct, today, canPreTest } from '../../core/index.js';
+import { parseResult, splitList, topicState, levelFromPct, pct, today, canPreTest, nextPreTopic } from '../../core/index.js';
 import { context } from '../../state/context.js';
 import { store, save } from '../../state/store.js';
 import { ui, resetToday } from '../../state/session.js';
@@ -25,6 +25,34 @@ export function startEdit(id) {
   if (d && d.scrollIntoView) d.scrollIntoView({ block: 'center' });
   const s = document.getElementById('m-score');
   if (s) s.focus();
+}
+
+/**
+ * "I don't know this topic": save it as a pre-test with 0/5, so you skip the questions.
+ * It counts as Weak, shows under Learn first, and is never counted in level or revision. Undo removes it.
+ */
+export function markUnknown(topicId) {
+  if (!canPreTest(store.data.results, topicId)) return;
+  const rec = {
+    id: uid(), topicId, date: today(), mode: 'pre', score: 0, total: 5,
+    weakPoints: ['Not studied yet (marked I don\'t know)'], nextStep: 'Learn this topic first, then take a Full test',
+    edited: false, source: 'unknown'
+  };
+  store.data.results.push(rec);
+  const ok = save();
+  const name = context.byId[topicId].topic.name;
+  const next = nextPreTopic(context.syllabus.phases, store.data.results, topicId);
+  const actions = [];
+  if (next) actions.push(route().name === 'today'
+    ? { label: 'Next task', kind: '', fn: () => { resetToday(); render(); } }
+    : { label: 'Next pre-test: ' + next.topic.name, kind: '', fn: () => { location.hash = '#t-' + next.topic.id; } });
+  actions.push({ label: 'Undo', kind: 'secondary', fn: () => { removeResult(rec.id); clearMsg(); } });
+  setMsg({
+    type: ok ? 'success' : 'error',
+    lines: [name + ': marked as not known. Saved as a 0/5 pre-test, so it goes to Learn first.',
+      'It is not counted in your level or revision. Learn it, then take a Full test.'].concat(ok ? [] : ['Could not save to this browser.']),
+    actions
+  });
 }
 
 /** "Save result" on the paste box. `currentTopicId` is the topic whose page or card is open. */

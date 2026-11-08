@@ -1,5 +1,6 @@
 // The copy-prompt card, the message box and the paste card. Shared by the Today page and the topic page.
 import { h, copyText, hideLabel } from '../dom.js';
+import { markUnknown } from './result-flow.js';
 import { buildPrompt, recentWeakPoints, canPreTest, suggestMode, topicState, today } from '../../core/index.js';
 import { context } from '../../state/context.js';
 import { store } from '../../state/store.js';
@@ -67,7 +68,10 @@ export function studyCards(id, twoStep) {
   frag.appendChild(h('section', { class: 'card' },
     h('h3', null, h('span', { class: 'stepno', 'aria-hidden': 'true' }, '1'), 'Copy the prompt'),
     h('p', { class: 'small muted' }, canPre ? PRETEST_HINT : tested ? (TAG_HINT[topic.tag] || TAG_HINT.UNSET) : PRETEST_DONE_HINT),
-    modes, copyBtn, copyNote, details));
+    modes, copyBtn, copyNote, details,
+    canPre ? h('div', { class: 'unknown-box' },
+      h('button', { class: 'btn secondary', type: 'button', id: 'unknown-btn', onclick: () => markUnknown(id) }, 'I don\'t know this topic'),
+      h('p', { class: 'small muted' }, 'Never studied it? Skip the questions. It is saved as a 0/5 pre-test (Weak) and goes to Learn first.')) : null));
 
   frag.appendChild(msgArea());
 

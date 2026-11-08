@@ -1,8 +1,12 @@
 // What changed in the app, newest first. Add a new entry at the top for every update and raise APP_VERSION.
 // The Overview shows the newest entry once after an update; the Profile page keeps the full list.
-export const APP_VERSION = '1.6';
+export const APP_VERSION = '1.7';
 
 export const CHANGES = [
+  { version: '1.7', date: '2026-11-08', title: 'I don\'t know this topic', items: [
+    'New button on a topic you never studied: it skips the pre-test questions and saves a 0/5 pre-test, so the topic goes to Learn first.',
+    'It is not counted in your level or revision, and Undo removes it.'
+  ] },
   { version: '1.6', date: '2026-11-08', title: 'Cleaner tests, your own projects', items: [
     'Quick test is gone. Old Quick results were converted to pre-tests, so those topics need a Full test to count again.',
     'A pre-test can be taken only once per topic.',

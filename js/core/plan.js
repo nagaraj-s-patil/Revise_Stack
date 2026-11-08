@@ -81,6 +81,19 @@ export function canPreTest(results, topicId) {
   return !results.some(function (r) { return r.topicId === topicId; });
 }
 
+// The next topic in study order, after this one, that has no saved result yet (so it can still be pre-tested).
+export function nextPreTopic(phases, results, topicId) {
+  var seen = false, found = null;
+  orderedPhases(phases).forEach(function (p) {
+    p.topics.forEach(function (t) {
+      if (found) return;
+      if (t.id === topicId) { seen = true; return; }
+      if (seen && canPreTest(results, t.id)) found = { topic: t, phase: p };
+    });
+  });
+  return found;
+}
+
 // Minimum day: one revision, else a new topic that does not need teaching first.
 export function shortTask(queue) {
   var rev = queue.filter(function (q) { return q.kind === 'revision'; });

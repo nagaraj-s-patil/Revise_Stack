@@ -78,3 +78,10 @@ test('canPreTest: only a topic with no saved result', () => {
   assert.equal(L.canPreTest([r('a1', '2026-11-01', 8, 10, 'full')], 'a1'), false);
   assert.equal(L.canPreTest([r('a2', '2026-11-01', 2, 5, 'pre')], 'a1'), true);
 });
+
+test('nextPreTopic: next topic in study order that has no result', () => {
+  const phases = [{ number: 1, name: 'A', topics: [{ id: 'a1', core: true }, { id: 'a2', core: true }, { id: 'a3', core: true }] }];
+  assert.equal(L.nextPreTopic(phases, [], 'a1').topic.id, 'a2');
+  assert.equal(L.nextPreTopic(phases, [r('a2', '2026-11-01', 0, 5, 'pre')], 'a1').topic.id, 'a3');
+  assert.equal(L.nextPreTopic(phases, [], 'a3'), null);
+});
