@@ -39,7 +39,7 @@ function onRouteChange(r) {
   if (key === lastRouteKey) return false;
   const previous = lastRouteKey ? lastRouteKey.split(':')[0] : null;
   lastRouteKey = key;
-  ui.msg = null; ui.editing = null; ui.manualOpen = false; ui.promptOpen = false; ui.copied = false;
+  ui.msg = null; ui.editing = null; ui.manualOpen = false; ui.promptOpen = false; ui.copied = false; ui.pfEdit = false;
   if (r.name === 'topic') {
     ui.from = previous === 'today' ? 'today' : 'syllabus';
     ui.mode = ui.nextMode || suggestMode(context.byId[r.id].topic, topicState(store.data.results, r.id, today()));

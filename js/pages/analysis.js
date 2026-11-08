@@ -8,7 +8,6 @@ import { context } from '../state/context.js';
 import { store } from '../state/store.js';
 import { ui } from '../state/session.js';
 import { states, me } from '../state/selectors.js';
-import { badge } from '../ui/components/badge.js';
 import { fmt, fmtLong } from '../ui/format.js';
 import { render as redraw } from '../ui/render.js';
 
@@ -41,10 +40,17 @@ function weekBars(rows, key, max, fmtVal, unit) {
 
 function chartCard(title, sub, chart, rows, cols) {
   return h('section', { class: 'card' }, h('h3', null, title), h('p', { class: 'small muted' }, sub), chart,
-    h('details', { class: 'more' }, h('summary', null, 'Show as a table'),
+    tableToggle(h('details', { class: 'more' }, h('summary', null, 'Show as a table'),
       h('div', { class: 'inner' }, h('table', { class: 'tbl' },
         h('thead', null, h('tr', null, h('th', null, 'Week of'), cols.map(c => h('th', null, c[0])))),
-        h('tbody', null, rows.map(r => h('tr', null, h('td', null, r.label), cols.map(c => h('td', null, c[1](r))))))))));
+        h('tbody', null, rows.map(r => h('tr', null, h('td', null, r.label), cols.map(c => h('td', null, c[1](r)))))))))));
+}
+
+/** The summary reads "Show as a table" when closed and "Hide table" when open. */
+function tableToggle(d) {
+  const sum = d.querySelector('summary');
+  d.addEventListener('toggle', () => { sum.textContent = d.open ? 'Hide table' : 'Show as a table'; });
+  return d;
 }
 
 function chooser(phases) {
@@ -54,10 +60,44 @@ function chooser(phases) {
   sel.value = ui.anPhase;
   sel.addEventListener('change', () => { ui.anPhase = sel.value; redraw(); });
   return h('section', { class: 'card an-choose', 'aria-label': 'Choose what to look at' },
-    h('label', { class: 'field', for: 'an-phase' }, 'Phase', sel),
-    h('div', { class: 'chips', role: 'group', 'aria-label': 'Show topics that are' },
-      FILTERS.map(([k, label]) => h('button', { class: 'chip', type: 'button', 'data-f': k, 'aria-pressed': String(ui.anFilter === k),
-        onclick: () => { ui.anFilter = k; redraw(); } }, label))));
+    h('label', { class: 'field', for: 'an-phase' }, 'Look at', sel));
+}
+
+/** Donut: thin ring, one slice per part, share of the total in the middle. */
+function donut(parts, centerText, centerSub, label) {
+  const R = 52, C = 2 * Math.PI * R, total = parts.reduce((a, x) => a + x.n, 0);
+  const kids = [svg('circle', { cx: 70, cy: 70, r: R, fill: 'none', 'stroke-width': 16, class: 'dn-track' })];
+  let off = 0;
+  if (total) parts.forEach(x => {
+    if (!x.n) return;
+    const len = (x.n / total) * C, gap = parts.filter(y => y.n).length > 1 ? 2 : 0;
+    kids.push(svg('circle', { cx: 70, cy: 70, r: R, fill: 'none', 'stroke-width': 16, class: x.cls, 'stroke-dasharray': Math.max(len - gap, 0.5) + ' ' + C,
+      'stroke-dashoffset': -off, transform: 'rotate(-90 70 70)' }, svg('title', null, x.label + ': ' + x.n)));
+    off += len;
+  });
+  kids.push(svg('text', { x: 70, y: 74, 'text-anchor': 'middle', class: 'dn-num' }, centerText));
+  kids.push(svg('text', { x: 70, y: 92, 'text-anchor': 'middle', class: 'dn-sub' }, centerSub));
+  return svg('svg', { viewBox: '0 0 140 140', class: 'donut', role: 'img', 'aria-label': label }, ...kids);
+}
+
+const legend = (parts, total) => h('ul', { class: 'an-legend' }, parts.map(x => h('li', null,
+  h('span', { class: 'swatch ' + x.cls, 'aria-hidden': 'true' }), h('span', null, x.label), h('strong', null, String(x.n)),
+  h('span', { class: 'muted small' }, total ? pc(x.n / total) : '0%'))));
+
+/** How much is completed, for the chosen phase. */
+function completionCard(core, st, scope) {
+  const c = countLevels(core, st), total = core.length;
+  const good = c.done + c.strong;
+  const parts = [
+    { label: 'Done', n: c.done, cls: 'sl-done' }, { label: 'Strong', n: c.strong, cls: 'sl-strong' },
+    { label: 'OK', n: c.ok, cls: 'sl-ok' }, { label: 'Weak', n: c.weak, cls: 'sl-weak' }, { label: 'Not started', n: c.untested, cls: 'sl-new' }];
+  const started = total - c.untested;
+  return h('section', { class: 'card', id: 'completion' }, h('h3', null, 'How much is completed'),
+    h('p', { class: 'small muted' }, scope + ' · core topics only. Done = 2 Strong tests on 2 days with a Full test.'),
+    h('div', { class: 'an-donut-row' },
+      donut(parts, total ? pc(good / total) : '0%', 'Good', 'Core topics by level: ' + parts.map(x => x.n + ' ' + x.label).join(', ')),
+      h('div', { class: 'an-donut-side' }, legend(parts, total),
+        h('p', { class: 'small' }, h('strong', null, 'Done: '), total ? pc(c.done / total) : '0%', ' · ', h('strong', null, 'Started: '), total ? pc(started / total) : '0%'))));
 }
 
 function tiles(st, core, results) {
@@ -97,36 +137,11 @@ function phaseCard(stats) {
 
 function mixCard(mix) {
   const total = mix.pre + mix.quick + mix.full;
-  const row = (label, n, cls) => h('li', null, h('span', { class: 'swatch ' + cls, 'aria-hidden': 'true' }), h('span', null, label), h('strong', null, String(n)),
-    h('span', { class: 'muted small' }, total ? pc(n / total) : '0%'));
-  const w = n => (total ? n / total * 100 : 0).toFixed(2) + '%';
+  const parts = [{ label: 'Full tests', n: mix.full, cls: 'mx-full' }, { label: 'Quick tests', n: mix.quick, cls: 'mx-quick' }, { label: 'Pre-tests', n: mix.pre, cls: 'mx-pre' }];
   return h('section', { class: 'card' }, h('h3', null, 'What kind of tests'),
-    h('div', { class: 'bar', role: 'img', 'aria-label': mix.full + ' full, ' + mix.quick + ' quick, ' + mix.pre + ' pre-tests' },
-      h('span', { class: 'mx-full', style: 'width:' + w(mix.full) }), h('span', { class: 'mx-quick', style: 'width:' + w(mix.quick) }), h('span', { class: 'mx-pre', style: 'width:' + w(mix.pre) })),
-    h('ul', { class: 'an-legend' }, row('Full tests', mix.full, 'mx-full'), row('Quick tests', mix.quick, 'mx-quick'), row('Pre-tests', mix.pre, 'mx-pre')),
+    h('div', { class: 'an-donut-row' }, donut(parts, String(total), 'tests', mix.full + ' full, ' + mix.quick + ' quick, ' + mix.pre + ' pre-tests'),
+      h('div', { class: 'an-donut-side' }, legend(parts, total))),
     h('p', { class: 'small muted' }, 'Done needs a Full test. If Full is low, topics cannot reach Done.'));
-}
-
-function listCard(rows) {
-  const phase = ui.anPhase, f = ui.anFilter;
-  const list = rows.filter(r => (phase === 'all' || String(r.phase.number) === phase) && (f === 'all' || groupOf(r.state.level) === f));
-  const counts = { good: 0, work: 0, new: 0 };
-  rows.filter(r => phase === 'all' || String(r.phase.number) === phase).forEach(r => counts[groupOf(r.state.level)]++);
-  const order = { work: 0, new: 1, good: 2 };
-  list.sort((a, b) => order[groupOf(a.state.level)] - order[groupOf(b.state.level)]);
-  const shown = list.slice(0, 40);
-  const card = h('section', { class: 'card', id: 'an-list' }, h('h3', null, list.length + ' topics'),
-    h('p', { class: 'small muted' }, counts.good + ' good · ' + counts.work + ' need work · ' + counts.new + ' not started (in this phase choice).'));
-  if (!list.length) { card.appendChild(h('p', { class: 'empty' }, 'No topics match this choice.')); return card; }
-  card.appendChild(h('ul', { class: 'history' }, shown.map(r => h('li', null,
-    h('a', { class: 'topic', href: '#t-' + r.topic.id, style: 'padding:0;min-height:44px' },
-      h('span', { class: 'name' }, r.topic.name, h('span', { class: 'tag', style: 'display:block' }, 'Phase ' + r.phase.number + (r.daysSince == null ? '' : ' · last test ' + (r.daysSince === 0 ? 'today' : r.daysSince + ' d ago')))),
-      h('span', { class: 'meta' },
-        r.state.last ? h('span', { class: 'score' }, r.state.last.score + '/' + r.state.last.total) : null,
-        r.trend !== 'new' ? h('span', { class: 'small trend-' + r.trend, title: TREND[r.trend][1] }, TREND[r.trend][0] + ' ' + TREND[r.trend][1]) : null,
-        badge(r.state.level)))))));
-  if (list.length > shown.length) card.appendChild(h('p', { class: 'small muted' }, 'Showing 40 of ' + list.length + '. Pick a phase to narrow it.'));
-  return card;
 }
 
 function insights(st, stats, rows, trend, p, results) {
@@ -161,6 +176,9 @@ export function analysisPage() {
   if (!ui.anPhase) ui.anPhase = 'all';
   if (!ui.anFilter) ui.anFilter = 'all';
   const core = allTopics(phases, true);
+  const scopePhases = ui.anPhase === 'all' ? phases : phases.filter(x => String(x.number) === ui.anPhase);
+  const scopeCore = allTopics(scopePhases, true);
+  const scope = ui.anPhase === 'all' ? 'All phases' : 'Phase ' + ui.anPhase;
   const trend = weeklyTrend(results, t, 8);
   const stats = phaseStats(phases, st);
   const rows = topicRows(phases, st, results, t);
@@ -169,15 +187,15 @@ export function analysisPage() {
 
   const frag = document.createDocumentFragment();
   frag.appendChild(h('h2', null, 'Analysis'));
-  frag.appendChild(h('p', { class: 'muted' }, 'Choose a phase and see what is good, what needs work and what you have not started.'));
+  frag.appendChild(h('p', { class: 'muted' }, 'Choose a phase to see how much is completed, what is strong and what is weak.'));
   frag.appendChild(chooser(phases));
-  frag.appendChild(tiles(st, core, results));
+  frag.appendChild(tiles(st, scopeCore, results));
   frag.appendChild(h('section', { class: 'card', id: 'an-insights' }, h('h3', null, 'What this says'),
     h('ul', { class: 'an-ins' }, insights(st, stats, rows, trend, p, results).map(x => h('li', null, x)))));
+  frag.appendChild(completionCard(scopeCore, st, scope));
   frag.appendChild(paceCard(p, deadline));
   frag.appendChild(phaseCard(stats));
-  frag.appendChild(listCard(rows));
-  frag.appendChild(chartCard('Tests per week', 'Every saved test counts, pre-tests too. Last 8 weeks, Monday start.',
+    frag.appendChild(chartCard('Tests per week', 'Every saved test counts, pre-tests too. Last 8 weeks, Monday start.',
     weekBars(trend, 'tests', maxT, v => String(v), ' tests'), trend, [['Tests', r => r.tests]]));
   frag.appendChild(chartCard('Average score per week', 'Scored tests only (pre-tests left out). A week with none has no bar.',
     weekBars(trend.map(w => ({ ...w, a: w.avg })), 'a', 1, v => pc(v), ''), trend, [['Average', r => r.avg == null ? '–' : pc(r.avg)], ['Scored tests', r => r.real]]));

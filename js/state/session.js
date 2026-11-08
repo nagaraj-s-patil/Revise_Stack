@@ -15,6 +15,7 @@ export const ui = {
   nextMode: null,      // mode to open the next topic page with
   summaryTime: null,   // time chosen for the progress summary
   importText: '',      // text typed into the restore box
+  pfEdit: false,        // Profile page is showing the edit form
   installDismissed: false
 };
 

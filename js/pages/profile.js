@@ -8,6 +8,7 @@ import { cloudEnabled } from '../cloud/config.js';
 import { icon } from '../ui/components/icons.js';
 import { fmtLong } from '../ui/format.js';
 import { render } from '../ui/render.js';
+import { ui } from '../state/session.js';
 
 const initials = name => name.split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
 
@@ -37,6 +38,7 @@ function formCard() {
     field('Study time per day', 'pf-hours', hours),
     h('div', { class: 'btn-row' },
       h('button', { class: 'btn', type: 'submit', id: 'pf-save' }, 'Save profile'),
+      h('button', { class: 'btn small secondary', type: 'button', id: 'pf-cancel' }, 'Cancel'),
       h('button', { class: 'btn small secondary', type: 'button', id: 'pf-reset' }, 'Reset to defaults')),
     note);
 
@@ -48,14 +50,26 @@ function formCard() {
     const ok = save();
     note.className = 'small';
     note.textContent = ok ? 'Saved.' : 'Could not save in this browser.';
-    // the name in the sidebar and greeting changes, so redraw once
-    if (ok) render();
+    if (ok) { ui.pfEdit = false; render(); }
   });
+  form.querySelector('#pf-cancel').addEventListener('click', () => { ui.pfEdit = false; render(); });
   form.querySelector('#pf-reset').addEventListener('click', () => {
-    store.data.profile = {}; save();
+    store.data.profile = {}; save(); ui.pfEdit = false;
     render();
   });
   return form;
+}
+
+/** Read-only view of the profile. The form only opens after Edit is clicked. */
+function viewCard() {
+  const p = me();
+  const row = (k, v) => h('div', { class: 'pf-row' }, h('span', null, k), h('strong', null, v));
+  return h('section', { class: 'card', id: 'profile-view' },
+    h('div', { class: 'summary-head' }, h('h3', null, 'About you'),
+      h('button', { class: 'btn small', type: 'button', id: 'pf-edit', onclick: () => { ui.pfEdit = true; render(); } }, 'Edit')),
+    h('div', { class: 'pf-view' },
+      row('Name', p.name), row('Target role', p.role), row('City', p.city),
+      row('Ready to apply by', fmtLong(p.deadline)), row('Study time per day', p.dailyHours + (p.dailyHours === 1 ? ' hour' : ' hours'))));
 }
 
 function accountCard() {
@@ -83,7 +97,7 @@ export function profilePage() {
   frag.appendChild(h('section', { class: 'pf-stats', 'aria-label': 'Your numbers' },
     num(store.data.results.length, 'tests saved'), num(studyDays(store.data.results), 'study days'),
     num(s.streak, 'day streak'), num((store.data.mocks || []).length, 'mock interviews')));
-  frag.appendChild(formCard());
+  frag.appendChild(ui.pfEdit ? formCard() : viewCard());
   frag.appendChild(accountCard());
   return frag;
 }

@@ -7,7 +7,7 @@ import { cloudEnabled } from '../../cloud/config.js';
 
 const SIDE = [
   ['today', 'Overview', 'home'], ['syllabus', 'Learning Path', 'path'], ['interview', 'Interview Prep', 'interview'],
-  ['projects', 'Projects', 'projects'], ['progress', 'Progress', 'progress'], ['analysis', 'Analysis', 'analysis'], ['profile', 'Profile', 'profile'], ['backup', 'Backup', 'backup']
+  ['projects', 'Projects', 'projects'], ['progress', 'Progress', 'progress'], ['analysis', 'Analysis', 'analysis'], ['backup', 'Backup', 'backup']
 ];
 const TABS = [['today', 'Home', 'home'], ['syllabus', 'Learning', 'path'], ['interview', 'Interview', 'interview'], ['projects', 'Projects', 'projects'], ['progress', 'Progress', 'progress']];
 
@@ -28,7 +28,7 @@ export function sideBar(active) {
       h('strong', null, 'Keep going!'),
       h('span', null, 'Every test you take today is one less topic to forget.')),
     h('div', { class: 'side-user' },
-      h('a', { class: 'side-me', href: '#profile', 'aria-label': 'Open your profile' },
+      h('a', { class: 'side-me', href: '#profile', 'aria-label': 'Open your profile', 'aria-current': active === 'profile' ? 'page' : null },
         h('span', { class: 'avatar', 'aria-hidden': 'true' }, initials(me().name)),
         h('span', null, h('strong', null, me().name), h('small', null, me().role))),
       cloudEnabled() && cloud.user
