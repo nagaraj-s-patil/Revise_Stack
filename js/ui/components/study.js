@@ -1,6 +1,6 @@
 // The copy-prompt card, the message box and the paste card. Shared by the Today page and the topic page.
 import { h, copyText, hideLabel } from '../dom.js';
-import { buildPrompt, recentWeakPoints } from '../../core/index.js';
+import { buildPrompt, recentWeakPoints, canPreTest, suggestMode, topicState, today } from '../../core/index.js';
 import { context } from '../../state/context.js';
 import { store } from '../../state/store.js';
 import { ui } from '../../state/session.js';
@@ -9,9 +9,10 @@ import { TAG_HINT } from '../format.js';
 import { msgArea } from '../messages.js';
 import { onSavePaste, manualForm } from './result-flow.js';
 
-const modesFor = tested => tested
+const modesFor = canPre => !canPre
   ? [['learn', 'Learn first (about 20 min)'], ['full', 'Full test (10 questions)']]
   : [['learn', 'Learn first (about 20 min)'], ['pre', 'Pre-test (5 questions, not counted in revision)'], ['full', 'Full test (10 questions, starts revision)']];
+const PRETEST_DONE_HINT = 'You already took the pre-test for this topic. A pre-test is allowed only once. Weak or OK: learn it first. Then take a Full test, which starts your revision.';
 const PRETEST_HINT = 'A pre-test shows what you already know. It is not counted in your level or revision. Weak or OK: learn it first. Your first Full test after that starts the revision schedule.';
 
 /**
@@ -24,6 +25,10 @@ export function studyCards(id, twoStep) {
   let step2 = null;
   let haveBtn = null;
   function reveal() { ui.copied = true; if (step2) step2.hidden = false; if (haveBtn) haveBtn.hidden = true; }
+
+  const canPre = canPreTest(store.data.results, id);
+  const tested = store.data.results.some(r => r.topicId === id && r.mode !== 'pre');
+  if (ui.mode === 'pre' && !canPre) ui.mode = suggestMode(topic, topicState(store.data.results, id, today()));
 
   // step 1: pick a mode, copy the prompt
   const promptEl = h('textarea', { id: 'promptbox', class: 'promptbox mono', readonly: true, 'aria-label': 'Test prompt' });
@@ -52,8 +57,7 @@ export function studyCards(id, twoStep) {
   });
 
   const modes = h('fieldset', { class: 'modes' }, h('legend', null, 'Mode'));
-  const tested = store.data.results.some(r => r.topicId === id && r.mode !== 'pre');
-  for (const [value, label] of modesFor(tested)) {
+  for (const [value, label] of modesFor(canPre)) {
     const input = h('input', { type: 'radio', name: 'mode', value, id: 'mode-' + value });
     input.checked = ui.mode === value;
     input.addEventListener('change', () => { ui.mode = value; promptEl.value = currentPrompt(); });
@@ -62,7 +66,7 @@ export function studyCards(id, twoStep) {
 
   frag.appendChild(h('section', { class: 'card' },
     h('h3', null, h('span', { class: 'stepno', 'aria-hidden': 'true' }, '1'), 'Copy the prompt'),
-    h('p', { class: 'small muted' }, tested ? (TAG_HINT[topic.tag] || TAG_HINT.UNSET) : PRETEST_HINT),
+    h('p', { class: 'small muted' }, canPre ? PRETEST_HINT : tested ? (TAG_HINT[topic.tag] || TAG_HINT.UNSET) : PRETEST_DONE_HINT),
     modes, copyBtn, copyNote, details));
 
   frag.appendChild(msgArea());

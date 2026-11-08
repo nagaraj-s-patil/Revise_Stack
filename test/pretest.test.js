@@ -71,3 +71,10 @@ test('backup keeps mode pre', () => {
   assert.equal(v.ok, true);
   assert.equal(v.data.results[0].mode, 'pre');
 });
+
+test('canPreTest: only a topic with no saved result', () => {
+  assert.equal(L.canPreTest([], 'a1'), true);
+  assert.equal(L.canPreTest([r('a1', '2026-11-01', 2, 5, 'pre')], 'a1'), false);
+  assert.equal(L.canPreTest([r('a1', '2026-11-01', 8, 10, 'full')], 'a1'), false);
+  assert.equal(L.canPreTest([r('a2', '2026-11-01', 2, 5, 'pre')], 'a1'), true);
+});

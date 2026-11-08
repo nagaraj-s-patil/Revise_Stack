@@ -17,7 +17,7 @@ You take the tests in ChatGPT or Claude. Revise Stack plans your day, records yo
 ## How it works
 
 1. **Overview** (Today) shows one task: a due revision first, then a new topic.
-2. **Pre-test first.** A topic you have never tested starts with a **Pre-test**: 5 questions, no teaching, to see what you already know. Copy the test prompt, paste it into an AI chat and take the test. (You can also choose **Learn first** or a **Full test** under Mode. There is no Quick test: old Quick results are converted to pre-tests on load.)
+2. **Pre-test first.** A topic you have never tested starts with a **Pre-test**: 5 questions, no teaching, to see what you already know. Copy the test prompt, paste it into an AI chat and take the test. (You can also choose **Learn first** or a **Full test** under Mode. A pre-test is allowed once per topic, only before any other test (Undo it to take it again). There is no Quick test: old Quick results are converted to pre-tests on load.)
    - **A pre-test is only a starting check.** It is not counted in the level, in Done, in your progress numbers or in revision. It never makes a topic due. You can pre-test the whole syllabus in one go and the revision list stays empty.
    - What it does: Weak and OK pre-tests move those topics to the front of your new topics (weakest first), and they appear in **Progress > Learn first** with a "Pre-test" badge. Strong pre-tests go to the back and get a Full test to confirm.
    - After you learn a topic, your first **Full test** (10 questions) is the first real test. That is when the level is set and the revision schedule starts.

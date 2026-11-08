@@ -1,7 +1,7 @@
 // Saving a test result: read the pasted AI reply (or the manual form), warn about wrong topic or duplicates,
 // save, then show the outcome with Undo and Edit. Also the manual score form, which doubles as the edit form.
 import { h, hideLabel } from '../dom.js';
-import { parseResult, splitList, topicState, levelFromPct, pct, today } from '../../core/index.js';
+import { parseResult, splitList, topicState, levelFromPct, pct, today, canPreTest } from '../../core/index.js';
 import { context } from '../../state/context.js';
 import { store, save } from '../../state/store.js';
 import { ui, resetToday } from '../../state/session.js';
@@ -68,6 +68,11 @@ function checkDuplicate(topicId, d) {
 }
 
 function commit(topicId, d) {
+  if (d.mode === 'pre' && !canPreTest(store.data.results, topicId)) {
+    setMsg({ type: 'error', lines: ['This topic already has a result. A pre-test is allowed only once, and only before any other test. Take a Full test (10 questions) instead.'],
+      actions: [{ label: 'OK', kind: 'secondary', fn: clearMsg }] });
+    return;
+  }
   const rec = {
     id: uid(), topicId, date: today(), mode: d.mode, score: d.score, total: d.total,
     weakPoints: d.weakPoints || [], nextStep: d.nextStep || '', edited: false, source: d.source || 'paste'
@@ -108,7 +113,7 @@ function showSaved(topicId, rec, ok, wasEdit) {
 export function manualForm(topicId) {
   const rec = ui.editing ? store.data.results.find(r => r.id === ui.editing) : null;
   const score = h('input', { type: 'number', id: 'm-score', inputmode: 'numeric', min: '0', step: '1' });
-  const total = h('select', { id: 'm-total' }, h('option', { value: '5' }, '5 (Pre-test)'), h('option', { value: '10' }, '10 (Full)'));
+  const total = h('select', { id: 'm-total' }, h('option', { value: '5' }, '5 (Pre-test, once per topic)'), h('option', { value: '10' }, '10 (Full)'));
   const weak = h('input', { type: 'text', id: 'm-weak', placeholder: 'HashMap vs TreeMap; Comparator' });
   const next = h('input', { type: 'text', id: 'm-next', placeholder: 'Practice custom comparators' });
   if (rec) {

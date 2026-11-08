@@ -75,6 +75,12 @@ export function suggestMode(topic, state) {
   return 'full';
 }
 
+// A pre-test is taken once per topic: only a topic with no saved result at all can still be pre-tested.
+// (Undo a pre-test and the topic can be pre-tested again.)
+export function canPreTest(results, topicId) {
+  return !results.some(function (r) { return r.topicId === topicId; });
+}
+
 // Minimum day: one revision, else a new topic that does not need teaching first.
 export function shortTask(queue) {
   var rev = queue.filter(function (q) { return q.kind === 'revision'; });
