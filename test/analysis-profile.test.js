@@ -49,3 +49,9 @@ test('custom projects are cleaned and added after the built-in ones', () => {
   const text = exportBackup({ results: [], projects: {}, mocks: [], customProjects: list }, '2026-11-08');
   assert.equal(validateBackup(text).data.customProjects.length, 1);
 });
+
+test('changelog: newest entry matches APP_VERSION and every entry has items', async () => {
+  const { APP_VERSION, CHANGES } = await import('../js/data/changelog.js');
+  assert.equal(CHANGES[0].version, APP_VERSION);
+  CHANGES.forEach(c => assert.ok(c.items.length && /^\d{4}-\d{2}-\d{2}$/.test(c.date)));
+});

@@ -108,3 +108,7 @@ circle.mx-full { stroke: var(--accent); } circle.mx-quick { stroke: var(--accent
 .np-needs legend { font-weight: 700; padding: 0; }
 .np-phase { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 15px; }
 .np-phase input { width: 22px; height: 22px; flex: none; accent-color: var(--accent-fill); }
+
+.whats-new { border-color: var(--accent-fill); background: var(--soft); margin: 12px 0; }
+.update { padding: 10px 0; border-top: 1px solid var(--line); }
+.update ul { margin: 6px 0 0; }

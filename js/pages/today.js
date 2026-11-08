@@ -12,6 +12,7 @@ import { icon } from '../ui/components/icons.js';
 import { studyCards } from '../ui/components/study.js';
 import { greeting, hero, statTiles, pathCard, projectCards } from '../ui/components/dashboard.js';
 import { installCard } from '../ui/components/install-card.js';
+import { whatsNewCard } from '../ui/components/whats-new.js';
 
 const linkButton = 'display:inline-flex;align-items:center;text-decoration:none';
 
@@ -121,6 +122,8 @@ export function todayPage() {
   const frag = document.createDocumentFragment();
 
   frag.appendChild(greeting());
+  const news = whatsNewCard();
+  if (news) frag.appendChild(news);
   frag.appendChild(hero(!!task));
   frag.appendChild(statTiles(st, streakInfo(store.data.results, t)));
   const install = installCard();
