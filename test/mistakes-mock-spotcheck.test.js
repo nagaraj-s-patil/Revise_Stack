@@ -40,12 +40,12 @@ test('recentWeakPoints: newest first, no repeats, limited', () => {
 });
 test('prompt: previous weak points are asked about, and consistent naming is requested', () => {
   const phase = S.phases[1], topic = phase.topics[5];
-  const q = L.buildPrompt(topic, phase, 'quick', ['HashMap vs TreeMap', 'Comparator']);
+  const q = L.buildPrompt(topic, phase, 'pre', ['HashMap vs TreeMap', 'Comparator']);
   assert.ok(q.includes('My weak points from earlier tests on this topic: HashMap vs TreeMap; Comparator.'));
   assert.ok(q.includes('Include 2 questions on these'));
   assert.ok(L.buildPrompt(topic, phase, 'full', ['x']).includes('Include 3 questions on these'));
   assert.ok(L.buildPrompt(topic, phase, 'learn', ['x']).includes('Spend extra time on these'));
-  assert.ok(!L.buildPrompt(topic, phase, 'quick').includes('earlier tests'));
+  assert.ok(!L.buildPrompt(topic, phase, 'pre').includes('earlier tests'));
   assert.ok(q.includes('short consistent names'));
 });
 test('mock prompt: focus areas, project question, result block with mock topic id', () => {

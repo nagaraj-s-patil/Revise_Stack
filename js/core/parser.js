@@ -44,7 +44,7 @@ export function parseBlock(body) {
   }
 
   var weak = splitList(fields.weak_points || fields.weakpoints || '');
-  var mode = /^\s*pre/i.test(fields.mode || '') ? 'pre' : /full/i.test(fields.mode || '') ? 'full' : /quick/i.test(fields.mode || '') ? 'quick' : (total >= 10 ? 'full' : 'quick');
+  var mode = /^\s*pre/i.test(fields.mode || '') ? 'pre' : /full/i.test(fields.mode || '') ? 'full' : (total >= 10 ? 'full' : 'pre');
   return {
     ok: true,
     data: {

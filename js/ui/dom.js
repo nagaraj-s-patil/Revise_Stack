@@ -43,3 +43,12 @@ export function copyText(text) {
     } else resolve(legacy());
   });
 }
+
+/** Make a <details> summary read "closedText" when shut and "openText" when open, so the same control shows and hides. */
+export function hideLabel(details, closedText, openText) {
+  const sum = details.querySelector('summary');
+  const sync = () => { sum.textContent = details.open ? openText : closedText; };
+  details.addEventListener('toggle', sync);
+  sync();
+  return details;
+}

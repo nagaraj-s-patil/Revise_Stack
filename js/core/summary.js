@@ -75,7 +75,7 @@ export function buildSummary(c) {
     '',
     'RESULT_START',
     'topic_id: <topic id>',
-    'mode: <quick or full>',
+    'mode: <pre or full>',
     'score: <number correct>/<total questions>',
     'weak_points: <short list separated by semicolons, or none>',
     'next_step: <one concrete practice task>',

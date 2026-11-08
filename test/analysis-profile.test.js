@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { cleanProfile, profileOf, PROFILE_DEFAULTS, weeklyTrend, modeMix, pace, groupOf, exportBackup, validateBackup } from '../js/core/index.js';
+import { migrateModes, cleanCustomProjects, allProjects, cleanProfile, profileOf, PROFILE_DEFAULTS, weeklyTrend, modeMix, pace, groupOf, exportBackup, validateBackup } from '../js/core/index.js';
 
 const phases = [{ number: 1, name: 'Java', topics: [{ id: 'a', name: 'A', core: true }, { id: 'b', name: 'B', core: true }] }];
 const res = (id, date, score, mode = 'quick') => ({ id: id + date + mode, topicId: id, date, score, total: 10, mode, weakPoints: [] });
@@ -20,7 +20,7 @@ test('weekly trend counts pre-tests as activity but not in the average', () => {
   const r = [res('a', '2026-11-03', 8), res('a', '2026-11-04', 2, 'pre')];
   const w = weeklyTrend(r, '2026-11-07', 2).pop();
   assert.equal(w.tests, 2); assert.equal(w.real, 1); assert.equal(w.avg, 0.8);
-  assert.deepEqual(modeMix(r), { pre: 1, quick: 1, full: 0 });
+  assert.deepEqual(modeMix(r), { pre: 2, full: 0 });
 });
 
 test('pace verdicts', () => {
@@ -31,4 +31,21 @@ test('pace verdicts', () => {
   assert.equal(pace(phases, st, [], '2026-11-07', '2027-01-28').verdict, 'nopace');
   assert.equal(pace(phases, st, r, '2026-11-07', '2026-11-10').verdict, 'behind');
   assert.equal(groupOf('done'), 'good'); assert.equal(groupOf('ok'), 'work'); assert.equal(groupOf('untested'), 'new');
+});
+
+test('old quick results become pre-tests', () => {
+  const d = { results: [res('a', '2026-11-01', 8, 'quick'), res('a', '2026-11-02', 8, 'full')] };
+  assert.equal(migrateModes(d), true);
+  assert.deepEqual(d.results.map(r => r.mode), ['pre', 'full']);
+  assert.equal(migrateModes(d), false);
+  const text = JSON.stringify({ results: [{ topicId: 'a', date: '2026-11-01', mode: 'quick', score: 3, total: 5 }] });
+  assert.equal(validateBackup(text).data.results[0].mode, 'pre');
+});
+
+test('custom projects are cleaned and added after the built-in ones', () => {
+  const list = cleanCustomProjects([{ id: 'my-1', name: ' Chat app ', stack: 'Node', needs: [2, 2, 'x', 7] }, { id: '', name: 'no id' }, { id: 'my-1', name: 'dup' }]);
+  assert.deepEqual(list, [{ id: 'my-1', name: 'Chat app', stack: 'Node', needs: [2, 7], custom: true }]);
+  assert.deepEqual(allProjects([{ id: 'b', name: 'B' }], { customProjects: list }).map(p => p.id), ['b', 'my-1']);
+  const text = exportBackup({ results: [], projects: {}, mocks: [], customProjects: list }, '2026-11-08');
+  assert.equal(validateBackup(text).data.customProjects.length, 1);
 });

@@ -1,5 +1,5 @@
 // The copy-prompt card, the message box and the paste card. Shared by the Today page and the topic page.
-import { h, copyText } from '../dom.js';
+import { h, copyText, hideLabel } from '../dom.js';
 import { buildPrompt, recentWeakPoints } from '../../core/index.js';
 import { context } from '../../state/context.js';
 import { store } from '../../state/store.js';
@@ -10,9 +10,9 @@ import { msgArea } from '../messages.js';
 import { onSavePaste, manualForm } from './result-flow.js';
 
 const modesFor = tested => tested
-  ? [['learn', 'Learn first (about 20 min)'], ['quick', 'Quick test (5 questions)'], ['full', 'Full test (10 questions)']]
-  : [['learn', 'Learn first (about 20 min)'], ['pre', 'Pre-test (5 questions, not counted in revision)'], ['quick', 'Quick test (5 questions, starts revision)'], ['full', 'Full test (10 questions, starts revision)']];
-const PRETEST_HINT = 'A pre-test shows what you already know. It is not counted in your level or revision. Weak or OK: learn it first. Your first Quick or Full test after that starts the revision schedule.';
+  ? [['learn', 'Learn first (about 20 min)'], ['full', 'Full test (10 questions)']]
+  : [['learn', 'Learn first (about 20 min)'], ['pre', 'Pre-test (5 questions, not counted in revision)'], ['full', 'Full test (10 questions, starts revision)']];
+const PRETEST_HINT = 'A pre-test shows what you already know. It is not counted in your level or revision. Weak or OK: learn it first. Your first Full test after that starts the revision schedule.';
 
 /**
  * twoStep (Today): the paste card stays hidden until the prompt has been copied,
@@ -34,6 +34,7 @@ export function studyCards(id, twoStep) {
   const copyBtn = h('button', { class: 'btn', type: 'button', id: 'copy-btn' }, 'Copy test prompt');
   const details = h('details', { class: 'more' }, h('summary', null, 'Show the prompt'), h('div', { class: 'inner' }, promptEl));
   details.open = ui.promptOpen;
+  hideLabel(details, 'Show the prompt', 'Hide the prompt');
   details.addEventListener('toggle', () => { ui.promptOpen = details.open; });
 
   copyBtn.addEventListener('click', () => {

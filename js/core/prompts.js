@@ -1,4 +1,4 @@
-// Builds the Learn, Pre-test, Quick and Full test prompts that you paste into an AI chat.
+// Builds the Learn, Pre-test and Full test prompts that you paste into an AI chat.
 
 export const FORMAT_RULES =
   'Do not write a level such as Weak, OK or Strong. My tracker works that out from the score.\n' +
@@ -48,9 +48,9 @@ export function buildPrompt(topic, phase, mode, prevWeak) {
       'Mode: LEARN. I need to learn this topic again before being tested.\n\n' +
       'STEP 1 (about 20 minutes): Teach the topic in small parts. For each part give a short explanation and one small Java or SQL or JavaScript example, ' +
       'then ask me one quick question to check I understood. Wait for my answer before moving on.\n' +
-      'STEP 2: When I type TEST, ask me 5 questions on what we covered (3 interview-style concept questions and 2 small code or output questions).\n\n' +
+      'STEP 2: When I type TEST, ask me 10 questions on what we covered (6 interview-style concept questions, 2 output-prediction questions and 2 short coding tasks).\n\n' +
       rules.replace('- Ask ONE question at a time.', '- During the test, ask ONE question at a time.') +
-      FORMAT_RULES + '\n\n' + ending + block(topic, 'quick', 5);
+      FORMAT_RULES + '\n\n' + ending + block(topic, 'full', 10);
   }
   if (mode === 'full') {
     return head +
@@ -64,8 +64,5 @@ export function buildPrompt(topic, phase, mode, prevWeak) {
       'Cover different parts of the topic, from easy to hard.\n\n' +
       rules + FORMAT_RULES + '\n\n' + ending + block(topic, 'pre', 5);
   }
-  return head +
-    'Mode: QUICK TEST. Ask exactly 5 questions: 3 interview-style concept questions and 2 small code or output questions. ' +
-    'Start easy and finish harder.\n\n' +
-    rules + FORMAT_RULES + '\n\n' + ending + block(topic, 'quick', 5);
+  throw new Error('Unknown test mode: ' + mode);
 }

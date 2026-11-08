@@ -5,8 +5,7 @@ import { pct } from './levels.js';
 // Tag-based starting mode. The app no longer uses it for a first attempt (see suggestMode), only as a reference.
 export function suggestedMode(tag) {
   if (tag === 'LEARN') return 'learn';
-  if (tag === 'TEST') return 'full';
-  return 'quick';
+  return 'full';
 }
 
 export function orderedPhases(phases) {
@@ -67,14 +66,13 @@ export function learnFirst(phases, states) {
 }
 
 // A topic never tested starts with a pre-test (5 questions) whatever its tag. After a pre-test: Weak or OK means
-// learn first, Strong means a Full test to confirm. A strong Quick test needs a Full test to reach Done, so suggest Full then.
+// learn first, Strong means a Full test to confirm. Once a topic has a real test, the next one is always a Full test (10 questions).
 export function suggestMode(topic, state) {
   if (!state || !state.last) {
     if (state && state.pre) return state.pre.level === 'strong' ? 'full' : 'learn';
     return 'pre';
   }
-  if (pct(state.last) >= STRONG && state.last.total < 10) return 'full';
-  return 'quick';
+  return 'full';
 }
 
 // Minimum day: one revision, else a new topic that does not need teaching first.

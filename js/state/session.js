@@ -2,7 +2,7 @@
 export const ui = {
   filter: 'all',       // syllabus filter chip
   open: null,          // which syllabus phases are expanded
-  mode: 'quick',       // test mode shown on the topic or Today card
+  mode: 'full',        // test mode shown on the topic or Today card
   msg: null,           // the message box under the Copy card
   editing: null,       // id of the result being edited
   manualOpen: false,
@@ -15,6 +15,7 @@ export const ui = {
   nextMode: null,      // mode to open the next topic page with
   summaryTime: null,   // time chosen for the progress summary
   importText: '',      // text typed into the restore box
+  addProjectOpen: false,   // the Add a project form is open
   pfEdit: false,        // Profile page is showing the edit form
   installDismissed: false
 };

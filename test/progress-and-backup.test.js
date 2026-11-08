@@ -62,7 +62,7 @@ test('summary: has goal, time, counts, topic ids, due list and the result block'
 test('summary: a block filled in from the summary prompt parses back', () => {
   const t = summaryFor([], {}, '1 hour');
   const filled = t.slice(t.lastIndexOf('RESULT_START'))
-    .replace('<topic id>', 'p1-recursion').replace('<quick or full>', 'quick').replace('<number correct>/<total questions>', '4/5')
+    .replace('<topic id>', 'p1-recursion').replace('<pre or full>', 'pre').replace('<number correct>/<total questions>', '4/5')
     .replace('<short list separated by semicolons, or none>', 'none').replace('<one concrete practice task>', 'Practice');
   const p = L.parseResult(filled);
   assert.equal(p.ok, true);

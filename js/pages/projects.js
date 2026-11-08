@@ -1,10 +1,12 @@
 // Projects page: status, repository link and note for each portfolio project.
-import { h } from '../ui/dom.js';
-import { projectReady, BUILD_READY } from '../core/index.js';
+import { h, hideLabel } from '../ui/dom.js';
+import { projectReady, BUILD_READY, orderedPhases, cleanCustomProjects, MAX_CUSTOM } from '../core/index.js';
+import { render } from '../ui/render.js';
 import { context } from '../state/context.js';
 import { store, save } from '../state/store.js';
-import { states, projState } from '../state/selectors.js';
+import { states, projState, projectList } from '../state/selectors.js';
 import { STATUS_LABEL } from '../ui/format.js';
+import { ui } from '../state/session.js';
 
 function projectCard(project, st) {
   const saved = projState(project.id);
@@ -37,10 +39,52 @@ function projectCard(project, st) {
 
   const skills = 'Skills ready: ' + percent + ' of the needed core topics are Strong or Done. ' +
     (ready.ready ? 'You can start building.' : 'Building works best from ' + Math.round(BUILD_READY * 100) + '%.');
-  return h('section', { class: 'card' },
-    h('div', null, h('h3', null, project.name), h('p', { class: 'small muted' }, project.stack)),
+  const remove = project.custom ? h('button', { class: 'btn small secondary', type: 'button', id: 'rm-' + project.id, onclick: () => {
+    if (!confirm('Remove "' + project.name + '" and its saved status, link and note?')) return;
+    store.data.customProjects = store.data.customProjects.filter(p => p.id !== project.id);
+    delete store.data.projects[project.id];
+    save(); render();
+  } }, 'Remove project') : null;
+  if (remove) form.querySelector('.btn-row').appendChild(remove);
+  return h('section', { class: 'card' + (project.custom ? ' custom-proj' : '') },
+    h('div', null, h('h3', null, project.name), h('p', { class: 'small muted' }, (project.stack || 'Your own project') + (project.custom ? ' · added by you' : ''))),
     h('p', { class: 'small ' + (ready.ready ? '' : 'muted') }, skills),
     form);
+}
+
+/** "Add a project": name, stack and which phases it needs (so skills-ready works for it too). Closed until clicked. */
+function addProjectCard() {
+  const name = h('input', { type: 'text', id: 'np-name', maxlength: '80', placeholder: 'Library Management System' });
+  const stack = h('input', { type: 'text', id: 'np-stack', maxlength: '120', placeholder: 'Java, Spring Boot and MySQL' });
+  const boxes = orderedPhases(context.syllabus.phases).map(ph => {
+    const cb = h('input', { type: 'checkbox', value: String(ph.number), id: 'np-ph-' + ph.number });
+    return h('label', { class: 'np-phase', for: 'np-ph-' + ph.number }, cb, 'Phase ' + ph.number + ' · ' + ph.name);
+  });
+  const err = h('p', { class: 'small msg-bad', role: 'alert' });
+  const form = h('form', { class: 'inner stack', id: 'add-project-form', novalidate: true },
+    h('label', { class: 'field', for: 'np-name' }, 'Project name', name),
+    h('label', { class: 'field', for: 'np-stack' }, 'Tech stack (optional)', stack),
+    h('fieldset', { class: 'np-needs' }, h('legend', null, 'Skills it needs'),
+      h('p', { class: 'small muted' }, 'Tick the phases this project uses. The project card then shows how ready your skills are.'), boxes),
+    err,
+    h('div', { class: 'btn-row' }, h('button', { class: 'btn', type: 'submit', id: 'np-save' }, 'Add project')));
+  form.addEventListener('submit', e => {
+    e.preventDefault(); err.textContent = '';
+    const list = store.data.customProjects || [];
+    if (list.length >= MAX_CUSTOM) { err.textContent = 'You can add up to ' + MAX_CUSTOM + ' projects. Remove one first.'; return; }
+    if (!name.value.trim()) { err.textContent = 'Give the project a name.'; name.focus(); return; }
+    const needs = boxes.map(l => l.firstChild).filter(c => c.checked).map(c => +c.value);
+    const id = 'my-' + Date.now().toString(36);
+    const [clean] = cleanCustomProjects([{ id, name: name.value, stack: stack.value, needs }]);
+    store.data.customProjects = list.concat([clean]);
+    store.data.projects[id] = { status: 'notstarted', link: '', note: '' };
+    ui.addProjectOpen = false;
+    save(); render();
+  });
+  const d = h('details', { class: 'card more', id: 'add-project' }, h('summary', null, 'Add a project'), form);
+  d.open = !!ui.addProjectOpen;
+  d.addEventListener('toggle', () => { ui.addProjectOpen = d.open; });
+  return hideLabel(d, 'Add a project', 'Hide add project');
 }
 
 export function projectsPage() {
@@ -55,6 +99,7 @@ export function projectsPage() {
       h('li', null, 'Authentication, validation and error handling are in.'),
       h('li', null, 'Unit and integration tests are written.'),
       h('li', null, 'It is on GitHub with a clear README, and you can explain every part of the code.'))));
-  for (const project of context.syllabus.projects) frag.appendChild(projectCard(project, st));
+  frag.appendChild(addProjectCard());
+  for (const project of projectList()) frag.appendChild(projectCard(project, st));
   return frag;
 }

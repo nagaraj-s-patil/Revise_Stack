@@ -1,6 +1,6 @@
 // Analysis page: everything worked out from your saved tests, with a chooser (phase + Good / Needs work / Not started).
 // Pre-tests are not scored here (see core/levels.js); they only count as activity.
-import { h } from '../ui/dom.js';
+import { h, hideLabel } from '../ui/dom.js';
 import {
   allTopics, countLevels, weeklyTrend, modeMix, studyDays, recentAverage, phaseStats, topicRows, groupOf, pace, today, orderedPhases
 } from '../core/index.js';
@@ -40,17 +40,10 @@ function weekBars(rows, key, max, fmtVal, unit) {
 
 function chartCard(title, sub, chart, rows, cols) {
   return h('section', { class: 'card' }, h('h3', null, title), h('p', { class: 'small muted' }, sub), chart,
-    tableToggle(h('details', { class: 'more' }, h('summary', null, 'Show as a table'),
+    hideLabel(h('details', { class: 'more' }, h('summary', null, 'Show as a table'),
       h('div', { class: 'inner' }, h('table', { class: 'tbl' },
         h('thead', null, h('tr', null, h('th', null, 'Week of'), cols.map(c => h('th', null, c[0])))),
-        h('tbody', null, rows.map(r => h('tr', null, h('td', null, r.label), cols.map(c => h('td', null, c[1](r)))))))))));
-}
-
-/** The summary reads "Show as a table" when closed and "Hide table" when open. */
-function tableToggle(d) {
-  const sum = d.querySelector('summary');
-  d.addEventListener('toggle', () => { sum.textContent = d.open ? 'Hide table' : 'Show as a table'; });
-  return d;
+        h('tbody', null, rows.map(r => h('tr', null, h('td', null, r.label), cols.map(c => h('td', null, c[1](r))))))))), 'Show as a table', 'Hide table'));
 }
 
 function chooser(phases) {
@@ -136,10 +129,10 @@ function phaseCard(stats) {
 }
 
 function mixCard(mix) {
-  const total = mix.pre + mix.quick + mix.full;
-  const parts = [{ label: 'Full tests', n: mix.full, cls: 'mx-full' }, { label: 'Quick tests', n: mix.quick, cls: 'mx-quick' }, { label: 'Pre-tests', n: mix.pre, cls: 'mx-pre' }];
+  const total = mix.pre + mix.full;
+  const parts = [{ label: 'Full tests', n: mix.full, cls: 'mx-full' }, { label: 'Pre-tests', n: mix.pre, cls: 'mx-pre' }];
   return h('section', { class: 'card' }, h('h3', null, 'What kind of tests'),
-    h('div', { class: 'an-donut-row' }, donut(parts, String(total), 'tests', mix.full + ' full, ' + mix.quick + ' quick, ' + mix.pre + ' pre-tests'),
+    h('div', { class: 'an-donut-row' }, donut(parts, String(total), 'tests', mix.full + ' full, ' + mix.pre + ' pre-tests'),
       h('div', { class: 'an-donut-side' }, legend(parts, total))),
     h('p', { class: 'small muted' }, 'Done needs a Full test. If Full is low, topics cannot reach Done.'));
 }

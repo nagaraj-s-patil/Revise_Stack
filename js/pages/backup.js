@@ -1,5 +1,5 @@
 // Backup page: copy your data as text, restore it from text, and install the app.
-import { h, copyText } from '../ui/dom.js';
+import { h, copyText, hideLabel } from '../ui/dom.js';
 import { exportBackup, validateBackup, today, parseDate } from '../core/index.js';
 import { store, save, replaceData } from '../state/store.js';
 import { ui } from '../state/session.js';
@@ -37,6 +37,7 @@ function backupCard() {
   const note = h('p', { class: 'small muted', role: 'status', 'aria-live': 'polite' }, daysAgoText(store.data.lastExport));
   const btn = h('button', { class: 'btn', type: 'button', id: 'backup-btn' }, 'Copy backup');
   const details = h('details', { class: 'more' }, h('summary', null, 'Show the backup text'), h('div', { class: 'inner' }, out));
+  hideLabel(details, 'Show the backup text', 'Hide the backup text');
   btn.addEventListener('click', () => {
     copyText(json).then(ok => {
       if (ok) {

@@ -22,8 +22,8 @@ export function weeklyTrend(results, today, weeks) {
 }
 
 export function modeMix(results) {
-  var m = { pre: 0, quick: 0, full: 0 };
-  results.forEach(function (r) { m[r.mode === 'pre' ? 'pre' : r.mode === 'full' ? 'full' : 'quick']++; });
+  var m = { pre: 0, full: 0 };
+  results.forEach(function (r) { m[r.mode === 'full' ? 'full' : 'pre']++; });
   return m;
 }
 

@@ -40,7 +40,7 @@ test('suggestMode: strong quick result asks for a Full test', () => {
   const st = L.topicState([res('a1', '2026-10-27', 5, 5)], 'a1', '2026-10-29');
   assert.equal(L.suggestMode(t, st), 'full');
   const st2 = L.topicState([res('a1', '2026-10-27', 6, 10)], 'a1', '2026-10-29');
-  assert.equal(L.suggestMode(t, st2), 'quick');
+  assert.equal(L.suggestMode(t, st2), 'full');
   assert.equal(L.suggestMode(phasesFixture[0].topics[1], L.topicState([], 'a2', '2026-10-29')), 'pre');   // LEARN tag: still a pre-test first
 });
 test('shortTask: prefers a revision, then a new topic that is not LEARN', () => {

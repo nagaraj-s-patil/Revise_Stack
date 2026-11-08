@@ -1,5 +1,5 @@
 // Small read helpers that combine the syllabus and the saved data.
-import { topicState, today, profileOf, USER_NAME } from '../core/index.js';
+import { topicState, today, profileOf, USER_NAME, allProjects } from '../core/index.js';
 import { cloud } from '../cloud/sync.js';
 import { context } from './context.js';
 import { store } from './store.js';
@@ -23,4 +23,9 @@ export function me() {
   const google = cloud.user && (cloud.user.displayName || cloud.user.email);
   const name = p.name || google || USER_NAME;
   return { ...p, name, first: name.split(/\s+/)[0], google: google || '' };
+}
+
+/** Built-in projects plus the ones you added. */
+export function projectList() {
+  return allProjects(context.syllabus.projects, store.data);
 }

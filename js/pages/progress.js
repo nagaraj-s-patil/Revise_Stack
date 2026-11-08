@@ -1,13 +1,13 @@
 // Progress page: core progress by phase, readiness checks, weakest topics, repeated mistakes,
 // and the progress summary to paste into an AI chat.
-import { h, copyText } from '../ui/dom.js';
+import { h, copyText, hideLabel } from '../ui/dom.js';
 import {
   allTopics, countLevels, applyChecks, weakestTopics, learnFirst, repeatedMistakes, buildSummary, streakInfo, today
 } from '../core/index.js';
 import { context } from '../state/context.js';
 import { store } from '../state/store.js';
 import { ui } from '../state/session.js';
-import { states, me } from '../state/selectors.js';
+import { states, me, projectList } from '../state/selectors.js';
 import { badge, preBadge } from '../ui/components/badge.js';
 
 const SUMMARY_TIMES = ['30 minutes', '1 hour', '2 hours', '3 hours or more'];
@@ -46,8 +46,8 @@ function overviewCard(st) {
 }
 
 function readinessCard(st) {
-  const { phases, projects } = context.syllabus;
-  const checks = applyChecks(phases, st, store.data.projects, projects);
+  const { phases } = context.syllabus;
+  const checks = applyChecks(phases, st, store.data.projects, projectList());
   const allOk = checks.every(c => c.ok);
   return h('section', { class: 'card' },
     h('h3', null, allOk ? 'You pass all three apply checks' : 'Ready to apply?'),
@@ -106,7 +106,8 @@ function repeatedCard() {
 
 // ---------- progress summary for the AI ----------
 function summaryCard(st) {
-  const { phases, projects, } = context.syllabus;
+  const { phases } = context.syllabus;
+  const projects = projectList();
   const t = today();
   const topics = {};
   for (const id of Object.keys(context.byId)) topics[id] = context.byId[id].topic;
@@ -124,6 +125,7 @@ function summaryCard(st) {
   const note = h('p', { class: 'small muted', role: 'status', 'aria-live': 'polite' });
   const btn = h('button', { class: 'btn', type: 'button', id: 'sum-btn' }, 'Copy progress summary');
   const details = h('details', { class: 'more' }, h('summary', null, 'Show the summary'), h('div', { class: 'inner' }, sumEl));
+  hideLabel(details, 'Show the summary', 'Hide the summary');
   btn.addEventListener('click', () => {
     copyText(sumEl.value).then(ok => {
       if (ok) {

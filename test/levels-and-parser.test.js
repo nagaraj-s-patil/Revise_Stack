@@ -73,7 +73,7 @@ const CLEAN = 'RESULT_START\ntopic_id: java-collections\nmode: quick\nscore: 6/1
 test('parser: clean block', () => {
   const p = L.parseResult('Great job!\n\n' + CLEAN);
   assert.equal(p.ok, true);
-  assert.deepEqual(p.data, { topicId: 'java-collections', mode: 'quick', score: 6, total: 10, weakPoints: ['HashMap vs TreeMap', 'Comparator'], nextStep: 'Practice custom comparators' });
+  assert.deepEqual(p.data, { topicId: 'java-collections', mode: 'full', score: 6, total: 10, weakPoints: ['HashMap vs TreeMap', 'Comparator'], nextStep: 'Practice custom comparators' });
 });
 test('parser: markdown bold, bullets, code fence, odd case and spacing', () => {
   const t = '```\n**RESULT_START**\n- **Topic_ID**:   java-collections\n- Mode : Full\n- **Score:** 8 out of 10\n> Weak Points: none\n- next step: Revise streams\n**RESULT_END**\n```';
@@ -126,22 +126,23 @@ test('parser: score missing', () => {
 test('prompt contains topic id, format block and the right question count', () => {
   const phase = S.phases[1];
   const topic = phase.topics.find(t => t.name === 'Collections Framework');
-  const quick = L.buildPrompt(topic, phase, 'quick');
+  const pre = L.buildPrompt(topic, phase, 'pre');
   const full = L.buildPrompt(topic, phase, 'full');
   const learn = L.buildPrompt(topic, phase, 'learn');
-  for (const p of [quick, full, learn]) {
+  for (const p of [pre, full, learn]) {
     assert.ok(p.includes('topic_id: ' + topic.id));
     assert.ok(p.includes('RESULT_START') && p.includes('RESULT_END'));
     assert.ok(p.includes('FINISH'));
   }
-  assert.ok(quick.includes('score: <number correct>/5'));
+  assert.ok(pre.includes('score: <number correct>/5'));
+  assert.throws(() => L.buildPrompt(topic, phase, 'quick'));
   assert.ok(full.includes('score: <number correct>/10'));
   assert.ok(learn.includes('Mode: LEARN'));
 });
 test('a prompt block, when filled in by an AI, parses back to the same topic', () => {
   const phase = S.phases[1];
   const topic = phase.topics[5];
-  const prompt = L.buildPrompt(topic, phase, 'quick');
+  const prompt = L.buildPrompt(topic, phase, 'pre');
   const filled = prompt.slice(prompt.lastIndexOf('RESULT_START')).replace('<number correct>', '4');
   const p = L.parseResult(filled.replace('<short list separated by semicolons, or none>', 'none').replace('<one concrete practice task>', 'Practice'));
   assert.equal(p.ok, true);
@@ -150,9 +151,9 @@ test('a prompt block, when filled in by an AI, parses back to the same topic', (
 });
 test('suggested mode by tag', () => {
   assert.equal(L.suggestedMode('LEARN'), 'learn');
-  assert.equal(L.suggestedMode('REVISE'), 'quick');
+  assert.equal(L.suggestedMode('REVISE'), 'full');
   assert.equal(L.suggestedMode('TEST'), 'full');
-  assert.equal(L.suggestedMode('UNSET'), 'quick');
+  assert.equal(L.suggestedMode('UNSET'), 'full');
 });
 test('syllabus ids are unique and every topic has a name', () => {
   const ids = S.phases.flatMap(p => p.topics.map(t => t.id));

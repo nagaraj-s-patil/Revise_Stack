@@ -17,10 +17,10 @@ You take the tests in ChatGPT or Claude. Revise Stack plans your day, records yo
 ## How it works
 
 1. **Overview** (Today) shows one task: a due revision first, then a new topic.
-2. **Pre-test first.** A topic you have never tested starts with a **Pre-test**: 5 questions, no teaching, to see what you already know. Copy the test prompt, paste it into an AI chat and take the test. (You can also choose **Learn first**, a **Quick test** or a **Full test** under Mode.)
+2. **Pre-test first.** A topic you have never tested starts with a **Pre-test**: 5 questions, no teaching, to see what you already know. Copy the test prompt, paste it into an AI chat and take the test. (You can also choose **Learn first** or a **Full test** under Mode. There is no Quick test: old Quick results are converted to pre-tests on load.)
    - **A pre-test is only a starting check.** It is not counted in the level, in Done, in your progress numbers or in revision. It never makes a topic due. You can pre-test the whole syllabus in one go and the revision list stays empty.
    - What it does: Weak and OK pre-tests move those topics to the front of your new topics (weakest first), and they appear in **Progress > Learn first** with a "Pre-test" badge. Strong pre-tests go to the back and get a Full test to confirm.
-   - After you learn a topic, your first **Quick or Full test** is the first real test. That is when the level is set and the revision schedule starts.
+   - After you learn a topic, your first **Full test** (10 questions) is the first real test. That is when the level is set and the revision schedule starts.
 3. **Paste the AI reply** back. The app reads the `RESULT_START ... RESULT_END` block and saves the score. A manual score form is the backup.
 4. The app works out the level from the score of real tests (not pre-tests) and tells you **what next**:
    - **Weak** (below 6/10): choose Learn first, study the weak points, then test again.
@@ -37,7 +37,7 @@ You take the tests in ChatGPT or Claude. Revise Stack plans your day, records yo
 | Overview | Greeting, goal banner, four numbers (streak, topics completed, studied this week, job target), learning path, projects, today's task (buttons: Open topic, Short on time?, Another topic) and the test steps |
 | Learning Path | All phases and topics with levels, filters and each topic's history |
 | Interview Prep | Mock interview prompt on your weakest topics and your saved mock scores |
-| Projects | Status, repository link and note for each project |
+| Projects | Status, repository link and note for each project. **Add a project** (name, stack, phases it needs) for your own; you can remove those later |
 | Progress | Core progress, apply-readiness checks, Learn first list (from pre-tests), weakest topics, repeated mistakes, progress summary to paste into an AI |
 | Analysis | Pick a phase. Headline numbers, plain-words insights, a donut of how much is completed (Done, Strong, OK, Weak, Not started), pace to your apply-by date, phase bars, tests per week, average score per week, test mix donut. Each chart has a table view. Pre-tests count as activity only, never as a score |
 | Profile | Opens from your name at the bottom of the sidebar (or the person icon on a phone). Shows your details; click Edit to change them. Name, target role, city, apply-by date, study hours per day (saved with your data, so Firebase and backups carry them). Account: Upload now, Backup link, Sign out |

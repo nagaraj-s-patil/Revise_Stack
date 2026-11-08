@@ -1,5 +1,6 @@
 // Cloud sync: Firebase Google sign-in plus one Firestore document per person (users/<uid>).
 // The browser copy stays as a cache, so the app still opens offline. Firestore is the master copy.
+import { migrateModes } from '../core/projects.js';
 import { FIREBASE_CONFIG, FIREBASE_DATABASE, FIREBASE_SDK, cloudEnabled } from './config.js';
 import { store, setSaveHook, adoptData, wipeLocal } from '../state/store.js';
 import { render } from '../ui/render.js';
@@ -58,7 +59,7 @@ const byId = (a, b) => { const m = new Map(); for (const x of [...a, ...b]) m.se
 /** Unsent offline work plus the cloud copy: keep every result and mock from both, and this device's project edits. */
 function merge(remote, local) {
   return { ...remote, results: byId(remote.results, local.results), mocks: byId(remote.mocks || [], local.mocks || []),
-    projects: { ...(remote.projects || {}), ...(local.projects || {}) }, drafts: local.drafts || {}, profile: { ...(remote.profile || {}), ...(local.profile || {}) }, lastExport: local.lastExport || remote.lastExport || null };
+    projects: { ...(remote.projects || {}), ...(local.projects || {}) }, drafts: local.drafts || {}, profile: { ...(remote.profile || {}), ...(local.profile || {}) }, customProjects: byId(remote.customProjects || [], local.customProjects || []), lastExport: local.lastExport || remote.lastExport || null };
 }
 
 /** After sign-in: the cloud copy wins, unless this device has changes not sent yet (then both are merged). If there is none yet, the browser copy is uploaded. */
@@ -74,10 +75,12 @@ async function pull() {
         // keep the browser copy aside so nothing is lost if the choice was wrong
         try { localStorage.setItem('jfs-tracker-v1-before-cloud', JSON.stringify(local)); } catch (e) { /* ignore */ }
       }
-      remote.drafts = remote.drafts || {}; remote.projects = remote.projects || {}; remote.profile = remote.profile || {};
+      remote.drafts = remote.drafts || {}; remote.projects = remote.projects || {}; remote.profile = remote.profile || {}; remote.customProjects = Array.isArray(remote.customProjects) ? remote.customProjects : [];
+      const migrated = migrateModes(remote);
       remote.mocks = Array.isArray(remote.mocks) ? remote.mocks : [];
       if (dirty) { adoptData(merge(remote, local)); await push(); return; }
       adoptData(remote);
+      if (migrated) await push();
       return;
     }
   }

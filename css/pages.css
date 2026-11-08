@@ -102,3 +102,9 @@ circle.mx-full { stroke: var(--accent); } circle.mx-quick { stroke: var(--accent
 .pf-row span:first-child { color: var(--muted); }
 .pf-row strong { text-align: right; overflow-wrap: anywhere; }
 .side-me[aria-current="page"] { outline: 2px solid var(--side-active); outline-offset: 4px; border-radius: 12px; }
+
+#add-project > summary { cursor: pointer; font-weight: 700; color: var(--accent); min-height: 44px; display: flex; align-items: center; }
+.np-needs { border: 0; padding: 0; margin: 0; display: grid; gap: 4px; }
+.np-needs legend { font-weight: 700; padding: 0; }
+.np-phase { display: flex; align-items: center; gap: 10px; min-height: 44px; font-size: 15px; }
+.np-phase input { width: 22px; height: 22px; flex: none; accent-color: var(--accent-fill); }

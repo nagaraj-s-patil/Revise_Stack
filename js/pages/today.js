@@ -62,7 +62,7 @@ function taskCard(task, queue, dueList, st, t) {
       class: 'btn small secondary', type: 'button', id: 'short-btn', onclick: () => {
         const pick = shortTask(queue);
         if (!pick) return;
-        ui.short = true; ui.todayId = pick.topic.id; ui.mode = 'quick'; ui.copied = false; ui.msg = null;
+        ui.short = true; ui.todayId = pick.topic.id; ui.mode = 'full'; ui.copied = false; ui.msg = null;
         render();
       }
     }, 'Short on time?'));
@@ -96,10 +96,10 @@ function spotCheckCard(st, t) {
   return h('section', { class: 'card', 'aria-label': 'Spot check' },
     h('h3', null, 'Spot check (optional)'),
     h('p', { class: 'small' }, spot.topic.name + ' is ' + LEVEL_LABEL[spot.state.level][1] + ', last tested ' + fmt(spot.state.last.date) +
-      '. A 5-minute Quick test checks that you have not started to forget it.'),
+      '. A Full test checks that you have not started to forget it.'),
     h('div', { class: 'btn-row' }, h('a', {
       class: 'btn small secondary', href: '#t-' + spot.topic.id, style: linkButton,
-      onclick: () => { ui.nextMode = 'quick'; }
+      onclick: () => { ui.nextMode = 'full'; }
     }, 'Test me')));
 }
 

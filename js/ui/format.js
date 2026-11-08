@@ -10,14 +10,14 @@ export const LEVEL_LABEL = {
   untested: ['–', 'Untested']
 };
 
-export const MODE_LABEL = { learn: 'Learn first', quick: 'Quick test', full: 'Full test', pre: 'Pre-test' };
+export const MODE_LABEL = { learn: 'Learn first', full: 'Full test', pre: 'Pre-test' };
 
 export const TAG_HINT = {
-  REVISE: 'You studied this before, so a Quick test is suggested.',
+  REVISE: 'You studied this before, so a Full test is suggested.',
   LEARN: 'Marked LEARN in your syllabus, so start by learning it.',
   TEST: 'Marked TEST in your syllabus, so a Full test is suggested.',
-  BUILD: 'Marked BUILD in your syllabus. A Quick test checks the basics first.',
-  UNSET: 'Not tagged in your syllabus. A Quick test works as a first check.'
+  BUILD: 'Marked BUILD in your syllabus. A Full test shows where you stand.',
+  UNSET: 'Not tagged in your syllabus. A Full test is the real check.'
 };
 
 export const fmt = s => parseDate(s).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });

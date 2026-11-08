@@ -1,11 +1,12 @@
 // Backup export and safe restore. Pasted backups are validated before anything is replaced.
 import { cleanProfile } from './profile.js';
+import { cleanCustomProjects } from './projects.js';
 import { PROJECT_STATUS } from './config.js';
 import { localDate, parseDate } from './dates.js';
 
 // Backup text and restore check.
 export function exportBackup(data, today) {
-  return JSON.stringify({ version: 1, exportedOn: today, results: data.results, projects: data.projects, mocks: data.mocks || [], profile: data.profile || {} }, null, 1);
+  return JSON.stringify({ version: 1, exportedOn: today, results: data.results, projects: data.projects, mocks: data.mocks || [], profile: data.profile || {}, customProjects: data.customProjects || [] }, null, 1);
 }
 
 export function validDate(s) { return typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s) && localDate(parseDate(s)) === s; }
@@ -21,7 +22,7 @@ export function validateBackup(text) {
         r.total < 1 || r.total > 50 || r.score < 0 || r.score > r.total) { dropped++; return; }
     results.push({
       id: typeof r.id === 'string' && r.id ? r.id : 'imp' + i + r.date,
-      topicId: r.topicId, date: r.date, mode: r.mode === 'full' ? 'full' : r.mode === 'pre' ? 'pre' : 'quick', score: r.score, total: r.total,
+      topicId: r.topicId, date: r.date, mode: r.mode === 'full' ? 'full' : 'pre', score: r.score, total: r.total,
       weakPoints: Array.isArray(r.weakPoints) ? r.weakPoints.filter(function (x) { return typeof x === 'string'; }) : [],
       nextStep: typeof r.nextStep === 'string' ? r.nextStep : '', edited: !!r.edited, source: typeof r.source === 'string' ? r.source : 'import'
     });
@@ -44,6 +45,6 @@ export function validateBackup(text) {
       };
     });
   }
-  return { ok: true, data: { version: 1, results: results, projects: projects, mocks: mocks, drafts: {}, lastExport: null, profile: cleanProfile(obj.profile) },
+  return { ok: true, data: { version: 1, results: results, projects: projects, mocks: mocks, drafts: {}, lastExport: null, profile: cleanProfile(obj.profile), customProjects: cleanCustomProjects(obj.customProjects) },
     stats: { results: results.length, mocks: mocks.length, dropped: dropped, projects: Object.keys(projects).length, exportedOn: typeof obj.exportedOn === 'string' ? obj.exportedOn : null } };
 }

@@ -6,7 +6,7 @@ import { fmtLong, STATUS_LABEL } from '../format.js';
 import { allTopics, countLevels, projectReady, parseDate, today, PRIORITY } from '../../core/index.js';
 import { context } from '../../state/context.js';
 import { store } from '../../state/store.js';
-import { projState, me } from '../../state/selectors.js';
+import { projState, me, projectList } from '../../state/selectors.js';
 
 const pct = share => Math.round(share * 100);
 
@@ -90,7 +90,8 @@ export function pathCard(st) {
 }
 
 export function projectCards(st) {
-  const { phases, projects } = context.syllabus;
+  const { phases } = context.syllabus;
+  const projects = projectList();
   return h('section', { 'aria-label': 'Your projects' },
     sectionHead('Your Projects', '#projects', 'View all'),
     h('div', { class: 'proj-row' }, projects.map(p => {

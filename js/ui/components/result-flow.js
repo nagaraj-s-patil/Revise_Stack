@@ -1,6 +1,6 @@
 // Saving a test result: read the pasted AI reply (or the manual form), warn about wrong topic or duplicates,
 // save, then show the outcome with Undo and Edit. Also the manual score form, which doubles as the edit form.
-import { h } from '../dom.js';
+import { h, hideLabel } from '../dom.js';
 import { parseResult, splitList, topicState, levelFromPct, pct, today } from '../../core/index.js';
 import { context } from '../../state/context.js';
 import { store, save } from '../../state/store.js';
@@ -85,7 +85,7 @@ function showSaved(topicId, rec, ok, wasEdit) {
   const lines = [name + (isPre ? ' pre-test: ' : ': ') + rec.score + '/' + rec.total + ', ' + LEVEL_LABEL[shownLevel][1] + (wasEdit ? ' (edited)' : '') + '.'];
   if (rec.weakPoints.length) lines.push('Weak points: ' + rec.weakPoints.join('; '));
   if (rec.nextStep) lines.push('Next step: ' + rec.nextStep);
-  const PRE_NEXT = { weak: 'Learn this first: choose Learn first, then take a Quick test. That test starts your revision schedule.', ok: 'Learn the weak points first (Learn first), then take a Quick test. That test starts your revision schedule.', strong: 'Strong start. Take a Full test (10 questions) to confirm. Revision starts from your first Quick or Full test.' };
+  const PRE_NEXT = { weak: 'Learn this first: choose Learn first, then take a Full test. That test starts your revision schedule.', ok: 'Learn the weak points first (Learn first), then take a Full test. That test starts your revision schedule.', strong: 'Strong start. Take a Full test (10 questions) to confirm. Revision starts from your first Full test.' };
   const NEXT = { weak: 'What next: choose Learn first on this topic, study the weak points, then test again.', ok: 'What next: revise the weak points, then test again on the due date.' };
   if (isPre) {
     lines.push('Pre-test only: it is not counted in your level or revision.');
@@ -108,7 +108,7 @@ function showSaved(topicId, rec, ok, wasEdit) {
 export function manualForm(topicId) {
   const rec = ui.editing ? store.data.results.find(r => r.id === ui.editing) : null;
   const score = h('input', { type: 'number', id: 'm-score', inputmode: 'numeric', min: '0', step: '1' });
-  const total = h('select', { id: 'm-total' }, h('option', { value: '5' }, '5 (Quick)'), h('option', { value: '10' }, '10 (Full)'));
+  const total = h('select', { id: 'm-total' }, h('option', { value: '5' }, '5 (Pre-test)'), h('option', { value: '10' }, '10 (Full)'));
   const weak = h('input', { type: 'text', id: 'm-weak', placeholder: 'HashMap vs TreeMap; Comparator' });
   const next = h('input', { type: 'text', id: 'm-next', placeholder: 'Practice custom comparators' });
   if (rec) {
@@ -148,12 +148,13 @@ export function manualForm(topicId) {
       showSaved(rec.topicId, rec, ok, true);
     } else {
       ui.manualOpen = false;
-      commit(topicId, { source: 'manual', mode: tt >= 10 ? 'full' : ui.mode === 'pre' ? 'pre' : 'quick', score: sc, total: tt, weakPoints: wp, nextStep: ns });
+      commit(topicId, { source: 'manual', mode: tt >= 10 ? 'full' : 'pre', score: sc, total: tt, weakPoints: wp, nextStep: ns });
     }
   });
 
   const d = h('details', { class: 'more', id: 'manual' }, h('summary', null, rec ? 'Edit result' : 'Enter score by hand'), form);
   d.open = ui.manualOpen || !!rec;
+  if (!rec) hideLabel(d, 'Enter score by hand', 'Hide score entry');
   d.addEventListener('toggle', () => { ui.manualOpen = d.open; });
   return d;
 }
