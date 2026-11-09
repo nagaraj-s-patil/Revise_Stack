@@ -38,9 +38,9 @@ export function buildPrompt(topic, phase, mode, prevWeak, prereq) {
     var shaky = (prereq || []).filter(function (x) { return !x.ready; });
     head += 'BEFORE THIS TOPIC\n' + needsText +
       (mode === 'learn'
-        ? (shaky.length ? 'Before teaching, ask me 3 quick questions on these prerequisites I am not Strong in: ' + shaky.map(function (x) { return x.topic.name; }).join(', ') +
-          '. If I miss any, teach the missing basics in a few lines first, then continue.\n\n' : 'I should already know these. Move straight to the topic.\n\n')
-        : 'Do not ask questions about the prerequisites themselves. If my answers show I am missing one, name it in next_step.\n\n');
+        ? (shaky.length ? 'This is background only. Do not test me on it. Where you use ' + shaky.map(function (x) { return x.topic.name; }).join(' or ') +
+          ', add a two-line reminder first, then continue with the topic.\n\n' : 'This is background only. Do not test me on it. Move straight to the topic.\n\n')
+        : 'This is background only. Do not ask questions about it. If my answers show I am missing one, name it in next_step.\n\n');
   }
 
   var rules =

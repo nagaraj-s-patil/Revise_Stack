@@ -21,12 +21,12 @@ function beforeCard(topic) {
     topic.before ? h('p', null, topic.before) : null,
     needs.length ? h('p', { class: 'small ' + (ready === needs.length ? 'muted' : ''), role: 'status' },
       ready === needs.length ? 'All ' + needs.length + ' prerequisites are Strong or Done. You are ready.'
-        : ready + ' of ' + needs.length + ' prerequisites ready. Finish the ones marked below first, or the AI will recheck them for you.') : null,
+        : ready + ' of ' + needs.length + ' prerequisites ready. Finish the ones marked below first.') : null,
     needs.length ? h('ul', { class: 'history' }, needs.map(n => h('li', null,
       h('a', { class: 'topic', href: '#t-' + n.topic.id, style: 'padding:0;min-height:44px' },
         h('span', { class: 'name' }, n.topic.name),
         h('span', { class: 'meta' }, n.last ? h('span', { class: 'score' }, n.last.score + '/' + n.last.total) : null, n.pre && !n.last ? preBadge(n.pre) : badge(n.level)))))) : null,
-    h('p', { class: 'small muted' }, 'This note is also added to the copied prompt, so the AI checks your basics first.'));
+    h('p', { class: 'small muted' }, 'The same information goes into the copied prompt as background. It does not add any test questions.'));
 }
 
 export function topicPage(id) {

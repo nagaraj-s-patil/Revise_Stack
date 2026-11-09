@@ -10,7 +10,7 @@ export const CHANGES = [
     'Every topic has an importance from 1 to 5, kept in the syllabus files and shown as stars. 5 = must know.',
     'The Learning Path shows the stars and has a 5★ Must know filter.',
     'New "Before this topic" card: what to complete first (for example SELECT before Joins) and whether you are ready.',
-    'The same note and your level on the prerequisites are added to the copied prompt, so the AI checks your basics first.'
+    'The same note and your level on the prerequisites are added to the copied prompt as background only. They add no test questions.'
   ] },
   { version: '1.7', date: '2026-11-08', title: 'I don\'t know this topic', items: [
     'New button on a topic you never studied: it skips the pre-test questions and saves a 0/5 pre-test, so the topic goes to Learn first.',

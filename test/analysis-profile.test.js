@@ -76,7 +76,8 @@ test('prompt carries the prerequisite note and my level on them', async () => {
   const needs = [{ topic: { name: 'SELECT' }, level: 'strong', last: { score: 9, total: 10 }, ready: true }, { topic: { name: 'WHERE' }, level: 'untested', last: null, ready: false }];
   const learn = L.buildPrompt(topic, phase, 'learn', [], needs);
   assert.ok(learn.includes('Know SELECT and WHERE first.') && learn.includes('SELECT (Strong, last test 9/10)') && learn.includes('WHERE (not tested yet)'));
-  assert.ok(learn.includes('ask me 3 quick questions on these prerequisites I am not Strong in: WHERE'));
-  assert.ok(L.buildPrompt(topic, phase, 'full', [], needs).includes('Do not ask questions about the prerequisites themselves'));
+  assert.ok(learn.includes('Do not test me on it') && learn.includes('add a two-line reminder first'));
+  assert.ok(!learn.includes('quick questions'));
+  assert.ok(L.buildPrompt(topic, phase, 'full', [], needs).includes('Do not ask questions about it'));
   assert.ok(!L.buildPrompt({ id: 'x', name: 'X' }, phase, 'full', [], []).includes('BEFORE THIS TOPIC'));
 });
