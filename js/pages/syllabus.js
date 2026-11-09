@@ -7,6 +7,11 @@ import { ui } from '../state/session.js';
 import { render } from '../ui/render.js';
 import { badge, preBadge, stars } from '../ui/components/badge.js';
 
+// Which phases are open and which filter is chosen are remembered on this device, so a refresh puts you back where you were.
+const KEY = 'revise-stack-syllabus-view';
+const loadView = () => { try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch (e) { return null; } };
+const saveView = () => { try { localStorage.setItem(KEY, JSON.stringify({ open: ui.open, filter: ui.filter })); } catch (e) { /* ignore */ } };
+
 const FILTERS = [['all', 'All'], ['weak', 'Weak'], ['due', 'Due'], ['untested', 'Untested'], ['must', '5★ Must know']];
 
 function topicRow(topic, s, locked) {
@@ -48,7 +53,7 @@ function filterChips() {
   return h('div', { class: 'filters', role: 'group', 'aria-label': 'Filter topics' }, FILTERS.map(([value, label]) =>
     h('button', {
       class: 'chip', type: 'button', 'aria-pressed': String(ui.filter === value),
-      onclick: () => { ui.filter = value; render(); }
+      onclick: () => { ui.filter = value; saveView(); render(); }
     }, label)));
 }
 
@@ -73,11 +78,17 @@ export function syllabusPage() {
     return true;
   };
 
-  // the first core phase that is not finished starts open
+  // first visit in this tab: restore the saved view, else the first core phase that is not finished starts open
   if (ui.open === null) {
-    ui.open = {};
-    const next = phases.find(p => p.topics.some(t => t.core && st[t.id].level !== 'done'));
-    if (next) ui.open[next.id] = true;
+    const saved = loadView();
+    if (saved && saved.open && typeof saved.open === 'object') {
+      ui.open = saved.open;
+      if (FILTERS.some(f => f[0] === saved.filter)) ui.filter = saved.filter;
+    } else {
+      ui.open = {};
+      const next = phases.find(p => p.topics.some(t => t.core && st[t.id].level !== 'done'));
+      if (next) ui.open[next.id] = true;
+    }
   }
 
   let shown = 0;
@@ -96,7 +107,7 @@ export function syllabusPage() {
         h('span', { class: 'phase-right' })),
       h('ul', { class: 'topics' }, rows.map(t => topicRow(t, st[t.id], false))));
     details.open = ui.filter !== 'all' || !!ui.open[phase.id];
-    details.addEventListener('toggle', () => { ui.open[phase.id] = details.open; });
+    details.addEventListener('toggle', () => { if (ui.filter === 'all') { ui.open[phase.id] = details.open; saveView(); } });
     frag.appendChild(details);
   }
 

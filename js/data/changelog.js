@@ -1,8 +1,11 @@
 // What changed in the app, newest first. Add a new entry at the top for every update and raise APP_VERSION.
 // The Overview shows the newest entry once after an update; the Profile page keeps the full list.
-export const APP_VERSION = '1.8';
+export const APP_VERSION = '1.9';
 
 export const CHANGES = [
+  { version: '1.9', date: '2026-11-09', title: 'Learning Path remembers where you were', items: [
+    'The phases you left open (and the filter you picked) in the Learning Path stay the same after a refresh or reopening the app.'
+  ] },
   { version: '1.8', date: '2026-11-09', title: 'Star importance and prerequisites', items: [
     'Every topic has an importance from 1 to 5, kept in the syllabus files and shown as stars. 5 = must know.',
     'The Learning Path shows the stars and has a 5★ Must know filter.',
