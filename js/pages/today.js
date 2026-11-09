@@ -4,7 +4,7 @@ import { buildQueue, streakInfo, shortTask, suggestMode, pickSurprise, projectRe
 import { context } from '../state/context.js';
 import { store } from '../state/store.js';
 import { ui } from '../state/session.js';
-import { states, projState } from '../state/selectors.js';
+import { states, projState, importantSet } from '../state/selectors.js';
 import { render } from '../ui/render.js';
 import { fmt, LEVEL_LABEL } from '../ui/format.js';
 import { badge, preBadge } from '../ui/components/badge.js';
@@ -117,7 +117,7 @@ function dueListCard(others, total) {
 export function todayPage() {
   const t = today();
   const st = states();
-  const queue = buildQueue(context.syllabus.phases, st, t);
+  const queue = buildQueue(context.syllabus.phases, st, t, importantSet());
   const task = pickTask(queue, st);
   const frag = document.createDocumentFragment();
 

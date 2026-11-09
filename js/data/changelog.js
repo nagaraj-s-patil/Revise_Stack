@@ -1,8 +1,12 @@
 // What changed in the app, newest first. Add a new entry at the top for every update and raise APP_VERSION.
 // The Overview shows the newest entry once after an update; the Profile page keeps the full list.
-export const APP_VERSION = '1.7';
+export const APP_VERSION = '1.8';
 
 export const CHANGES = [
+  { version: '1.8', date: '2026-11-09', title: 'Important topics', items: [
+    'Mark any topic as important (star) on its page.',
+    'Important topics show a star in the Learning Path, have their own filter, and come first in Today\'s queue.'
+  ] },
   { version: '1.7', date: '2026-11-08', title: 'I don\'t know this topic', items: [
     'New button on a topic you never studied: it skips the pre-test questions and saves a 0/5 pre-test, so the topic goes to Learn first.',
     'It is not counted in your level or revision, and Undo removes it.'

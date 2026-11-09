@@ -2,7 +2,8 @@
 import { h } from '../ui/dom.js';
 import { topicState, today } from '../core/index.js';
 import { context } from '../state/context.js';
-import { store } from '../state/store.js';
+import { store, save } from '../state/store.js';
+import { render } from '../ui/render.js';
 import { ui } from '../state/session.js';
 import { fmt } from '../ui/format.js';
 import { badge, preBadge } from '../ui/components/badge.js';
@@ -15,9 +16,14 @@ export function topicPage(id) {
   const frag = document.createDocumentFragment();
 
   frag.appendChild(h('a', { class: 'back', href: '#' + ui.from }, ui.from === 'today' ? '← Today' : '← Learning Path'));
+  const star = !!(store.data.important || {})[id];
+  const starBtn = h('button', { class: 'btn small secondary star-btn', type: 'button', id: 'imp-btn', 'aria-pressed': String(star),
+    onclick: () => { store.data.important = store.data.important || {}; if (star) delete store.data.important[id]; else store.data.important[id] = true; save(); render(); } },
+  star ? '★ Important' : '☆ Mark as important');
   frag.appendChild(h('div', null,
-    h('h2', null, topic.name),
-    h('p', { class: 'muted small' }, 'Phase ' + phase.number + ' · ' + phase.name + (topic.tag !== 'UNSET' ? ' · ' + topic.tag : ''))));
+    h('h2', null, star ? h('span', { class: 'star', title: 'Important' }, '★ ') : null, topic.name),
+    h('p', { class: 'muted small' }, 'Phase ' + phase.number + ' · ' + phase.name + (topic.tag !== 'UNSET' ? ' · ' + topic.tag : '')),
+    h('p', null, starBtn)));
 
   const status = st.last
     ? [

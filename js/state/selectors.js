@@ -29,3 +29,6 @@ export function me() {
 export function projectList() {
   return allProjects(context.syllabus.projects, store.data);
 }
+
+/** Topics you starred as Important. */
+export const importantSet = () => store.data.important || {};

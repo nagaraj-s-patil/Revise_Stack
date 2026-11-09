@@ -55,3 +55,14 @@ test('changelog: newest entry matches APP_VERSION and every entry has items', as
   assert.equal(CHANGES[0].version, APP_VERSION);
   CHANGES.forEach(c => assert.ok(c.items.length && /^\d{4}-\d{2}-\d{2}$/.test(c.date)));
 });
+
+test('important topics go first in the queue and are cleaned', async () => {
+  const L = await import('../js/core/index.js');
+  const phases = [{ id: 'p', number: 1, name: 'A', topics: [{ id: 'a', core: true }, { id: 'b', core: true }, { id: 'c', core: true }] }];
+  const st = { a: { level: 'untested', pre: null }, b: { level: 'untested', pre: null }, c: { level: 'untested', pre: null } };
+  assert.deepEqual(L.buildQueue(phases, st, '2026-11-09').map(q => q.topic.id), ['a', 'b', 'c']);
+  assert.deepEqual(L.buildQueue(phases, st, '2026-11-09', { c: true }).map(q => q.topic.id), ['c', 'a', 'b']);
+  assert.deepEqual(L.cleanImportant({ a: true, b: false, c: 'x' }), { a: true });
+  const text = L.exportBackup({ results: [], projects: {}, mocks: [], important: { a: true } }, '2026-11-09');
+  assert.deepEqual(L.validateBackup(text).data.important, { a: true });
+});

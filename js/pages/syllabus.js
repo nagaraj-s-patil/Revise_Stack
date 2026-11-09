@@ -2,19 +2,19 @@
 import { h } from '../ui/dom.js';
 import { allTopics, countLevels, isUnlocked } from '../core/index.js';
 import { context } from '../state/context.js';
-import { states } from '../state/selectors.js';
+import { states, importantSet } from '../state/selectors.js';
 import { ui } from '../state/session.js';
 import { render } from '../ui/render.js';
 import { badge, preBadge } from '../ui/components/badge.js';
 
-const FILTERS = [['all', 'All'], ['weak', 'Weak'], ['due', 'Due'], ['untested', 'Untested']];
+const FILTERS = [['all', 'All'], ['weak', 'Weak'], ['due', 'Due'], ['untested', 'Untested'], ['important', '★ Important']];
 
 function topicRow(topic, s, locked) {
   const meta = h('span', { class: 'meta' },
     s.isDue ? h('span', { class: 'duepill' }, 'Due') : null,
     s.last ? h('span', { class: 'score' }, s.last.score + '/' + s.last.total) : s.pre ? h('span', { class: 'score' }, s.pre.last.score + '/' + s.pre.last.total) : null,
     s.pre ? preBadge(s.pre) : badge(s.level));
-  const name = h('span', { class: 'name' }, topic.name,
+  const name = h('span', { class: 'name' }, importantSet()[topic.id] ? h('span', { class: 'star', 'aria-label': 'Important', title: 'Important' }, '★ ') : null, topic.name,
     h('span', { class: 'tag', style: 'display:block' }, topic.tag === 'UNSET' ? '' : topic.tag));
   return h('li', null, locked
     ? h('div', { class: 'topic locked' }, name, meta)
@@ -69,6 +69,7 @@ export function syllabusPage() {
     if (ui.filter === 'weak') return s.level === 'weak';
     if (ui.filter === 'due') return s.isDue;
     if (ui.filter === 'untested') return s.level === 'untested';
+    if (ui.filter === 'important') return !!importantSet()[t.id];
     return true;
   };
 
@@ -124,6 +125,6 @@ export function syllabusPage() {
     shown += count;
   }
 
-  if (!shown) frag.appendChild(h('p', { class: 'empty' }, 'No topics match this filter.'));
+  if (!shown) frag.appendChild(h('p', { class: 'empty' }, ui.filter === 'important' ? 'No important topics yet. Open a topic and tap Mark as important.' : 'No topics match this filter.'));
   return frag;
 }
