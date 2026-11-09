@@ -34,7 +34,7 @@ export function topicPage(id) {
   const st = topicState(store.data.results, id, today());
   const frag = document.createDocumentFragment();
 
-  frag.appendChild(h('a', { class: 'back', href: '#' + ui.from }, ui.from === 'today' ? '← Today' : '← Learning Path'));
+  frag.appendChild(h('a', { class: 'btn small secondary back', href: '#' + ui.from }, ui.from === 'today' ? '← Today' : '← Learning Path'));
   frag.appendChild(h('div', null,
     h('h2', null, topic.name),
     h('p', null, stars(topic.importance, true)),

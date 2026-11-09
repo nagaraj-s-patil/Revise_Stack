@@ -36,11 +36,10 @@ test('a pre-test does not count towards Done', () => {
   const results = [r('a1', '2026-11-01', 5, 5, 'pre'), r('a1', '2026-11-05', 10, 10, 'full')];
   assert.equal(L.topicState(results, 'a1', TODAY).level, 'strong');   // needs a second real test
 });
-test('new topics: Weak pre-test first, then not pre-tested, then OK, then Strong', () => {
+test('new topics stay in study order whatever the pre-test scores were', () => {
   const results = [r('a1', '2026-11-01', 4, 5, 'pre'), r('a2', '2026-11-01', 1, 5, 'pre'), r('s1', '2026-11-01', 3, 5, 'pre'), r('s2', '2026-11-01', 5, 5, 'pre')];
   const ids = L.buildQueue(phases, statesOf(results, TODAY), TODAY).map(x => x.topic.id);
-  // a2 weak (1/5), a1 strong (4/5), s1 ok (3/5), s2 strong (5/5), a3 not pre-tested
-  assert.deepEqual(ids, ['a2', 'a3', 's1', 'a1', 's2']);
+  assert.deepEqual(ids, ['a1', 'a2', 'a3', 's1', 's2']);
 });
 test('a topic pre-tested today is skipped for the rest of the day', () => {
   const ids = L.buildQueue(phases, statesOf([r('a1', TODAY, 2, 5, 'pre')], TODAY), TODAY).map(x => x.topic.id);
@@ -53,9 +52,9 @@ test('suggested mode: untested pre, then learn (weak/ok) or full (strong)', () =
   assert.equal(L.suggestMode(t, statesOf([r('a1', '2026-11-01', 3, 5, 'pre')], TODAY).a1), 'learn');
   assert.equal(L.suggestMode(t, statesOf([r('a1', '2026-11-01', 5, 5, 'pre')], TODAY).a1), 'full');
 });
-test('learnFirst lists Weak and OK pre-tests, lowest score first, not strong ones', () => {
+test('learnFirst lists Weak and OK pre-tests in study order, not strong ones', () => {
   const results = [r('a1', '2026-11-01', 3, 5, 'pre'), r('a2', '2026-11-01', 1, 5, 'pre'), r('s1', '2026-11-01', 5, 5, 'pre')];
-  assert.deepEqual(L.learnFirst(phases, statesOf(results, TODAY)).map(x => x.topic.id), ['a2', 'a1']);
+  assert.deepEqual(L.learnFirst(phases, statesOf(results, TODAY)).map(x => x.topic.id), ['a1', 'a2']);
 });
 test('parser reads mode: pre and the pre-test prompt asks for it', () => {
   const text = 'RESULT_START\ntopic_id: a1\nmode: pre\nscore: 2/5\nweak_points: none\nnext_step: x\nRESULT_END';

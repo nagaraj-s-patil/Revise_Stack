@@ -120,3 +120,6 @@ circle.mx-full { stroke: var(--accent); } circle.mx-quick { stroke: var(--accent
 .stars-text { margin-left: 8px; color: var(--muted); font-size: 13px; letter-spacing: 0; }
 .tag .stars { font-size: 12px; }
 .before-card { border-left: 4px solid var(--accent-fill); }
+
+a.btn.back { min-height: 44px; padding: 0 14px; text-decoration: none; }
+a.btn { text-decoration: none; }

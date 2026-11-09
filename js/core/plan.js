@@ -45,15 +45,12 @@ export function buildQueue(phases, states, today) {
   due.sort(function (a, b) {
     return (rank[a.state.level] - rank[b.state.level]) || ((b.topic.importance || 3) - (a.topic.importance || 3)) || (a.state.due < b.state.due ? -1 : a.state.due > b.state.due ? 1 : 0);
   });
-  // New topics: what the pre-test says to learn first (Weak), then not pre-tested yet, then OK, then Strong (needs a real test to confirm).
-  var preRank = { weak: 0, none: 1, ok: 2, strong: 3 };
-  var rankOf = function (q) { return q.state.pre ? preRank[q.state.pre.level] : preRank.none; };
-  fresh.forEach(function (q, i) { q.order = i; });
-  fresh.sort(function (a, b) { return (rankOf(a) - rankOf(b)) || (a.order - b.order); });
+  // New topics stay in study order (basics first, each topic after the ones it builds on). A pre-test result
+  // changes what you do on the topic (learn first, or go straight to a Full test), never where it sits in the order.
   return due.concat(fresh);
 }
 
-// Topics whose pre-test was Weak or OK and that have no real test yet: what to learn first, lowest score first.
+// Topics whose pre-test was Weak or OK and that have no real test yet, in study order: basics first, then what builds on them.
 export function learnFirst(phases, states) {
   var out = [];
   orderedPhases(phases).forEach(function (p) {
@@ -62,7 +59,7 @@ export function learnFirst(phases, states) {
       if (s.level === 'untested' && s.pre && s.pre.level !== 'strong') out.push({ topic: t, phase: p, state: s, order: out.length });
     });
   });
-  return out.sort(function (a, b) { return (pct(a.state.pre.last) - pct(b.state.pre.last)) || ((b.topic.importance || 3) - (a.topic.importance || 3)) || (a.order - b.order); });
+  return out;
 }
 
 // A topic never tested starts with a pre-test (5 questions) whatever its tag. After a pre-test: Weak or OK means

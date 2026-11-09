@@ -8,6 +8,7 @@ import { context } from '../state/context.js';
 import { store } from '../state/store.js';
 import { ui } from '../state/session.js';
 import { states, me, projectList } from '../state/selectors.js';
+import { icon } from '../ui/components/icons.js';
 import { badge, preBadge } from '../ui/components/badge.js';
 
 const SUMMARY_TIMES = ['30 minutes', '1 hour', '2 hours', '3 hours or more'];
@@ -77,14 +78,14 @@ function weakestCard(weakest) {
 function learnFirstCard(st) {
   const list = learnFirst(context.syllabus.phases, st);
   const card = h('section', { class: 'card', 'aria-label': 'Learn first' }, h('h3', null, 'Learn first (from your pre-tests)'),
-    h('p', { class: 'small muted' }, 'Lowest pre-test score first. Pre-tests are not counted in progress or revision.'));
+    h('p', { class: 'small muted' }, 'In study order: start at the top, basics first. Pre-tests are not counted in progress or revision.'));
   if (!list.length) {
     card.appendChild(h('p', { class: 'empty' }, 'Nothing yet. Take a pre-test on a topic and, if it is Weak or OK, it shows here.'));
     return card;
   }
-  card.appendChild(h('ul', { class: 'history' }, list.slice(0, 10).map(x =>
+  card.appendChild(h('ul', { class: 'history' }, list.slice(0, 10).map((x, i) =>
     h('li', null, h('a', { class: 'topic', href: '#t-' + x.topic.id, style: 'padding:0;min-height:44px' },
-      h('span', { class: 'name' }, x.topic.name),
+      h('span', { class: 'name' }, (i + 1) + '. ' + x.topic.name, i === 0 ? h('span', { class: 'tag', style: 'display:block' }, 'Start here') : null),
       h('span', { class: 'meta' }, h('span', { class: 'score' }, x.state.pre.last.score + '/' + x.state.pre.last.total), preBadge(x.state.pre)))))));
   if (list.length > 10) card.appendChild(h('p', { class: 'small muted' }, 'And ' + (list.length - 10) + ' more. Use the Learning Path to see all.'));
   return card;
@@ -150,7 +151,7 @@ export function progressPage() {
   const weakest = weakestTopics(context.syllabus.phases, st, 5);
   const frag = document.createDocumentFragment();
   frag.appendChild(h('h2', null, 'Progress'));
-  frag.appendChild(h('p', null, h('a', { href: '#analysis' }, 'Open the full Analysis (trends, pace, choose a phase) →')));
+  frag.appendChild(h('a', { class: 'btn secondary', href: '#analysis', id: 'open-analysis' }, icon('analysis', 20), 'Open Analysis'));
   frag.appendChild(overviewCard(st));
   frag.appendChild(readinessCard(st));
   frag.appendChild(learnFirstCard(st));

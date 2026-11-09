@@ -97,7 +97,7 @@ function restoreCard() {
 
 export function backupPage() {
   const frag = document.createDocumentFragment();
-  frag.appendChild(h('a', { class: 'back', href: '#today' }, '← Today'));
+  frag.appendChild(h('a', { class: 'btn small secondary back', href: '#today' }, '← Today'));
   frag.appendChild(h('div', null,
     h('h2', null, 'Backup and restore'),
     h('p', { class: 'small muted' }, cloudEnabled()

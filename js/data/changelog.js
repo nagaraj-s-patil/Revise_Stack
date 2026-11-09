@@ -1,8 +1,13 @@
 // What changed in the app, newest first. Add a new entry at the top for every update and raise APP_VERSION.
 // The Overview shows the newest entry once after an update; the Profile page keeps the full list.
-export const APP_VERSION = '1.9';
+export const APP_VERSION = '2.0';
 
 export const CHANGES = [
+  { version: '2.0', date: '2026-11-09', title: 'Sensible order and real buttons', items: [
+    'Learn first and Today now follow the study order: basics first (variables, conditions, functions), then what builds on them. A weak pre-test no longer pushes an advanced topic to the top.',
+    'Learn first is numbered and marks Start here.',
+    'Text links (Open Analysis, View all, Back) are now proper buttons.'
+  ] },
   { version: '1.9', date: '2026-11-09', title: 'Learning Path remembers where you were', items: [
     'The phases you left open (and the filter you picked) in the Learning Path stay the same after a refresh or reopening the app.'
   ] },

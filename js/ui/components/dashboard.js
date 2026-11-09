@@ -68,7 +68,7 @@ export function statTiles(st, info) {
 }
 
 function sectionHead(title, href, linkText) {
-  return h('div', { class: 'sec-head' }, h('h3', null, title), h('a', { href }, linkText));
+  return h('div', { class: 'sec-head' }, h('h3', null, title), h('a', { class: 'btn small secondary', href }, linkText));
 }
 
 /** Core progress for the first six phases in study order. */

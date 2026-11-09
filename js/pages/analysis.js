@@ -193,6 +193,7 @@ export function analysisPage() {
   frag.appendChild(chartCard('Average score per week', 'Scored tests only (pre-tests left out). A week with none has no bar.',
     weekBars(trend.map(w => ({ ...w, a: w.avg })), 'a', 1, v => pc(v), ''), trend, [['Average', r => r.avg == null ? '–' : pc(r.avg)], ['Scored tests', r => r.real]]));
   frag.appendChild(mixCard(modeMix(results)));
-  frag.appendChild(h('p', { class: 'small muted' }, 'Pass line ' + pc(0.6) + ', Strong line ' + pc(0.8) + '. Need the full picture? ', h('a', { href: '#progress' }, 'Progress page')));
+  frag.appendChild(h('p', { class: 'small muted' }, 'Pass line ' + pc(0.6) + ', Strong line ' + pc(0.8) + '.'));
+  frag.appendChild(h('a', { class: 'btn secondary', href: '#progress' }, 'Back to Progress'));
   return frag;
 }
