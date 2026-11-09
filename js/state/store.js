@@ -5,7 +5,6 @@
 //   mocks     mock interview scores
 //   drafts    unsaved pasted AI replies, so an app switch does not lose them
 //   profile   name, role, city, apply-by date and daily hours (js/core/profile.js)
-//   important  topics you starred: { topicId: true }
 //   customProjects  projects you added yourself (js/core/projects.js)
 //   lastExport  day of the last backup copy
 // The storage key keeps its first name on purpose, so earlier progress is still found.
@@ -17,7 +16,7 @@ const KEY = 'jfs-tracker-v1';
 export const store = { data: emptyData(), storageOk: true };
 
 export function emptyData() {
-  return { version: 1, results: [], projects: {}, mocks: [], drafts: {}, lastExport: null, profile: {}, customProjects: [], important: {} };
+  return { version: 1, results: [], projects: {}, mocks: [], drafts: {}, lastExport: null, profile: {}, customProjects: [] };
 }
 
 function probe() {
@@ -37,7 +36,6 @@ function read() {
     d.mocks = Array.isArray(d.mocks) ? d.mocks : [];
     d.profile = d.profile && typeof d.profile === 'object' ? d.profile : {};
     d.customProjects = Array.isArray(d.customProjects) ? d.customProjects : [];
-    d.important = d.important && typeof d.important === 'object' && !Array.isArray(d.important) ? d.important : {};
     if (migrateModes(d)) { try { localStorage.setItem(KEY, JSON.stringify(d)); } catch (e) { /* ignore */ } }
     return d;
   } catch (e) {

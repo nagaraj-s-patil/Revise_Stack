@@ -7,61 +7,100 @@
       "id": "p11-maven",
       "name": "Maven",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 4,
+      "needs": [
+        "p2-java-syntax-variables-and-methods"
+      ]
     },
     {
       "id": "p11-docker-and-container-basics",
       "name": "Docker and container basics",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 4,
+      "needs": [
+        "p11-linux-command-basics"
+      ]
     },
     {
       "id": "p11-github-actions-or-jenkins",
       "name": "GitHub Actions or Jenkins",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 3,
+      "needs": [
+        "p3-commits-branches-merges-and-pull-requests"
+      ]
     },
     {
       "id": "p11-ci-cd-pipelines",
       "name": "CI/CD pipelines",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 3,
+      "needs": [
+        "p11-github-actions-or-jenkins"
+      ]
     },
     {
       "id": "p11-linux-command-basics",
       "name": "Linux command basics",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 3
     },
     {
       "id": "p11-aws-azure-or-gcp-choose-one",
       "name": "AWS, Azure or GCP — choose one",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 3,
+      "needs": [
+        "p11-linux-command-basics"
+      ]
     },
     {
       "id": "p11-deploy-a-spring-boot-application",
       "name": "Deploy a Spring Boot application",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 3,
+      "needs": [
+        "p11-maven",
+        "p11-docker-and-container-basics"
+      ],
+      "before": "Know Maven and Docker first. Deploying means building a jar or image and running it somewhere else."
     },
     {
       "id": "p11-environment-variables-and-secrets",
       "name": "Environment variables and secrets",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 3,
+      "needs": [
+        "p11-deploy-a-spring-boot-application"
+      ]
     },
     {
       "id": "p11-logging-monitoring-and-application-securit",
       "name": "Logging, monitoring and application security",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 2,
+      "needs": [
+        "p7-logging-and-application-configuration"
+      ]
     },
     {
       "id": "p11-sonarqube-and-code-quality",
       "name": "SonarQube and code quality",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 1,
+      "needs": [
+        "p11-maven"
+      ]
     }
   ]
 }

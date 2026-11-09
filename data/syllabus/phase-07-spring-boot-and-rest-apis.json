@@ -7,73 +7,128 @@
       "id": "p7-dependency-injection-and-inversion-of-cont",
       "name": "Dependency Injection and Inversion of Control",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p2-interfaces-abstract-classes-and-access-mod",
+        "p2-oop-inheritance-polymorphism-abstraction-a"
+      ],
+      "before": "Know interfaces and OOP first. Dependency Injection means depending on an interface and letting Spring supply the object."
     },
     {
       "id": "p7-spring-beans-and-configuration",
       "name": "Spring Beans and configuration",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p7-dependency-injection-and-inversion-of-cont"
+      ]
     },
     {
       "id": "p7-spring-boot-project-structure",
       "name": "Spring Boot project structure",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p7-spring-beans-and-configuration"
+      ]
     },
     {
       "id": "p7-spring-mvc-and-layered-architecture",
       "name": "Spring MVC and layered architecture",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p7-spring-boot-project-structure"
+      ]
     },
     {
       "id": "p7-controllers-services-and-repositories",
       "name": "Controllers, services and repositories",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p7-spring-mvc-and-layered-architecture"
+      ]
     },
     {
       "id": "p7-rest-api-methods-and-status-codes",
       "name": "REST API methods and status codes",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p5-json-http-methods-and-status-codes",
+        "p7-controllers-services-and-repositories"
+      ],
+      "before": "Know HTTP methods, status codes and JSON first, plus how a controller works."
     },
     {
       "id": "p7-dtos-and-request-response-handling",
       "name": "DTOs and request/response handling",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p7-rest-api-methods-and-status-codes"
+      ]
     },
     {
       "id": "p7-crud-apis-with-mysql",
       "name": "CRUD APIs with MySQL",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p7-dtos-and-request-response-handling",
+        "p6-spring-data-jpa-repositories"
+      ],
+      "before": "Know DTOs and Spring Data JPA first. A CRUD API is a controller, a DTO and a repository joined together."
     },
     {
       "id": "p7-validation-and-exception-handling",
       "name": "Validation and exception handling",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p7-dtos-and-request-response-handling",
+        "p2-exception-handling"
+      ]
     },
     {
       "id": "p7-pagination-and-sorting",
       "name": "Pagination and sorting",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 3,
+      "needs": [
+        "p7-crud-apis-with-mysql"
+      ]
     },
     {
       "id": "p7-swagger-openapi-documentation",
       "name": "Swagger/OpenAPI documentation",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 2,
+      "needs": [
+        "p7-rest-api-methods-and-status-codes"
+      ]
     },
     {
       "id": "p7-logging-and-application-configuration",
       "name": "Logging and application configuration",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 3,
+      "needs": [
+        "p7-spring-boot-project-structure"
+      ]
     }
   ]
 }

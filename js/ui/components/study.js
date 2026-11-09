@@ -1,7 +1,8 @@
 // The copy-prompt card, the message box and the paste card. Shared by the Today page and the topic page.
 import { h, copyText, hideLabel } from '../dom.js';
 import { markUnknown } from './result-flow.js';
-import { buildPrompt, recentWeakPoints, canPreTest, suggestMode, topicState, today } from '../../core/index.js';
+import { states } from '../../state/selectors.js';
+import { buildPrompt, recentWeakPoints, canPreTest, suggestMode, topicState, today, prereqStatus } from '../../core/index.js';
 import { context } from '../../state/context.js';
 import { store } from '../../state/store.js';
 import { ui } from '../../state/session.js';
@@ -33,7 +34,8 @@ export function studyCards(id, twoStep) {
 
   // step 1: pick a mode, copy the prompt
   const promptEl = h('textarea', { id: 'promptbox', class: 'promptbox mono', readonly: true, 'aria-label': 'Test prompt' });
-  const currentPrompt = () => buildPrompt(topic, phase, ui.mode, recentWeakPoints(store.data.results, id, 4));
+  const needs = prereqStatus(topic, context.byId, states());
+  const currentPrompt = () => buildPrompt(topic, phase, ui.mode, recentWeakPoints(store.data.results, id, 4), needs);
   promptEl.value = currentPrompt();
 
   const copyNote = h('p', { class: 'small muted', role: 'status', 'aria-live': 'polite' });

@@ -7,55 +7,95 @@
       "id": "p1-variables-data-types-and-operators",
       "name": "Variables, data types and operators",
       "tag": "REVISE",
-      "core": true
+      "core": true,
+      "importance": 5
     },
     {
       "id": "p1-conditions-and-loops",
       "name": "Conditions and loops",
       "tag": "REVISE",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p1-variables-data-types-and-operators"
+      ]
     },
     {
       "id": "p1-functions-and-methods",
       "name": "Functions and methods",
       "tag": "REVISE",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p1-conditions-and-loops"
+      ]
     },
     {
       "id": "p1-arrays-and-strings",
       "name": "Arrays and strings",
       "tag": "REVISE",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p1-conditions-and-loops",
+        "p1-functions-and-methods"
+      ]
     },
     {
       "id": "p1-recursion",
       "name": "Recursion",
       "tag": "LEARN",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p1-functions-and-methods"
+      ],
+      "before": "A function that calls itself needs solid functions first: parameters, return values and the call stack."
     },
     {
       "id": "p1-time-and-space-complexity",
       "name": "Time and space complexity",
       "tag": "LEARN",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p1-arrays-and-strings"
+      ],
+      "before": "You need to read loops and arrays comfortably before you can count how often code runs."
     },
     {
       "id": "p1-searching-and-sorting",
       "name": "Searching and sorting",
       "tag": "LEARN",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p1-arrays-and-strings",
+        "p1-time-and-space-complexity"
+      ]
     },
     {
       "id": "p1-linked-lists-stacks-queues-hash-maps-and-t",
       "name": "Linked lists, stacks, queues, hash maps and trees",
       "tag": "LEARN",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p1-arrays-and-strings",
+        "p1-recursion"
+      ],
+      "before": "Know arrays and recursion first: trees and linked lists are walked with loops and recursive calls."
     },
     {
       "id": "p1-coding-problems",
       "name": "Coding problems",
       "tag": "TEST",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p1-searching-and-sorting",
+        "p1-linked-lists-stacks-queues-hash-maps-and-t"
+      ]
     }
   ]
 }

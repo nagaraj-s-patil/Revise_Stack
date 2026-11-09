@@ -20,8 +20,19 @@ export function validateSyllabus(s) {
       if (typeof t.id !== 'string' || !t.id || typeof t.name !== 'string' || !t.name) fail('a topic in phase ' + p.number + ' has no id or name.');
       if (!TAGS.includes(t.tag)) fail('topic ' + t.id + ' has an unknown tag "' + t.tag + '".');
       if (typeof t.core !== 'boolean') fail('topic ' + t.id + ' needs core: true or false.');
+      if (!Number.isInteger(t.importance) || t.importance < 1 || t.importance > 5) fail('topic ' + t.id + ' needs importance 1 to 5.');
+      if (t.before !== undefined && (typeof t.before !== 'string' || t.before.length > 300)) fail('topic ' + t.id + ' has a bad "before" note.');
+      if (t.needs !== undefined && !Array.isArray(t.needs)) fail('topic ' + t.id + ': needs must be a list of topic ids.');
       if (topicIds.has(t.id)) fail('topic id ' + t.id + ' is used twice.');
       topicIds.add(t.id);
+    }
+  }
+  for (const p of s.phases) {
+    for (const t of p.topics) {
+      for (const n of t.needs || []) {
+        if (!topicIds.has(n)) fail('topic ' + t.id + ' needs "' + n + '", which does not exist.');
+        if (n === t.id) fail('topic ' + t.id + ' needs itself.');
+      }
     }
   }
   if (!Array.isArray(s.projects)) fail('projects must be a list.');

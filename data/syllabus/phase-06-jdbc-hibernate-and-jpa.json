@@ -7,61 +7,111 @@
       "id": "p6-jdbc-architecture-and-drivers",
       "name": "JDBC architecture and drivers",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 3,
+      "needs": [
+        "p4-select-insert-update-and-delete",
+        "p2-exception-handling"
+      ],
+      "before": "Know SELECT/INSERT/UPDATE/DELETE and exception handling first. JDBC just sends your SQL from Java."
     },
     {
       "id": "p6-connection-statement-and-preparedstatement",
       "name": "Connection, Statement and PreparedStatement",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p6-jdbc-architecture-and-drivers"
+      ]
     },
     {
       "id": "p6-resultset-and-crud-operations",
       "name": "ResultSet and CRUD operations",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p6-connection-statement-and-preparedstatement"
+      ]
     },
     {
       "id": "p6-database-transactions-and-connection-pooli",
       "name": "Database transactions and connection pooling",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p6-resultset-and-crud-operations",
+        "p4-acid-properties"
+      ]
     },
     {
       "id": "p6-orm-concepts",
       "name": "ORM concepts",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p6-resultset-and-crud-operations",
+        "p2-oop-inheritance-polymorphism-abstraction-a"
+      ],
+      "before": "Know JDBC (ResultSet) and OOP first. ORM maps table rows to objects so you stop writing that code by hand."
     },
     {
       "id": "p6-jpa-entities-and-hibernate",
       "name": "JPA entities and Hibernate",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p6-orm-concepts",
+        "p4-primary-keys-foreign-keys-and-constraints"
+      ]
     },
     {
       "id": "p6-entity-relationships-and-mappings",
       "name": "Entity relationships and mappings",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p6-jpa-entities-and-hibernate",
+        "p4-joins-subqueries-and-aggregate-functions"
+      ],
+      "before": "Know JPA basics and SQL joins first. Relationships are foreign keys written as object fields."
     },
     {
       "id": "p6-spring-data-jpa-repositories",
       "name": "Spring Data JPA repositories",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p6-jpa-entities-and-hibernate"
+      ]
     },
     {
       "id": "p6-jpql-and-lazy-eager-loading",
       "name": "JPQL and lazy/eager loading",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p6-jpa-entities-and-hibernate",
+        "p4-joins-subqueries-and-aggregate-functions"
+      ]
     },
     {
       "id": "p6-cascading-and-the-n-1-query-problem",
       "name": "Cascading and the N+1 query problem",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p6-entity-relationships-and-mappings"
+      ],
+      "before": "Know entity relationships first. N+1 shows up when a relationship loads one extra query per row."
     }
   ]
 }

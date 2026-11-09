@@ -26,11 +26,9 @@ export function isUnlocked(phases, states) {
   });
 }
 
-// Topics you marked Important (star) go first inside each group.
-// Queue: due revisions first (weak before ok before strong, oldest due first), then new topics in study order.
+// Queue: due revisions first (weak before ok before strong, more important first, then oldest due), then new topics in study order.
 // A topic tested today is skipped, so you never get the same topic twice in one day.
-export function buildQueue(phases, states, today, important) {
-  important = important || {};
+export function buildQueue(phases, states, today) {
   var unlocked = isUnlocked(phases, states);
   var due = [], fresh = [];
   orderedPhases(phases).forEach(function (p) {
@@ -44,15 +42,14 @@ export function buildQueue(phases, states, today, important) {
     });
   });
   var rank = { weak: 0, ok: 1, strong: 2, done: 3 };
-  var imp = function (q) { return important[q.topic.id] ? 0 : 1; };
   due.sort(function (a, b) {
-    return (imp(a) - imp(b)) || (rank[a.state.level] - rank[b.state.level]) || (a.state.due < b.state.due ? -1 : a.state.due > b.state.due ? 1 : 0);
+    return (rank[a.state.level] - rank[b.state.level]) || ((b.topic.importance || 3) - (a.topic.importance || 3)) || (a.state.due < b.state.due ? -1 : a.state.due > b.state.due ? 1 : 0);
   });
   // New topics: what the pre-test says to learn first (Weak), then not pre-tested yet, then OK, then Strong (needs a real test to confirm).
   var preRank = { weak: 0, none: 1, ok: 2, strong: 3 };
   var rankOf = function (q) { return q.state.pre ? preRank[q.state.pre.level] : preRank.none; };
   fresh.forEach(function (q, i) { q.order = i; });
-  fresh.sort(function (a, b) { return (imp(a) - imp(b)) || (rankOf(a) - rankOf(b)) || (a.order - b.order); });
+  fresh.sort(function (a, b) { return (rankOf(a) - rankOf(b)) || (a.order - b.order); });
   return due.concat(fresh);
 }
 
@@ -65,7 +62,7 @@ export function learnFirst(phases, states) {
       if (s.level === 'untested' && s.pre && s.pre.level !== 'strong') out.push({ topic: t, phase: p, state: s, order: out.length });
     });
   });
-  return out.sort(function (a, b) { return (pct(a.state.pre.last) - pct(b.state.pre.last)) || (a.order - b.order); });
+  return out.sort(function (a, b) { return (pct(a.state.pre.last) - pct(b.state.pre.last)) || ((b.topic.importance || 3) - (a.topic.importance || 3)) || (a.order - b.order); });
 }
 
 // A topic never tested starts with a pre-test (5 questions) whatever its tag. After a pre-test: Weak or OK means

@@ -15,3 +15,4 @@ export * from './spotcheck.js';
 export * from './profile.js';
 export * from './analysis.js';
 export * from './projects.js';
+export * from './prereq.js';

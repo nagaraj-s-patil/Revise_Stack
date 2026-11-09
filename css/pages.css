@@ -115,5 +115,8 @@ circle.mx-full { stroke: var(--accent); } circle.mx-quick { stroke: var(--accent
 
 .unknown-box { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--line-strong); display: grid; gap: 6px; }
 
-.star { color: var(--accent); font-weight: 800; }
-.star-btn[aria-pressed="true"] { background: var(--soft); border-color: var(--accent-fill); color: var(--accent); }
+.stars { color: var(--accent); letter-spacing: 1px; font-size: 14px; white-space: nowrap; }
+.stars .off { opacity: .3; }
+.stars-text { margin-left: 8px; color: var(--muted); font-size: 13px; letter-spacing: 0; }
+.tag .stars { font-size: 12px; }
+.before-card { border-left: 4px solid var(--accent-fill); }

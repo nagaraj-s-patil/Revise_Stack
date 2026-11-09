@@ -33,13 +33,3 @@ export function profileOf(data) {
 }
 
 export const deadlineOf = data => profileOf(data).deadline;
-
-/** Topics you marked Important: { topicId: true }. Keeps only valid keys. */
-export function cleanImportant(o) {
-  var out = {}, n = 0;
-  if (!o || typeof o !== 'object' || Array.isArray(o)) return out;
-  Object.keys(o).forEach(function (k) {
-    if (o[k] === true && k.length > 0 && k.length <= 80 && n < 1000) { out[k] = true; n++; }
-  });
-  return out;
-}

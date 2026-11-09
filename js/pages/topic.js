@@ -2,13 +2,32 @@
 import { h } from '../ui/dom.js';
 import { topicState, today } from '../core/index.js';
 import { context } from '../state/context.js';
-import { store, save } from '../state/store.js';
-import { render } from '../ui/render.js';
+import { store } from '../state/store.js';
 import { ui } from '../state/session.js';
 import { fmt } from '../ui/format.js';
-import { badge, preBadge } from '../ui/components/badge.js';
+import { badge, preBadge, stars } from '../ui/components/badge.js';
+import { prereqStatus } from '../core/index.js';
+import { states } from '../state/selectors.js';
 import { studyCards } from '../ui/components/study.js';
 import { mistakesCard, historyCard } from '../ui/components/history.js';
+
+/** "Before this topic": the note from the syllabus file and a ready check on each prerequisite. Nothing when the topic has neither. */
+function beforeCard(topic) {
+  const needs = prereqStatus(topic, context.byId, states());
+  if (!needs.length && !topic.before) return document.createDocumentFragment();
+  const ready = needs.filter(n => n.ready).length;
+  return h('section', { class: 'card before-card', id: 'before-card', 'aria-label': 'Before this topic' },
+    h('h3', null, 'Before this topic'),
+    topic.before ? h('p', null, topic.before) : null,
+    needs.length ? h('p', { class: 'small ' + (ready === needs.length ? 'muted' : ''), role: 'status' },
+      ready === needs.length ? 'All ' + needs.length + ' prerequisites are Strong or Done. You are ready.'
+        : ready + ' of ' + needs.length + ' prerequisites ready. Finish the ones marked below first, or the AI will recheck them for you.') : null,
+    needs.length ? h('ul', { class: 'history' }, needs.map(n => h('li', null,
+      h('a', { class: 'topic', href: '#t-' + n.topic.id, style: 'padding:0;min-height:44px' },
+        h('span', { class: 'name' }, n.topic.name),
+        h('span', { class: 'meta' }, n.last ? h('span', { class: 'score' }, n.last.score + '/' + n.last.total) : null, n.pre && !n.last ? preBadge(n.pre) : badge(n.level)))))) : null,
+    h('p', { class: 'small muted' }, 'This note is also added to the copied prompt, so the AI checks your basics first.'));
+}
 
 export function topicPage(id) {
   const { topic, phase } = context.byId[id];
@@ -16,14 +35,10 @@ export function topicPage(id) {
   const frag = document.createDocumentFragment();
 
   frag.appendChild(h('a', { class: 'back', href: '#' + ui.from }, ui.from === 'today' ? '← Today' : '← Learning Path'));
-  const star = !!(store.data.important || {})[id];
-  const starBtn = h('button', { class: 'btn small secondary star-btn', type: 'button', id: 'imp-btn', 'aria-pressed': String(star),
-    onclick: () => { store.data.important = store.data.important || {}; if (star) delete store.data.important[id]; else store.data.important[id] = true; save(); render(); } },
-  star ? '★ Important' : '☆ Mark as important');
   frag.appendChild(h('div', null,
-    h('h2', null, star ? h('span', { class: 'star', title: 'Important' }, '★ ') : null, topic.name),
-    h('p', { class: 'muted small' }, 'Phase ' + phase.number + ' · ' + phase.name + (topic.tag !== 'UNSET' ? ' · ' + topic.tag : '')),
-    h('p', null, starBtn)));
+    h('h2', null, topic.name),
+    h('p', null, stars(topic.importance, true)),
+    h('p', { class: 'muted small' }, 'Phase ' + phase.number + ' · ' + phase.name + (topic.tag !== 'UNSET' ? ' · ' + topic.tag : ''))));
 
   const status = st.last
     ? [
@@ -35,6 +50,7 @@ export function topicPage(id) {
   frag.appendChild(h('section', { class: 'card', 'aria-label': 'Status' },
     h('div', { class: 'meta', style: 'justify-content:flex-start' }, st.pre ? preBadge(st.pre) : badge(st.level), status)));
 
+  frag.appendChild(beforeCard(topic));
   frag.appendChild(studyCards(id, false));
   const mistakes = mistakesCard(id);
   if (mistakes) frag.appendChild(mistakes);

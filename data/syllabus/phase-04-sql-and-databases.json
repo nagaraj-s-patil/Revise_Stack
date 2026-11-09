@@ -7,63 +7,103 @@
       "id": "p4-select-insert-update-and-delete",
       "name": "SELECT, INSERT, UPDATE and DELETE",
       "tag": "REVISE",
-      "core": true
+      "core": true,
+      "importance": 5
     },
     {
       "id": "p4-where-order-by-group-by-and-having",
       "name": "WHERE, ORDER BY, GROUP BY and HAVING",
       "tag": "REVISE",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p4-select-insert-update-and-delete"
+      ],
+      "before": "You must be able to write a plain SELECT before filtering and sorting it."
     },
     {
       "id": "p4-joins-subqueries-and-aggregate-functions",
       "name": "Joins, subqueries and aggregate functions",
       "tag": "REVISE",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p4-select-insert-update-and-delete",
+        "p4-where-order-by-group-by-and-having"
+      ],
+      "before": "Be comfortable with SELECT and WHERE first. A join is a SELECT across two tables, matched on a key."
     },
     {
       "id": "p4-mysql-database-design-and-relationships",
       "name": "MySQL database design and relationships",
       "tag": "LEARN",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p4-select-insert-update-and-delete"
+      ]
     },
     {
       "id": "p4-primary-keys-foreign-keys-and-constraints",
       "name": "Primary keys, foreign keys and constraints",
       "tag": "LEARN",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p4-mysql-database-design-and-relationships"
+      ],
+      "before": "Know how to design a table first. Keys are what link one table to another."
     },
     {
       "id": "p4-normalization-indexes-and-transactions",
       "name": "Normalization, indexes and transactions",
       "tag": "LEARN",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p4-primary-keys-foreign-keys-and-constraints"
+      ],
+      "before": "Know primary and foreign keys first. Normalization is splitting tables so keys connect them without repeating data."
     },
     {
       "id": "p4-acid-properties",
       "name": "ACID properties",
       "tag": "LEARN",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p4-primary-keys-foreign-keys-and-constraints"
+      ]
     },
     {
       "id": "p4-postgresql-basics",
       "name": "PostgreSQL basics",
       "tag": "LEARN",
-      "core": true
+      "core": true,
+      "importance": 2,
+      "needs": [
+        "p4-joins-subqueries-and-aggregate-functions"
+      ]
     },
     {
       "id": "p4-oracle-sql-and-pl-sql",
       "name": "Oracle SQL and PL/SQL",
       "tag": "LEARN",
       "core": false,
-      "note": "only if required by target jobs"
+      "importance": 1,
+      "needs": [
+        "p4-joins-subqueries-and-aggregate-functions"
+      ]
     },
     {
       "id": "p4-mongodb-and-redis",
       "name": "MongoDB and Redis",
       "tag": "LEARN",
       "core": false,
-      "note": "later"
+      "importance": 2,
+      "needs": [
+        "p4-select-insert-update-and-delete"
+      ]
     }
   ]
 }

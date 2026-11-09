@@ -3,7 +3,7 @@
 // The file list and the version are written by `npm run precache`. Do not edit between the markers.
 
 // BEGIN GENERATED
-const VERSION = "1d683a8528";
+const VERSION = "74afd98f19";
 const PRECACHE = [
   "./",
   "assets/fonts/jetbrains-mono-latin-400-normal.woff2",
@@ -57,6 +57,7 @@ const PRECACHE = [
   "js/core/mock.js",
   "js/core/parser.js",
   "js/core/plan.js",
+  "js/core/prereq.js",
   "js/core/profile.js",
   "js/core/progress.js",
   "js/core/projects.js",

@@ -7,67 +7,112 @@
       "id": "p12-microservices-architecture",
       "name": "Microservices architecture",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 3,
+      "before": "Be solid on Spring Boot REST, JPA and Docker first. Microservices are many small Spring Boot apps talking to each other.",
+      "needs": [
+        "p7-rest-api-methods-and-status-codes",
+        "p6-spring-data-jpa-repositories",
+        "p11-docker-and-container-basics"
+      ]
     },
     {
       "id": "p12-api-gateway-and-service-discovery",
       "name": "API Gateway and Service Discovery",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 2,
+      "needs": [
+        "p12-microservices-architecture"
+      ]
     },
     {
       "id": "p12-inter-service-communication",
       "name": "Inter-service communication",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 2,
+      "needs": [
+        "p12-microservices-architecture"
+      ]
     },
     {
       "id": "p12-apache-kafka-or-rabbitmq",
       "name": "Apache Kafka or RabbitMQ",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 3,
+      "needs": [
+        "p12-inter-service-communication"
+      ]
     },
     {
       "id": "p12-redis-caching",
       "name": "Redis caching",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 2,
+      "needs": [
+        "p4-mongodb-and-redis"
+      ]
     },
     {
       "id": "p12-kubernetes-basics",
       "name": "Kubernetes basics",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 2,
+      "needs": [
+        "p11-docker-and-container-basics"
+      ],
+      "before": "Know Docker first. Kubernetes runs and scales containers."
     },
     {
       "id": "p12-distributed-tracing-and-circuit-breakers",
       "name": "Distributed tracing and circuit breakers",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 1,
+      "needs": [
+        "p12-microservices-architecture"
+      ]
     },
     {
       "id": "p12-system-design-fundamentals",
       "name": "System design fundamentals",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 3,
+      "needs": [
+        "p4-normalization-indexes-and-transactions"
+      ]
     },
     {
       "id": "p12-ai-api-integration",
       "name": "AI API integration",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 2,
+      "needs": [
+        "p7-rest-api-methods-and-status-codes"
+      ]
     },
     {
       "id": "p12-github-copilot-and-responsible-ai-assisted",
       "name": "GitHub Copilot and responsible AI-assisted coding",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 2
     },
     {
       "id": "p12-performance-optimization-and-maintenance",
       "name": "Performance optimization and maintenance",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 2,
+      "needs": [
+        "p2-jvm-jdk-jre-and-memory-management"
+      ]
     }
   ]
 }

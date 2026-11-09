@@ -7,67 +7,116 @@
       "id": "p8-spring-security",
       "name": "Spring Security",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 4,
+      "needs": [
+        "p7-rest-api-methods-and-status-codes"
+      ]
     },
     {
       "id": "p8-authentication-and-authorization",
       "name": "Authentication and authorization",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 4,
+      "needs": [
+        "p8-spring-security"
+      ]
     },
     {
       "id": "p8-password-hashing-and-role-based-access",
       "name": "Password hashing and role-based access",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 3,
+      "needs": [
+        "p8-authentication-and-authorization"
+      ]
     },
     {
       "id": "p8-jwt-authentication",
       "name": "JWT authentication",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 4,
+      "needs": [
+        "p8-authentication-and-authorization"
+      ],
+      "before": "Know authentication basics first. A JWT is a signed token proving who you are on each request."
     },
     {
       "id": "p8-oauth-2-0-and-openid-connect-basics",
       "name": "OAuth 2.0 and OpenID Connect basics",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 3,
+      "needs": [
+        "p8-jwt-authentication"
+      ]
     },
     {
       "id": "p8-cors-csrf-and-security-best-practices",
       "name": "CORS, CSRF and security best practices",
       "tag": "UNSET",
-      "core": false
+      "core": false,
+      "importance": 3,
+      "needs": [
+        "p5-json-http-methods-and-status-codes",
+        "p8-spring-security"
+      ]
     },
     {
       "id": "p8-junit-and-mockito",
       "name": "JUnit and Mockito",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p2-classes-objects-and-constructors",
+        "p2-exception-handling"
+      ]
     },
     {
       "id": "p8-unit-testing",
       "name": "Unit testing",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 5,
+      "needs": [
+        "p8-junit-and-mockito"
+      ]
     },
     {
       "id": "p8-integration-testing",
       "name": "Integration testing",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 3,
+      "needs": [
+        "p8-unit-testing",
+        "p7-crud-apis-with-mysql"
+      ],
+      "before": "Know unit testing and a working CRUD API first. Integration tests run the real layers together."
     },
     {
       "id": "p8-spring-boot-test",
       "name": "Spring Boot Test",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 4,
+      "needs": [
+        "p8-integration-testing"
+      ]
     },
     {
       "id": "p8-testcontainers",
       "name": "Testcontainers",
       "tag": "UNSET",
-      "core": true
+      "core": true,
+      "importance": 2,
+      "needs": [
+        "p8-integration-testing"
+      ]
     }
   ]
 }

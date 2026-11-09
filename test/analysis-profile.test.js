@@ -56,13 +56,27 @@ test('changelog: newest entry matches APP_VERSION and every entry has items', as
   CHANGES.forEach(c => assert.ok(c.items.length && /^\d{4}-\d{2}-\d{2}$/.test(c.date)));
 });
 
-test('important topics go first in the queue and are cleaned', async () => {
+test('syllabus: every topic has importance 1-5 and needs point at real topics', async () => {
+  const fs = await import('node:fs');
+  const dir = new URL('../data/syllabus/', import.meta.url);
+  const phases = fs.readdirSync(dir).filter(f => f.startsWith('phase-')).map(f => JSON.parse(fs.readFileSync(new URL(f, dir), 'utf8')));
+  const { validateSyllabus } = await import('../js/data/syllabus.js');
+  validateSyllabus({ phases, projects: [] });
+  const topics = phases.flatMap(p => p.topics);
+  assert.equal(topics.length, 117);
+  assert.ok(topics.every(t => t.importance >= 1 && t.importance <= 5));
+  assert.ok(topics.filter(t => t.importance === 5).length >= 10);
+  assert.throws(() => validateSyllabus({ phases: [{ id: 'p', number: 1, name: 'x', topics: [{ id: 'a', name: 'A', tag: 'UNSET', core: true, importance: 9 }] }], projects: [] }));
+  assert.throws(() => validateSyllabus({ phases: [{ id: 'p', number: 1, name: 'x', topics: [{ id: 'a', name: 'A', tag: 'UNSET', core: true, importance: 3, needs: ['zzz'] }] }], projects: [] }));
+});
+
+test('prompt carries the prerequisite note and my level on them', async () => {
   const L = await import('../js/core/index.js');
-  const phases = [{ id: 'p', number: 1, name: 'A', topics: [{ id: 'a', core: true }, { id: 'b', core: true }, { id: 'c', core: true }] }];
-  const st = { a: { level: 'untested', pre: null }, b: { level: 'untested', pre: null }, c: { level: 'untested', pre: null } };
-  assert.deepEqual(L.buildQueue(phases, st, '2026-11-09').map(q => q.topic.id), ['a', 'b', 'c']);
-  assert.deepEqual(L.buildQueue(phases, st, '2026-11-09', { c: true }).map(q => q.topic.id), ['c', 'a', 'b']);
-  assert.deepEqual(L.cleanImportant({ a: true, b: false, c: 'x' }), { a: true });
-  const text = L.exportBackup({ results: [], projects: {}, mocks: [], important: { a: true } }, '2026-11-09');
-  assert.deepEqual(L.validateBackup(text).data.important, { a: true });
+  const topic = { id: 'j', name: 'Joins', before: 'Know SELECT and WHERE first.' }, phase = { name: 'SQL' };
+  const needs = [{ topic: { name: 'SELECT' }, level: 'strong', last: { score: 9, total: 10 }, ready: true }, { topic: { name: 'WHERE' }, level: 'untested', last: null, ready: false }];
+  const learn = L.buildPrompt(topic, phase, 'learn', [], needs);
+  assert.ok(learn.includes('Know SELECT and WHERE first.') && learn.includes('SELECT (Strong, last test 9/10)') && learn.includes('WHERE (not tested yet)'));
+  assert.ok(learn.includes('ask me 3 quick questions on these prerequisites I am not Strong in: WHERE'));
+  assert.ok(L.buildPrompt(topic, phase, 'full', [], needs).includes('Do not ask questions about the prerequisites themselves'));
+  assert.ok(!L.buildPrompt({ id: 'x', name: 'X' }, phase, 'full', [], []).includes('BEFORE THIS TOPIC'));
 });

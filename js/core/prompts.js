@@ -15,7 +15,7 @@ export function block(topic, mode, total) {
     'RESULT_END';
 }
 
-export function buildPrompt(topic, phase, mode, prevWeak) {
+export function buildPrompt(topic, phase, mode, prevWeak, prereq) {
   var head =
     'You are a strict interviewer for Java Full Stack fresher jobs in Bengaluru. ' +
     'I studied this a year ago and forgot part of it. Help me find the gaps.\n\n' +
@@ -27,6 +27,20 @@ export function buildPrompt(topic, phase, mode, prevWeak) {
     head += 'My weak points from earlier tests on this topic: ' + prevWeak.join('; ') + '.\n' +
       (mode === 'learn' ? 'Spend extra time on these.\n\n'
         : 'Include ' + (mode === 'full' ? 3 : 2) + ' questions on these, and the rest on other parts of the topic.\n\n');
+  }
+
+  // What to complete before this topic, and where I stand on it (from the syllabus file and my saved levels).
+  var needsText = (topic.before ? topic.before + '\n' : '') + (prereq && prereq.length ? 'Prerequisites and my level on them: ' + prereq.map(function (x) {
+    var lvl = { done: 'Done', strong: 'Strong', ok: 'OK', weak: 'Weak', untested: 'not tested yet' }[x.level];
+    return x.topic.name + ' (' + lvl + (x.last ? ', last test ' + x.last.score + '/' + x.last.total : '') + ')';
+  }).join('; ') + '.\n' : '');
+  if (needsText) {
+    var shaky = (prereq || []).filter(function (x) { return !x.ready; });
+    head += 'BEFORE THIS TOPIC\n' + needsText +
+      (mode === 'learn'
+        ? (shaky.length ? 'Before teaching, ask me 3 quick questions on these prerequisites I am not Strong in: ' + shaky.map(function (x) { return x.topic.name; }).join(', ') +
+          '. If I miss any, teach the missing basics in a few lines first, then continue.\n\n' : 'I should already know these. Move straight to the topic.\n\n')
+        : 'Do not ask questions about the prerequisites themselves. If my answers show I am missing one, name it in next_step.\n\n');
   }
 
   var rules =
