@@ -2,7 +2,7 @@
 
 # Revise Stack
 
-An installable revision tracker for a Java Full Stack syllabus (117 topics, 3 projects).
+An installable revision tracker for a Java Full Stack syllabus (117 topics; you add your own projects).
 You take the tests in ChatGPT or Claude. Revise Stack plans your day, records your level and keeps your progress safe.
 
 - Runs in the browser and installs on your phone like an app. Works offline.
@@ -37,7 +37,7 @@ You take the tests in ChatGPT or Claude. Revise Stack plans your day, records yo
 | Overview | Greeting, goal banner, four numbers (streak, topics completed, studied this week, job target), learning path, projects, today's task (buttons: Open topic, Short on time?, Another topic) and the test steps |
 | Learning Path | All phases and topics with levels, filters and each topic's history |
 | Interview Prep | Mock interview prompt on your weakest topics and your saved mock scores |
-| Projects | Status, repository link and note for each project. **Add a project** (name, stack, phases it needs) for your own; you can remove those later |
+| Projects | Empty at first. Tap **Add project** when you build one: name, skills you learned and used, areas it uses (shows how ready your skills are), status, GitHub link and a note. **Edit** changes any of it later, **Remove project** deletes it. Saved with your data (Firebase and Backup) |
 | Progress | Core progress, apply-readiness checks, Learn first list (from pre-tests), weakest topics, repeated mistakes, progress summary to paste into an AI |
 | Analysis | Pick a phase. Headline numbers, plain-words insights, a donut of how much is completed (Done, Strong, OK, Weak, Not started), pace to your apply-by date, phase bars, tests per week, average score per week, test mix donut. Each chart has a table view. Pre-tests count as activity only, never as a score |
 | Profile | Opens from your name at the bottom of the sidebar (or the person icon on a phone). Shows your details; click Edit to change them. Name, target role, city, apply-by date, study hours per day (saved with your data, so Firebase and backups carry them). Account: Upload now, Backup link, Sign out |
@@ -113,7 +113,7 @@ css/
   fonts.css  tokens.css  base.css  layout.css  components.css  pages.css  dashboard.css  signin.css  motion.css
 data/
   syllabus/             index.json and one JSON file per phase
-  projects.json         the portfolio projects
+  projects.json         empty list (projects are added in the app, not in this file)
 docs/syllabus.md        the syllabus as written
 docs/app-map.png        the picture of the whole app shown at the top of this file
 js/

@@ -65,7 +65,7 @@ export function applyChecks(phases, states, projectState, projectList) {
     p.topics.forEach(function (t) { if (t.core && states[t.id].level === 'weak') weak.push(t.name); });
   });
   return [
-    { id: 'project', ok: doneProjects >= 1, label: 'At least 1 project Done with a repository link', detail: doneProjects + ' of ' + projectList.length + ' done' },
+    { id: 'project', ok: doneProjects >= 1, label: 'At least 1 project Done with a repository link', detail: projectList.length ? doneProjects + ' of ' + projectList.length + ' done' : 'No project added yet' },
     { id: 'core', ok: share >= 0.7, label: '70% of core topics Strong or Done', detail: Math.round(share * 100) + '% now' },
     { id: 'weak', ok: weak.length === 0, label: 'No Weak topic in Java, SQL or Spring Boot', detail: weak.length ? weak.length + ' Weak now' : 'none Weak' }
   ];

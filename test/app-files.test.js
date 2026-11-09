@@ -98,5 +98,5 @@ test('syllabus data: every phase file is listed, and the ids from the first vers
 test('syllabus data: small files by phase, in phase order', () => {
   const nums = syllabus.phases.map(p => p.number);
   assert.deepEqual(nums, [...nums].sort((a, b) => a - b));
-  assert.equal(syllabus.projects.length, 3);
+  assert.equal(syllabus.projects.length, 0);   // no built-in projects: you add your own
 });

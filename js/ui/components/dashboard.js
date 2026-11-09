@@ -6,6 +6,7 @@ import { fmtLong, STATUS_LABEL } from '../format.js';
 import { allTopics, countLevels, projectReady, parseDate, today, PRIORITY } from '../../core/index.js';
 import { context } from '../../state/context.js';
 import { store } from '../../state/store.js';
+import { ui } from '../../state/session.js';
 import { projState, me, projectList } from '../../state/selectors.js';
 
 const pct = share => Math.round(share * 100);
@@ -94,6 +95,8 @@ export function projectCards(st) {
   const projects = projectList();
   return h('section', { 'aria-label': 'Your projects' },
     sectionHead('Your Projects', '#projects', 'View all'),
+    !projects.length ? h('div', { class: 'card' }, h('p', { class: 'empty' }, 'No projects yet. Add one when you build it.'),
+      h('a', { class: 'btn small', href: '#projects', onclick: () => { ui.addProjectOpen = true; } }, 'Add project')) : null,
     h('div', { class: 'proj-row' }, projects.map(p => {
       const ready = projectReady(p, phases, st);
       const status = projState(p.id).status;

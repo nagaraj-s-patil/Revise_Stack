@@ -1,8 +1,13 @@
 // What changed in the app, newest first. Add a new entry at the top for every update and raise APP_VERSION.
 // The Overview shows the newest entry once after an update; the Profile page keeps the full list.
-export const APP_VERSION = '2.0';
+export const APP_VERSION = '2.1';
 
 export const CHANGES = [
+  { version: '2.1', date: '2026-11-09', title: 'Your own projects only', items: [
+    'The three ready-made projects are gone. Projects start empty.',
+    'Add project: name, skills you learned and used, GitHub link, status and a note. Edit or remove it any time.',
+    'A project with a GitHub link and status Done counts for the "1 project Done" apply check.'
+  ] },
   { version: '2.0', date: '2026-11-09', title: 'Sensible order and real buttons', items: [
     'Learn first and Today now follow the study order: basics first (variables, conditions, functions), then what builds on them. A weak pre-test no longer pushes an advanced topic to the top.',
     'Learn first is numbered and marks Start here.',

@@ -4,7 +4,7 @@ import { h, copyText } from '../ui/dom.js';
 import { weakestTopics, buildMockPrompt, averageMock, parseResult, today } from '../core/index.js';
 import { context } from '../state/context.js';
 import { store, save } from '../state/store.js';
-import { states, projState } from '../state/selectors.js';
+import { states, projState, projectList } from '../state/selectors.js';
 import { bindDraft, discardDraft } from '../ui/draft.js';
 import { fmt, uid } from '../ui/format.js';
 import { setMsg, clearMsg, msgArea } from '../ui/messages.js';
@@ -53,7 +53,7 @@ function mockList(mocks) {
 }
 
 function mockCard(weakest) {
-  const { projects } = context.syllabus;
+  const projects = projectList();
   const focus = weakest.map(x => x.topic.name);
   const started = projects.filter(p => projState(p.id).status !== 'notstarted').map(p => p.name + ' (' + p.stack + ')');
   const promptText = buildMockPrompt({ focus, projects: started });

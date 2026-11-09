@@ -114,7 +114,7 @@ test('summary: repeated mistakes and mock interviews are listed', () => {
   const results = [wp('p2-generics', '2026-10-20', 4, 10, ['wildcards']), wp('p2-generics', '2026-10-25', 5, 10, ['Wildcards'])];
   const states = realStates(results, T);
   const byId = {}; S.phases.forEach(p => p.topics.forEach(t => { byId[t.id] = t; }));
-  const t = L.buildSummary({ phases: S.phases, states, results, projectState: {}, projectList: S.projects, byId, today: T, deadline: '2027-01-28', timeText: '1 hour', streak: L.streakInfo(results, T),
+  const t = L.buildSummary({ phases: S.phases, states, results, projectState: {}, projectList: [], byId, today: T, deadline: '2027-01-28', timeText: '1 hour', streak: L.streakInfo(results, T),
     mocks: [{ id: 'm', date: '2026-10-27', score: 6, total: 10, weakPoints: ['joins'], nextStep: '' }] });
   assert.ok(t.includes('MISTAKES THAT KEEP COMING BACK'));
   assert.ok(t.includes('[p2-generics]: Wildcards (2 tests)'));

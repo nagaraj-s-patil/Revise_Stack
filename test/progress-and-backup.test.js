@@ -3,6 +3,10 @@ import assert from 'node:assert/strict';
 import * as L from '../js/core/index.js';
 import { syllabus as S, rr, T, realStates } from './helpers.js';
 
+// The app ships no projects (you add your own), so the tests use a sample one.
+const PROJECTS = [{ id: 'student-mgmt', name: 'Student Management System', stack: 'Java, JDBC and MySQL', needs: [2, 4, 6] }];
+
+
 
 test('weakestTopics: lowest score first, only Weak or OK topics', () => {
   const results = [
@@ -22,28 +26,28 @@ test('skillShare and projectReady use only core topics of the needed phases', ()
   const st = realStates(results, T);
   assert.equal(L.skillShare(S.phases, st, [2]), 1);
   assert.ok(L.skillShare(S.phases, st, [2, 4, 6]) > 0 && L.skillShare(S.phases, st, [2, 4, 6]) < 0.7);
-  assert.equal(L.projectReady(S.projects[0], S.phases, st).ready, false);
+  assert.equal(L.projectReady(PROJECTS[0], S.phases, st).ready, false);
   assert.equal(L.projectReady({ needs: [2] }, S.phases, st).ready, true);
   assert.equal(L.skillShare(S.phases, realStates([], T), [2]), 0);
 });
 
 test('applyChecks: project needs Done status and a link; weak key topics fail the third check', () => {
   const st0 = realStates([], T);
-  let c = L.applyChecks(S.phases, st0, {}, S.projects);
+  let c = L.applyChecks(S.phases, st0, {}, PROJECTS);
   assert.deepEqual(c.map(x => x.ok), [false, false, true]);
-  c = L.applyChecks(S.phases, st0, { 'student-mgmt': { status: 'done', link: '' } }, S.projects);
+  c = L.applyChecks(S.phases, st0, { 'student-mgmt': { status: 'done', link: '' } }, PROJECTS);
   assert.equal(c[0].ok, false);
-  c = L.applyChecks(S.phases, st0, { 'student-mgmt': { status: 'done', link: 'https://github.com/x/y' } }, S.projects);
+  c = L.applyChecks(S.phases, st0, { 'student-mgmt': { status: 'done', link: 'https://github.com/x/y' } }, PROJECTS);
   assert.equal(c[0].ok, true);
   const st1 = realStates([rr('p4-joins-subqueries-and-aggregate-functions', '2026-10-28', 2, 10)], T);
-  assert.equal(L.applyChecks(S.phases, st1, {}, S.projects)[2].ok, false);
+  assert.equal(L.applyChecks(S.phases, st1, {}, PROJECTS)[2].ok, false);
 });
 
 function summaryFor(results, projectState, timeText) {
   const states = realStates(results, T);
   const byId = {};
   S.phases.forEach(p => p.topics.forEach(t => { byId[t.id] = t; }));
-  return L.buildSummary({ phases: S.phases, states, results, projectState: projectState || {}, projectList: S.projects, byId, today: T, deadline: '2027-01-28', timeText: timeText || '1 hour', streak: L.streakInfo(results, T) });
+  return L.buildSummary({ phases: S.phases, states, results, projectState: projectState || {}, projectList: PROJECTS, byId, today: T, deadline: '2027-01-28', timeText: timeText || '1 hour', streak: L.streakInfo(results, T) });
 }
 test('summary: has goal, time, counts, topic ids, due list and the result block', () => {
   const results = [
