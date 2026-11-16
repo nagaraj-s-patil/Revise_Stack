@@ -11,6 +11,7 @@ import { badge, preBadge } from '../ui/components/badge.js';
 import { icon } from '../ui/components/icons.js';
 import { studyCards } from '../ui/components/study.js';
 import { greeting, hero, statTiles, pathCard, projectCards } from '../ui/components/dashboard.js';
+import { linksCard } from '../ui/components/links-card.js';
 import { installCard } from '../ui/components/install-card.js';
 import { whatsNewCard } from '../ui/components/whats-new.js';
 
@@ -149,7 +150,7 @@ export function todayPage() {
     if (others.length) side.appendChild(dueListCard(others, dueList.length));
   }
   frag.appendChild(h('div', { class: 'dash' },
-    h('div', { class: 'dash-main' }, pathCard(st), projectCards(st)),
+    h('div', { class: 'dash-main' }, pathCard(st), projectCards(st), linksCard()),
     side));
   return frag;
 }

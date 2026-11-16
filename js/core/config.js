@@ -21,3 +21,8 @@ export const PROJECT_STATUS = ['notstarted', 'building', 'done'];
 
 // Name shown in the greeting and the sidebar.
 export const USER_NAME = 'Nagaraj S Patil';
+
+// Your other apps, shown in the sidebar, on the Overview and on the Profile page. Opens in a new tab.
+export const EXTERNAL_LINKS = [
+  { id: 'winter-arc', label: 'Winter Arc Tracker', note: 'Your daily, calendar and stats tracker', url: 'https://nagaraj-s-patil.github.io/Winter-arc' }
+];

@@ -10,6 +10,7 @@ import { fmtLong } from '../ui/format.js';
 import { render } from '../ui/render.js';
 import { ui } from '../state/session.js';
 import { updatesCard } from '../ui/components/whats-new.js';
+import { linksCard } from '../ui/components/links-card.js';
 
 const initials = name => name.split(/\s+/).map(w => w[0]).slice(0, 2).join('').toUpperCase();
 
@@ -99,6 +100,7 @@ export function profilePage() {
     num(store.data.results.length, 'tests saved'), num(studyDays(store.data.results), 'study days'),
     num(s.streak, 'day streak'), num((store.data.mocks || []).length, 'mock interviews')));
   frag.appendChild(ui.pfEdit ? formCard() : viewCard());
+  frag.appendChild(linksCard());
   frag.appendChild(accountCard());
   frag.appendChild(updatesCard());
   return frag;

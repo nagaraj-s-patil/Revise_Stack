@@ -4,6 +4,7 @@ import { icon } from './icons.js';
 import { me } from '../../state/selectors.js';
 import { cloud, signOutNow, syncNow } from '../../cloud/sync.js';
 import { cloudEnabled } from '../../cloud/config.js';
+import { EXTERNAL_LINKS } from '../../core/index.js';
 
 const SIDE = [
   ['today', 'Overview', 'home'], ['syllabus', 'Learning Path', 'path'], ['interview', 'Interview Prep', 'interview'],
@@ -22,7 +23,8 @@ export function sideBar(active) {
     h('div', { class: 'side-brand' },
       h('img', { src: 'assets/icons/mark-96.png?v=2', width: '40', height: '40', alt: '' }),
       h('span', null, 'Revise Stack')),
-    h('nav', { class: 'side-nav', 'aria-label': 'Main' }, SIDE.map(item => link(active, item))),
+    h('nav', { class: 'side-nav', 'aria-label': 'Main' }, SIDE.map(item => link(active, item)).concat(EXTERNAL_LINKS.map(l =>
+      h('a', { href: l.url, target: '_blank', rel: 'noopener noreferrer', class: 'ext-link', id: 'side-' + l.id }, icon('external', 22), h('span', null, l.label))))),
     h('div', { class: 'side-note' },
       icon('lightbulb', 20),
       h('strong', null, 'Keep going!'),
