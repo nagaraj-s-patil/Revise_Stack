@@ -5,7 +5,7 @@
 .blob.b2 { width: 320px; height: 320px; background: #FF7A59; bottom: -100px; right: -60px; }
 .blob.b3 { width: 240px; height: 240px; background: #FFD08A; top: 55%; left: 55%; opacity: .4; }
 .signin-card { position: relative; width: 100%; max-width: 440px; display: flex; flex-direction: column; border-radius: 28px; overflow: hidden; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 24px 70px rgba(80, 40, 0, .25); }
-.signin-art { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; padding: 28px 28px 8px; background: var(--hero-bg); color: #fff; position: relative; overflow: hidden; }
+.signin-art { display: flex; flex-direction: column; gap: 10px; align-items: flex-start; padding: 28px 28px 8px; background: var(--dark-bg); color: #fff; position: relative; overflow: hidden; }
 .signin-art img { border-radius: 14px; }
 .signin-art h1 { font-size: 28px; }
 .signin-art p { color: rgba(255, 255, 255, .9); font-size: 15px; max-width: 30ch; }

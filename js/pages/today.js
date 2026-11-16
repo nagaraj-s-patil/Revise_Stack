@@ -1,4 +1,4 @@
-// Today page: greeting, hero, numbers, learning path, projects, and one task (a due revision first, then a new topic) with its study cards.
+// Today page: hero, numbers, learning path, projects, and one task (a due revision first, then a new topic) with its study cards.
 import { h } from '../ui/dom.js';
 import { buildQueue, streakInfo, shortTask, suggestMode, pickSurprise, projectReady, today } from '../core/index.js';
 import { context } from '../state/context.js';
@@ -10,7 +10,8 @@ import { fmt, LEVEL_LABEL } from '../ui/format.js';
 import { badge, preBadge } from '../ui/components/badge.js';
 import { icon } from '../ui/components/icons.js';
 import { studyCards } from '../ui/components/study.js';
-import { greeting, hero, statTiles, pathCard, projectCards } from '../ui/components/dashboard.js';
+import { hero, statTiles, pathCard, projectCards } from '../ui/components/dashboard.js';
+import { studyPlanCard, progressCard, nextGoalCard, subjectsCard, upcomingCard, levelUpBanner } from '../ui/components/dash-widgets.js';
 import { linksCard } from '../ui/components/links-card.js';
 import { installCard } from '../ui/components/install-card.js';
 import { whatsNewCard } from '../ui/components/whats-new.js';
@@ -122,11 +123,11 @@ export function todayPage() {
   const task = pickTask(queue, st);
   const frag = document.createDocumentFragment();
 
-  frag.appendChild(greeting());
   const news = whatsNewCard();
   if (news) frag.appendChild(news);
   frag.appendChild(hero(!!task));
   frag.appendChild(statTiles(st, streakInfo(store.data.results, t)));
+  frag.appendChild(h('div', { class: 'widgets' }, studyPlanCard(task, queue), progressCard(), nextGoalCard(st), subjectsCard(st), upcomingCard(st), levelUpBanner(st, !!task)));
   const install = installCard();
   if (install) frag.appendChild(install);
   const nudge = buildNudge(st);

@@ -3,7 +3,7 @@
 // The file list and the version are written by `npm run precache`. Do not edit between the markers.
 
 // BEGIN GENERATED
-const VERSION = "7de926240e";
+const VERSION = "4a90fe2fe9";
 const PRECACHE = [
   "./",
   "assets/fonts/jetbrains-mono-latin-400-normal.woff2",
@@ -50,6 +50,7 @@ const PRECACHE = [
   "js/core/analysis.js",
   "js/core/backup.js",
   "js/core/config.js",
+  "js/core/dashboard-data.js",
   "js/core/dates.js",
   "js/core/index.js",
   "js/core/levels.js",
@@ -85,6 +86,8 @@ const PRECACHE = [
   "js/state/session.js",
   "js/state/store.js",
   "js/ui/components/badge.js",
+  "js/ui/components/charts.js",
+  "js/ui/components/dash-widgets.js",
   "js/ui/components/dashboard.js",
   "js/ui/components/header.js",
   "js/ui/components/hero-art.js",
@@ -96,6 +99,7 @@ const PRECACHE = [
   "js/ui/components/result-flow.js",
   "js/ui/components/study.js",
   "js/ui/components/toast.js",
+  "js/ui/components/topbar.js",
   "js/ui/components/whats-new.js",
   "js/ui/components/youtube-card.js",
   "js/ui/dom.js",

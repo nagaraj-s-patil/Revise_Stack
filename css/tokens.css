@@ -3,7 +3,7 @@
    --accent is for orange TEXT and borders (dark enough on white). --accent-fill is for orange backgrounds, with dark text on top. */
 :root {
   color-scheme: light;
-  --page-bg: linear-gradient(135deg, #FFF3E4 0%, #FFEAD6 55%, #FFF7EE 100%);
+  --page-bg: #FBF7F3;
   --panel: #FFF8F1;
   --surface: #FFFFFF;
   --surface-2: #FFF1E3;
@@ -29,13 +29,12 @@
   --shadow: 0 1px 2px rgba(80, 40, 0, .05), 0 8px 24px rgba(80, 40, 0, .07);
   --radius: 16px;
   --radius-sm: 12px;
-  /* sidebar and hero stay black in both themes */
-  --side-bg: linear-gradient(180deg, #1A1713 0%, #0B0A08 100%);
-  --side-fg: #FFFFFF;
-  --side-muted: #D2C6B8;
-  --side-active: #FF7A00;
-  --hero-bg: linear-gradient(105deg, #121212 0%, #2A1808 55%, #7A3A00 100%);
-  --hero-accent: #FFB347;
+  /* light sidebar, peach hero, dark Level Up banner */
+  --side-bg: #FFFFFF; --side-fg: #1B130B; --side-muted: #5B4C3D; --side-active: #FFE9D6; --side-active-fg: #B93A08; --side-line: #F0DDC9; --side-hover: #FFF4EA;
+  --hero-bg: linear-gradient(105deg, #FFEBD8 0%, #FFE0C2 60%, #FFD3A8 100%);
+  --hero-fg: #1B130B; --hero-sub: #5B4C3D;
+  --hero-accent: #B93A08;
+  --peach: #FFF1E2; --dark-bg: linear-gradient(105deg, #1A1713 0%, #2A1808 60%, #5A2C00 100%);
   /* tinted icon chips */
   --chip-orange-bg: #FFE9D2; --chip-orange: #C2410C;
   --chip-green-bg: #DDF5E8;  --chip-green: #067647;
@@ -49,7 +48,9 @@
 @media (prefers-color-scheme: dark) {
   :root:not([data-theme="light"]) {
     color-scheme: dark;
-    --page-bg: linear-gradient(135deg, #0E0B08 0%, #15100B 55%, #1B140D 100%);
+    --page-bg: #0E0B08;
+    --side-bg: #17120D; --side-fg: #FBF3EA; --side-muted: #CDBBA6; --side-active: #3A2412; --side-active-fg: #FFA66B; --side-line: #3B2F22; --side-hover: #241B13;
+    --hero-bg: linear-gradient(105deg, #33200F 0%, #2C1B0D 60%, #3D2410 100%); --hero-fg: #FBF3EA; --hero-sub: #E3D3BF; --hero-accent: #FFB36B; --peach: #2A2016;
     --panel: #17120D; --surface: #1F1812; --surface-2: #2A2118; --soft: #2A2016; --track: #3B2F22;
     --line: #3B2F22; --line-strong: #5A452F; --field-line: #8F7656; --fg: #FBF3EA; --muted: #CDBBA6;
     --accent: #FF9A3D; --btn-bg: linear-gradient(180deg, #FF8E26 0%, #FF7A00 100%); --on-btn: #1A1208; --on-accent: #1A1208; --accent-fill: #FF7A00; --glow: rgba(255, 122, 0, .35); --shadow-lift: rgba(0, 0, 0, .45);
@@ -63,7 +64,9 @@
 }
 :root[data-theme="dark"] {
   color-scheme: dark;
-  --page-bg: linear-gradient(135deg, #0E0B08 0%, #15100B 55%, #1B140D 100%);
+  --page-bg: #0E0B08;
+  --side-bg: #17120D; --side-fg: #FBF3EA; --side-muted: #CDBBA6; --side-active: #3A2412; --side-active-fg: #FFA66B; --side-line: #3B2F22; --side-hover: #241B13;
+  --hero-bg: linear-gradient(105deg, #33200F 0%, #2C1B0D 60%, #3D2410 100%); --hero-fg: #FBF3EA; --hero-sub: #E3D3BF; --hero-accent: #FFB36B; --peach: #2A2016;
   --panel: #17120D; --surface: #1F1812; --surface-2: #2A2118; --soft: #2A2016; --track: #3B2F22;
   --line: #3B2F22; --line-strong: #5A452F; --field-line: #8F7656; --fg: #FBF3EA; --muted: #CDBBA6;
   --accent: #FF9A3D; --btn-bg: linear-gradient(180deg, #FF8E26 0%, #FF7A00 100%); --on-btn: #1A1208; --on-accent: #1A1208; --accent-fill: #FF7A00; --glow: rgba(255, 122, 0, .35); --shadow-lift: rgba(0, 0, 0, .45);

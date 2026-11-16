@@ -17,3 +17,4 @@ export * from './analysis.js';
 export * from './projects.js';
 export * from './prereq.js';
 export * from './youtube.js';
+export * from './dashboard-data.js';

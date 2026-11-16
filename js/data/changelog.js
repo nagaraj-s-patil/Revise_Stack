@@ -1,8 +1,13 @@
 // What changed in the app, newest first. Add a new entry at the top for every update and raise APP_VERSION.
 // The Overview shows the newest entry once after an update; the Profile page keeps the full list.
-export const APP_VERSION = '2.3';
+export const APP_VERSION = '2.4';
 
 export const CHANGES = [
+  { version: '2.4', date: '2026-11-16', title: 'New look', items: [
+    'Light sidebar with an orange active page, a top bar with topic search, your streak and profile, and a peach welcome banner.',
+    'Overview has a Study Plan timeline, a Progress chart (7D / 30D / 90D), Next Goal, Subjects Overview, Upcoming Revisions and a Level Up banner. All numbers come from your own saved tests.',
+    'Number tiles now show small charts. Learning Path has a search box.'
+  ] },
   { version: '2.3', date: '2026-11-16', title: 'Winter Arc Tracker link', items: [
     'Open your Winter Arc Tracker from the sidebar, the Overview ("My other apps") and the Profile page. It opens in a new tab.'
   ] },

@@ -49,6 +49,13 @@ function summaryCard(core, st, dueCount) {
       h('span', null, h('b', null, counts.untested), ' Untested')));
 }
 
+function searchBox() {
+  const input = h('input', { type: 'search', id: 'syl-search', value: ui.q, placeholder: 'Search topics', 'aria-label': 'Search topics', autocomplete: 'off' });
+  input.addEventListener('input', () => { ui.q = input.value.trim(); render(); const el = document.getElementById('syl-search'); if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); } });
+  return h('div', { class: 'syl-search' }, input,
+    ui.q ? h('button', { class: 'btn small secondary', type: 'button', onclick: () => { ui.q = ''; render(); } }, 'Clear') : null);
+}
+
 function filterChips() {
   return h('div', { class: 'filters', role: 'group', 'aria-label': 'Filter topics' }, FILTERS.map(([value, label]) =>
     h('button', {
@@ -67,10 +74,12 @@ export function syllabusPage() {
   const frag = document.createDocumentFragment();
 
   frag.appendChild(summaryCard(core, st, dueCount));
+  frag.appendChild(searchBox());
   frag.appendChild(filterChips());
 
   const matches = t => {
     const s = st[t.id];
+    if (ui.q && !t.name.toLowerCase().includes(ui.q.toLowerCase())) return false;
     if (ui.filter === 'weak') return s.level === 'weak';
     if (ui.filter === 'due') return s.isDue;
     if (ui.filter === 'untested') return s.level === 'untested';
@@ -106,7 +115,7 @@ export function syllabusPage() {
           h('small', null, doneCount + ' of ' + coreTopics.length + ' Done')),
         h('span', { class: 'phase-right' })),
       h('ul', { class: 'topics' }, rows.map(t => topicRow(t, st[t.id], false))));
-    details.open = ui.filter !== 'all' || !!ui.open[phase.id];
+    details.open = ui.filter !== 'all' || !!ui.q || !!ui.open[phase.id];
     details.addEventListener('toggle', () => { if (ui.filter === 'all') { ui.open[phase.id] = details.open; saveView(); } });
     frag.appendChild(details);
   }

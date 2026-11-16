@@ -8,6 +8,7 @@ import { suggestMode, topicState, today } from './core/index.js';
 import { flushDraft, releaseDraft } from './ui/draft.js';
 import { header } from './ui/components/header.js';
 import { navBar, sideBar } from './ui/components/nav.js';
+import { topBar } from './ui/components/topbar.js';
 import { todayPage } from './pages/today.js';
 import { syllabusPage } from './pages/syllabus.js';
 import { topicPage } from './pages/topic.js';
@@ -62,7 +63,7 @@ export function renderApp() {
   const entered = onRouteChange(r);   // true when the page just changed: the entrance animation plays only then
 
   const active = r.name === 'topic' ? ui.from : r.name;
-  const wrap = h('main', { class: 'wrap', 'data-enter': entered ? '' : null }, header());
+  const wrap = h('main', { class: 'wrap', 'data-enter': entered ? '' : null }, header(), topBar());
   if (!store.storageOk) {
     wrap.appendChild(h('div', { class: 'banner', role: 'alert' },
       'Your browser is blocking storage. Progress will NOT be saved. Open the site in a normal window.'));

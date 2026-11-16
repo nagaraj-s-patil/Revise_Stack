@@ -3,7 +3,7 @@ import { h } from '../dom.js';
 import { icon } from './icons.js';
 import { heroArt } from './hero-art.js';
 import { fmtLong, STATUS_LABEL } from '../format.js';
-import { allTopics, countLevels, projectReady, parseDate, today, PRIORITY } from '../../core/index.js';
+import { allTopics, countLevels, projectReady, parseDate, today, PRIORITY, lastDays } from '../../core/index.js';
 import { context } from '../../state/context.js';
 import { store } from '../../state/store.js';
 import { ui } from '../../state/session.js';
@@ -28,7 +28,7 @@ export function daysLeft() {
   return Math.round((parseDate(me().deadline) - parseDate(today())) / 86400000);
 }
 
-/** Blue banner. The button jumps to today's task card, when there is one. */
+/** Peach welcome banner. The button jumps to today's task card, when there is one. */
 export function hero(hasTask) {
   const days = daysLeft();
   const goal = days >= 0 ? 'Ready to apply by ' + fmtLong(me().deadline) + ' · ' + days + ' days left' : 'Target date ' + fmtLong(me().deadline) + ' has passed';
@@ -38,9 +38,10 @@ export function hero(hasTask) {
   };
   return h('section', { class: 'hero', 'aria-label': 'Your goal' },
     h('div', { class: 'hero-text' },
-      h('h2', null, 'Your next role ', h('span', null, 'starts here.')),
-      h('p', null, goal),
-      hasTask ? h('button', { class: 'btn light', type: 'button', id: 'hero-go', onclick: go }, 'Continue Learning', icon('arrow', 18)) : null),
+      h('h2', null, 'Welcome back, ', h('span', null, me().first + '!'), ' 👋'),
+      h('p', null, 'Small steps today. Big dreams tomorrow.'),
+      h('p', { class: 'hero-goal' }, goal),
+      hasTask ? h('button', { class: 'btn', type: 'button', id: 'hero-go', onclick: go }, 'Continue Learning', icon('arrow', 18)) : null),
     heroArt());
 }
 
@@ -51,20 +52,29 @@ function streakNote(info) {
   return 'Not studied yet today';
 }
 
-function tile(chip, ic, label, value, sub) {
+/** Seven small bars: tests saved per day over the last 7 days. */
+function spark(results, label) {
+  const days = lastDays(results, today(), 7), max = Math.max(1, ...days.map(d => d.count));
+  return h('span', { class: 'spark', role: 'img', 'aria-label': label + ': ' + days.map(d => d.count).join(', ') },
+    days.map(d => h('i', { style: 'height:' + (d.count ? Math.max(18, d.count / max * 100) : 8) + '%', class: d.count ? 'on' : '' })));
+}
+
+function tile(chip, ic, label, value, sub, extra) {
   return h('div', { class: 'tile' },
     h('span', { class: 'chipicon chip-' + chip }, icon(ic, 22)),
-    h('div', null, h('p', { class: 'small muted' }, label), h('p', { class: 'tile-num' }, value), h('p', { class: 'small muted' }, sub)));
+    h('div', { class: 'tile-body' }, h('p', { class: 'small muted' }, label), h('p', { class: 'tile-num' }, value), h('p', { class: 'small muted' }, sub)),
+    extra || null);
 }
 
 export function statTiles(st, info) {
   const core = allTopics(context.syllabus.phases, true);
   const done = countLevels(core, st).done;
   const days = daysLeft();
+  const results = store.data.results;
   return h('section', { class: 'tiles', 'aria-label': 'Your numbers' },
-    tile('orange', 'flame', 'Streak', info.streak + (info.streak === 1 ? ' day' : ' days'), streakNote(info)),
-    tile('green', 'check', 'Topics Completed', done + '/' + core.length, 'Core topics Done'),
-    tile('purple', 'calendar', 'Studied This Week', info.weekDays + '/7 days', 'Days with a saved test'),
+    tile('orange', 'flame', 'Streak', info.streak + (info.streak === 1 ? ' day' : ' days'), streakNote(info), spark(results, 'Tests per day, last 7 days')),
+    tile('green', 'check', 'Topics Completed', done + '/' + core.length, 'Core topics Done', bar(core.length ? done / core.length : 0, done + ' of ' + core.length + ' core topics Done')),
+    tile('purple', 'calendar', 'Studied This Week', info.weekDays + '/7 days', 'Days with a saved test', bar(info.weekDays / 7, info.weekDays + ' of 7 days studied this week')),
     tile('red', 'target', 'Job Target', fmtLong(me().deadline), days >= 0 ? days + ' days left' : 'Date passed'));
 }
 

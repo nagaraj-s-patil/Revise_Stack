@@ -101,7 +101,7 @@ circle.mx-full { stroke: var(--accent); } circle.mx-quick { stroke: var(--accent
 .pf-row { display: flex; justify-content: space-between; gap: 12px; padding: 8px 0; border-bottom: 1px solid var(--line); }
 .pf-row span:first-child { color: var(--muted); }
 .pf-row strong { text-align: right; overflow-wrap: anywhere; }
-.side-me[aria-current="page"] { outline: 2px solid var(--side-active); outline-offset: 4px; border-radius: 12px; }
+.side-me[aria-current="page"] { outline: 2px solid var(--accent); outline-offset: 4px; border-radius: 12px; }
 
 #add-project > summary { cursor: pointer; font-weight: 700; color: var(--accent); min-height: 44px; display: flex; align-items: center; }
 .np-needs { border: 0; padding: 0; margin: 0; display: grid; gap: 4px; }

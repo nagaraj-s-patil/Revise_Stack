@@ -17,6 +17,8 @@ export const ui = {
   importText: '',      // text typed into the restore box
   editProject: null,       // id of the project being edited
   addProjectOpen: false,   // the Add a project form is open
+  q: '',               // topic search text (syllabus page)
+  pgRange: 30,         // progress chart range in days
   pfEdit: false,        // Profile page is showing the edit form
   installDismissed: false
 };

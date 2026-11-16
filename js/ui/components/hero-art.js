@@ -2,7 +2,7 @@
 const NS = 'http://www.w3.org/2000/svg';
 
 const ART = `
-<ellipse cx="170" cy="168" rx="150" ry="9" fill="#000000" opacity=".35"/>
+<ellipse cx="170" cy="168" rx="150" ry="9" fill="#7A3A00" opacity=".15"/>
 <rect x="150" y="128" width="64" height="12" rx="3" fill="#FF9F2E"/>
 <rect x="156" y="116" width="58" height="12" rx="3" fill="#FFB347"/>
 <rect x="148" y="104" width="62" height="12" rx="3" fill="#FFD9A8"/>
