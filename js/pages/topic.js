@@ -7,6 +7,7 @@ import { ui } from '../state/session.js';
 import { fmt } from '../ui/format.js';
 import { badge, preBadge, stars } from '../ui/components/badge.js';
 import { prereqStatus } from '../core/index.js';
+import { youtubeCard } from '../ui/components/youtube-card.js';
 import { states } from '../state/selectors.js';
 import { studyCards } from '../ui/components/study.js';
 import { mistakesCard, historyCard } from '../ui/components/history.js';
@@ -51,6 +52,7 @@ export function topicPage(id) {
     h('div', { class: 'meta', style: 'justify-content:flex-start' }, st.pre ? preBadge(st.pre) : badge(st.level), status)));
 
   frag.appendChild(beforeCard(topic));
+  frag.appendChild(youtubeCard(topic, phase));
   frag.appendChild(studyCards(id, false));
   const mistakes = mistakesCard(id);
   if (mistakes) frag.appendChild(mistakes);

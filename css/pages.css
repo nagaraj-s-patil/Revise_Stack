@@ -123,3 +123,8 @@ circle.mx-full { stroke: var(--accent); } circle.mx-quick { stroke: var(--accent
 
 a.btn.back { min-height: 44px; padding: 0 14px; text-decoration: none; }
 a.btn { text-decoration: none; }
+
+.yt-list { display: grid; gap: 14px; padding: 0; list-style: none; }
+.yt-row { display: grid; gap: 6px; padding-top: 12px; border-top: 1px solid var(--line); }
+.yt-row:first-child { border-top: 0; padding-top: 0; }
+.yt-query { display: block; padding: 10px 12px; background: var(--soft); border-radius: 10px; font-size: 14px; overflow-wrap: anywhere; user-select: all; }

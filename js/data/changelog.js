@@ -1,8 +1,13 @@
 // What changed in the app, newest first. Add a new entry at the top for every update and raise APP_VERSION.
 // The Overview shows the newest entry once after an update; the Profile page keeps the full list.
-export const APP_VERSION = '2.1';
+export const APP_VERSION = '2.2';
 
 export const CHANGES = [
+  { version: '2.2', date: '2026-11-16', title: 'Learn from YouTube', items: [
+    'Every topic page has a Learn from YouTube card with three ready searches: learn it fast, practise it, interview questions.',
+    'Copy puts the search text on your clipboard to paste into YouTube. Open YouTube opens the search directly.',
+    'Each search carries a time box (one video, then practise, then test) so a topic does not eat hours.'
+  ] },
   { version: '2.1', date: '2026-11-09', title: 'Your own projects only', items: [
     'The three ready-made projects are gone. Projects start empty.',
     'Add project: name, skills you learned and used, GitHub link, status and a note. Edit or remove it any time.',

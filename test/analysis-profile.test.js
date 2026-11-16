@@ -81,3 +81,15 @@ test('prompt carries the prerequisite note and my level on them', async () => {
   assert.ok(L.buildPrompt(topic, phase, 'full', [], needs).includes('Do not ask questions about it'));
   assert.ok(!L.buildPrompt({ id: 'x', name: 'X' }, phase, 'full', [], []).includes('BEFORE THIS TOPIC'));
 });
+
+test('youtube searches: topic phrase, technology prefix only when missing, three variants', async () => {
+  const L = await import('../js/core/index.js');
+  const s = L.youtubeSearches({ name: 'Variables, data types and operators' }, { number: 1 });
+  assert.deepEqual(s.map(x => x.id), ['learn', 'practice', 'interview']);
+  assert.ok(s[0].query.startsWith('Java Variables, data types and operators') || s[0].query.startsWith('Java Variables data types'));
+  const j = L.searchPhrase({ name: 'Java 8+: Lambda, Streams, Optional and functional interfaces' }, { number: 2 });
+  assert.ok(j.startsWith('Java 8'), j);
+  assert.ok(!j.includes(':') && !j.startsWith('Java Java'));
+  assert.equal(L.searchPhrase({ name: 'Git and GitHub' }, { number: 3 }), 'Git and GitHub');
+  assert.ok(L.youtubeUrl('java joins').startsWith('https://www.youtube.com/results?search_query=java%20joins'));
+});
