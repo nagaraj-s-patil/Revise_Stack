@@ -25,7 +25,6 @@
 .lvl-strong { color: var(--strong); background: var(--surface); }
 .lvl-done { color: #fff; background: var(--strong); border-color: var(--strong); }
 :root[data-theme="dark"] .lvl-done { color: #06210F; }
-@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .lvl-done { color: #06210F; } }
 .lvl-untested { color: var(--untested); background: var(--untested-bg); }
 
 .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow); padding: 18px; display: flex; flex-direction: column; gap: 12px; min-width: 0; }

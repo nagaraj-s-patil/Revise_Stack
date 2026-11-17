@@ -3,7 +3,7 @@
    --accent is for orange TEXT and borders (dark enough on white). --accent-fill is for orange backgrounds, with dark text on top. */
 :root {
   color-scheme: light;
-  --page-bg: #FBF7F3;
+  --page-bg: #FFFFFF;
   --panel: #FFF8F1;
   --surface: #FFFFFF;
   --surface-2: #FFF1E3;
@@ -45,23 +45,7 @@
   --font-body: "Plus Jakarta Sans", "Segoe UI", system-ui, sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 }
-@media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
-    color-scheme: dark;
-    --page-bg: #0E0B08;
-    --side-bg: #17120D; --side-fg: #FBF3EA; --side-muted: #CDBBA6; --side-active: #3A2412; --side-active-fg: #FFA66B; --side-line: #3B2F22; --side-hover: #241B13;
-    --hero-bg: linear-gradient(105deg, #33200F 0%, #2C1B0D 60%, #3D2410 100%); --hero-fg: #FBF3EA; --hero-sub: #E3D3BF; --hero-accent: #FFB36B; --peach: #2A2016;
-    --panel: #17120D; --surface: #1F1812; --surface-2: #2A2118; --soft: #2A2016; --track: #3B2F22;
-    --line: #3B2F22; --line-strong: #5A452F; --field-line: #8F7656; --fg: #FBF3EA; --muted: #CDBBA6;
-    --accent: #FF9A3D; --btn-bg: linear-gradient(180deg, #FF8E26 0%, #FF7A00 100%); --on-btn: #1A1208; --on-accent: #1A1208; --accent-fill: #FF7A00; --glow: rgba(255, 122, 0, .35); --shadow-lift: rgba(0, 0, 0, .45);
-    --weak: #FF8A7D; --weak-bg: #3A1B19; --ok: #F2B260; --ok-bg: #3A2A12;
-    --strong: #55D19A; --strong-bg: #11301F; --untested: #A9B3C7; --untested-bg: #232C45;
-    --focus: #FFB36B; --shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .3);
-    --chip-orange-bg: #3A2412; --chip-orange: #FFA66B; --chip-green-bg: #11301F; --chip-green: #55D19A;
-    --chip-purple-bg: #2A2358; --chip-purple: #B4A3FF; --chip-red-bg: #3A1A28; --chip-red: #FF8CA5;
-    --chip-blue-bg: #3A2412; --chip-blue: #FFA66B;
-  }
-}
+/* The app is always light. Dark tokens apply only if data-theme="dark" is set on <html>. */
 :root[data-theme="dark"] {
   color-scheme: dark;
   --page-bg: #0E0B08;
