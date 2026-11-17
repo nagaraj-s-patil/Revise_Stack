@@ -1,8 +1,11 @@
 // What changed in the app, newest first. Add a new entry at the top for every update and raise APP_VERSION.
 // The Overview shows the newest entry once after an update; the Profile page keeps the full list.
-export const APP_VERSION = '2.5';
+export const APP_VERSION = '2.6';
 
 export const CHANGES = [
+  { version: '2.6', date: '2026-11-17', title: 'New welcome picture', items: [
+    'The welcome banner on the Overview now shows your Nobita and Doraemon picture in a round frame.'
+  ] },
   { version: '2.5', date: '2026-11-17', title: 'Fix my mistakes', items: [
     'When a topic has saved mistakes, the study card shows them with a Copy mistakes-only prompt button.',
     'That prompt teaches and then tests only your weak points (type TEST when ready). The result is saved as practice and never changes your level or revision.'

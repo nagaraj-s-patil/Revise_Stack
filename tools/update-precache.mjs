@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 
 export const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 
-const FOLDERS = ['css', 'js', 'data', 'assets/icons', 'assets/fonts'];   // brand/ is for the README and icon tool, not the app
+const FOLDERS = ['css', 'js', 'data', 'assets/icons', 'assets/fonts', 'assets/hero'];   // brand/ is for the README and icon tool, not the app
 const ROOT_FILES = ['index.html', 'manifest.webmanifest', 'favicon.ico'];
 
 function walk(dir) {

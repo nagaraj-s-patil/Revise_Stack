@@ -1,7 +1,6 @@
 // The Today dashboard pieces: greeting, hero banner, four number tiles, learning path and project cards.
 import { h } from '../dom.js';
 import { icon } from './icons.js';
-import { heroArt } from './hero-art.js';
 import { fmtLong, STATUS_LABEL } from '../format.js';
 import { allTopics, countLevels, projectReady, parseDate, today, PRIORITY, lastDays } from '../../core/index.js';
 import { context } from '../../state/context.js';
@@ -42,7 +41,10 @@ export function hero(hasTask) {
       h('p', null, 'Small steps today. Big dreams tomorrow.'),
       h('p', { class: 'hero-goal' }, goal),
       hasTask ? h('button', { class: 'btn', type: 'button', id: 'hero-go', onclick: go }, 'Continue Learning', icon('arrow', 18)) : null),
-    heroArt());
+    h('div', { class: 'hero-pic' },
+      h('span', { class: 'hp-glow', 'aria-hidden': 'true' }),
+      h('img', { src: 'assets/hero/study-buddies.webp', alt: 'Nobita and Doraemon sitting together under the night sky', width: '280', height: '280', decoding: 'async' }),
+      h('span', { class: 'hp-star hp-s1', 'aria-hidden': 'true' }), h('span', { class: 'hp-star hp-s2', 'aria-hidden': 'true' })));
 }
 
 function streakNote(info) {

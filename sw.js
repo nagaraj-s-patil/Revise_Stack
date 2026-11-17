@@ -3,7 +3,7 @@
 // The file list and the version are written by `npm run precache`. Do not edit between the markers.
 
 // BEGIN GENERATED
-const VERSION = "f4b2d765ef";
+const VERSION = "5388783dcb";
 const PRECACHE = [
   "./",
   "assets/fonts/jetbrains-mono-latin-400-normal.woff2",
@@ -12,6 +12,7 @@ const PRECACHE = [
   "assets/fonts/plus-jakarta-sans-latin-600-normal.woff2",
   "assets/fonts/plus-jakarta-sans-latin-700-normal.woff2",
   "assets/fonts/plus-jakarta-sans-latin-800-normal.woff2",
+  "assets/hero/study-buddies.webp",
   "assets/icons/apple-touch-icon.png",
   "assets/icons/favicon-16.png",
   "assets/icons/favicon-32.png",
