@@ -28,3 +28,17 @@ test('nextGoal finds the first phase under the target', () => {
   assert.equal(g.need, 1);
   assert.equal(nextGoal(phases, { a: { level: 'done' }, b: { level: 'strong' } }, 0.7), null);
 });
+
+import { buildPrompt, parseResult } from '../js/core/index.js';
+test('fix prompt covers only weak points and its result is saved as non-counting practice', () => {
+  const topic = { id: 't1', name: 'Loops' }, phase = { name: 'Basics' };
+  const p = buildPrompt(topic, phase, 'fix', ['for vs while', 'break and continue'], []);
+  assert.match(p, /FIX MY MISTAKES/);
+  assert.match(p, /for vs while; break and continue/);
+  assert.match(p, /mode: fix/);
+  assert.match(p, /score: <number correct>\/4/);
+  const r = parseResult('RESULT_START\ntopic_id: t1\nmode: fix\nscore: 3/4\nweak_points: none\nnext_step: x\nRESULT_END');
+  assert.equal(r.ok, true);
+  assert.equal(r.data.mode, 'pre');
+  assert.equal(r.data.fix, true);
+});

@@ -20,12 +20,14 @@ export function validateBackup(text) {
   obj.results.forEach(function (r, i) {
     if (!r || typeof r.topicId !== 'string' || !validDate(r.date) || !Number.isInteger(r.score) || !Number.isInteger(r.total) ||
         r.total < 1 || r.total > 50 || r.score < 0 || r.score > r.total) { dropped++; return; }
-    results.push({
+    var rec = {
       id: typeof r.id === 'string' && r.id ? r.id : 'imp' + i + r.date,
       topicId: r.topicId, date: r.date, mode: r.mode === 'full' ? 'full' : 'pre', score: r.score, total: r.total,
       weakPoints: Array.isArray(r.weakPoints) ? r.weakPoints.filter(function (x) { return typeof x === 'string'; }) : [],
       nextStep: typeof r.nextStep === 'string' ? r.nextStep : '', edited: !!r.edited, source: typeof r.source === 'string' ? r.source : 'import'
-    });
+    };
+    if (r.fix === true && rec.mode === 'pre') rec.fix = true;
+    results.push(rec);
   });
   var mocks = [];
   (Array.isArray(obj.mocks) ? obj.mocks : []).forEach(function (m, i) {

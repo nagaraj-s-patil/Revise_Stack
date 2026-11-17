@@ -35,6 +35,8 @@ export function studyCards(id, twoStep) {
   // step 1: pick a mode, copy the prompt
   const promptEl = h('textarea', { id: 'promptbox', class: 'promptbox mono', readonly: true, 'aria-label': 'Test prompt' });
   const needs = prereqStatus(topic, context.byId, states());
+  const weakNow = tested ? recentWeakPoints(store.data.results, id, 5) : [];
+  const fixPrompt = () => buildPrompt(topic, phase, 'fix', weakNow, needs);
   const currentPrompt = () => buildPrompt(topic, phase, ui.mode, recentWeakPoints(store.data.results, id, 4), needs);
   promptEl.value = currentPrompt();
 
@@ -44,6 +46,21 @@ export function studyCards(id, twoStep) {
   details.open = ui.promptOpen;
   hideLabel(details, 'Show the prompt', 'Hide the prompt');
   details.addEventListener('toggle', () => { ui.promptOpen = details.open; });
+
+  const fixBtn = h('button', { class: 'btn secondary', type: 'button', id: 'fix-btn' }, 'Copy mistakes-only prompt');
+  fixBtn.addEventListener('click', () => {
+    copyText(fixPrompt()).then(ok => {
+      if (ok) {
+        fixBtn.textContent = 'Copied';
+        setTimeout(() => { fixBtn.textContent = 'Copy mistakes-only prompt'; }, 2500);
+        copyNote.textContent = 'Mistakes-only prompt copied. Paste it in a new chat, learn the weak points, type TEST, then come back. This practice is not counted in your level.';
+      } else {
+        promptEl.value = fixPrompt(); details.open = true; ui.promptOpen = true; promptEl.focus(); promptEl.select();
+        copyNote.textContent = 'Copy was blocked here. The mistakes-only prompt is open below and selected. Copy it by hand.';
+      }
+      reveal();
+    });
+  });
 
   copyBtn.addEventListener('click', () => {
     copyText(currentPrompt()).then(ok => {
@@ -70,7 +87,12 @@ export function studyCards(id, twoStep) {
   frag.appendChild(h('section', { class: 'card' },
     h('h3', null, h('span', { class: 'stepno', 'aria-hidden': 'true' }, '1'), 'Copy the prompt'),
     h('p', { class: 'small muted' }, canPre ? PRETEST_HINT : tested ? (TAG_HINT[topic.tag] || TAG_HINT.UNSET) : PRETEST_DONE_HINT),
-    modes, copyBtn, copyNote, details,
+    modes, copyBtn,
+    weakNow.length ? h('div', { class: 'fix-box' },
+      h('p', { class: 'small' }, h('strong', null, 'Your mistakes on this topic: '), weakNow.join('; ')),
+      fixBtn,
+      h('p', { class: 'small muted' }, 'Teaches and tests only these points. Saved as practice, so it never changes your level or revision.')) : null,
+    copyNote, details,
     canPre ? h('div', { class: 'unknown-box' },
       h('button', { class: 'btn secondary', type: 'button', id: 'unknown-btn', onclick: () => markUnknown(id) }, 'I don\'t know this topic'),
       h('p', { class: 'small muted' }, 'Never studied it? Skip the questions. It is saved as a 0/5 pre-test (Weak) and goes to Learn first.')) : null));

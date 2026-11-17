@@ -39,7 +39,7 @@ export function historyCard(id) {
         h('strong', null, fmt(r.date)),
         h('span', { class: 'score' }, r.score + '/' + r.total),
         badge(levelFromPct(pct(r))),
-        h('span', { class: 'small muted' }, MODE_LABEL[r.mode] || r.mode),
+        h('span', { class: 'small muted' }, r.fix ? 'Fix practice (not counted)' : (MODE_LABEL[r.mode] || r.mode)),
         r.edited ? h('span', { class: 'edited' }, 'edited') : null),
       r.weakPoints.length ? h('p', { class: 'small' }, 'Weak: ' + r.weakPoints.join('; ')) : null,
       r.nextStep ? h('p', { class: 'small' }, 'Next: ' + r.nextStep) : null,

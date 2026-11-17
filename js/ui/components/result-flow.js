@@ -96,13 +96,13 @@ function checkDuplicate(topicId, d) {
 }
 
 function commit(topicId, d) {
-  if (d.mode === 'pre' && !canPreTest(store.data.results, topicId)) {
+  if (d.mode === 'pre' && !d.fix && !canPreTest(store.data.results, topicId)) {
     setMsg({ type: 'error', lines: ['This topic already has a result. A pre-test is allowed only once, and only before any other test. Take a Full test (10 questions) instead.'],
       actions: [{ label: 'OK', kind: 'secondary', fn: clearMsg }] });
     return;
   }
   const rec = {
-    id: uid(), topicId, date: today(), mode: d.mode, score: d.score, total: d.total,
+    id: uid(), topicId, date: today(), mode: d.mode, fix: !!d.fix, score: d.score, total: d.total,
     weakPoints: d.weakPoints || [], nextStep: d.nextStep || '', edited: false, source: d.source || 'paste'
   };
   store.data.results.push(rec);
@@ -113,14 +113,17 @@ function commit(topicId, d) {
 function showSaved(topicId, rec, ok, wasEdit) {
   const st = topicState(store.data.results, topicId, today());
   const name = context.byId[topicId].topic.name;
-  const isPre = rec.mode === 'pre';
-  const shownLevel = isPre ? levelFromPct(pct(rec)) : st.level;
-  const lines = [name + (isPre ? ' pre-test: ' : ': ') + rec.score + '/' + rec.total + ', ' + LEVEL_LABEL[shownLevel][1] + (wasEdit ? ' (edited)' : '') + '.'];
+  const isPre = rec.mode === 'pre' && !rec.fix;
+  const shownLevel = (isPre || rec.fix) ? levelFromPct(pct(rec)) : st.level;
+  const lines = [name + (rec.fix ? ' fix practice: ' : isPre ? ' pre-test: ' : ': ') + rec.score + '/' + rec.total + ', ' + LEVEL_LABEL[shownLevel][1] + (wasEdit ? ' (edited)' : '') + '.'];
   if (rec.weakPoints.length) lines.push('Weak points: ' + rec.weakPoints.join('; '));
   if (rec.nextStep) lines.push('Next step: ' + rec.nextStep);
   const PRE_NEXT = { weak: 'Learn this first: choose Learn first, then take a Full test. That test starts your revision schedule.', ok: 'Learn the weak points first (Learn first), then take a Full test. That test starts your revision schedule.', strong: 'Strong start. Take a Full test (10 questions) to confirm. Revision starts from your first Full test.' };
   const NEXT = { weak: 'What next: choose Learn first on this topic, study the weak points, then test again.', ok: 'What next: revise the weak points, then test again on the due date.' };
-  if (isPre) {
+  if (rec.fix) {
+    lines.push('Fix practice only: it is not counted in your level or revision.');
+    lines.push('What next: take a Full test on another day (not right after this) to see if the mistakes are really fixed.');
+  } else if (isPre) {
     lines.push('Pre-test only: it is not counted in your level or revision.');
     lines.push('What next: ' + PRE_NEXT[shownLevel]);
   } else {

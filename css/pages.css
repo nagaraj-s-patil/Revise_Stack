@@ -131,3 +131,4 @@ a.btn { text-decoration: none; }
 
 .ext-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .ext-row p { margin: 0; }
+.fix-box { margin: 12px 0; padding: 12px; border: 1px dashed var(--line-strong); border-radius: 14px; background: var(--peach); display: flex; flex-direction: column; gap: 8px; align-items: flex-start; }

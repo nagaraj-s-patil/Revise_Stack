@@ -23,7 +23,7 @@ export function buildPrompt(topic, phase, mode, prevWeak, prereq) {
     'Area: ' + phase.name + '\n' +
     'Topic ID (copy this exactly into the result): ' + topic.id + '\n\n';
 
-  if (prevWeak && prevWeak.length) {
+  if (prevWeak && prevWeak.length && mode !== 'fix') {
     head += 'My weak points from earlier tests on this topic: ' + prevWeak.join('; ') + '.\n' +
       (mode === 'learn' ? 'Spend extra time on these.\n\n'
         : 'Include ' + (mode === 'full' ? 3 : 2) + ' questions on these, and the rest on other parts of the topic.\n\n');
@@ -57,6 +57,17 @@ export function buildPrompt(topic, phase, mode, prevWeak, prereq) {
     '1. List the questions I got wrong with the correct answers.\n' +
     '2. Then print this block exactly once, filled in, as the last thing in your reply:\n\n';
 
+  if (mode === 'fix') {
+    var pts = (prevWeak || []).slice(0, 5), n = Math.min(10, Math.max(4, pts.length * 2));
+    return head.replace(/I studied this a year ago[^\n]*\n\n/, '') +
+      'Mode: FIX MY MISTAKES. I already took tests on this topic and got these parts wrong: ' + pts.join('; ') + '.\n' +
+      'Work ONLY on these parts. Do not teach or ask about anything else in the topic.\n\n' +
+      'STEP 1: Take the weak points one by one. For each: explain it simply in a few lines, show one small example, ' +
+      'then ask me ONE quick question on it. Wait for my answer. If I am wrong, explain again in a different way before moving on.\n' +
+      'STEP 2: When I type TEST, ask me exactly ' + n + ' questions, about 2 for each weak point, one at a time. Mix concept questions with small code or output questions.\n\n' +
+      rules.replace('- Ask ONE question at a time.', '- During the test, ask ONE question at a time.') +
+      FORMAT_RULES + '\n\n' + ending + block(topic, 'fix', n);
+  }
   if (mode === 'learn') {
     return head +
       'Mode: LEARN. I need to learn this topic again before being tested.\n\n' +

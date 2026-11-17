@@ -44,18 +44,18 @@ export function parseBlock(body) {
   }
 
   var weak = splitList(fields.weak_points || fields.weakpoints || '');
-  var mode = /^\s*pre/i.test(fields.mode || '') ? 'pre' : /full/i.test(fields.mode || '') ? 'full' : (total >= 10 ? 'full' : 'pre');
-  return {
-    ok: true,
-    data: {
-      topicId: (fields.topic_id || fields.topic || '').trim() || null,
-      mode: mode,
-      score: score,
-      total: total,
-      weakPoints: weak,
-      nextStep: clean(fields.next_step || '')
-    }
+  var fix = /^\s*fix/i.test(fields.mode || '');
+  var mode = fix ? 'pre' : /^\s*pre/i.test(fields.mode || '') ? 'pre' : /full/i.test(fields.mode || '') ? 'full' : (total >= 10 ? 'full' : 'pre');
+  var data = {
+    topicId: (fields.topic_id || fields.topic || '').trim() || null,
+    mode: mode,
+    score: score,
+    total: total,
+    weakPoints: weak,
+    nextStep: clean(fields.next_step || '')
   };
+  if (fix) data.fix = true;
+  return { ok: true, data: data };
 }
 
 export function clean(s) { return /^(none|n\/a|-|nil)\.?$/i.test(s.trim()) ? '' : s.trim(); }
