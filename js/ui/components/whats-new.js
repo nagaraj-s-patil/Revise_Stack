@@ -1,4 +1,4 @@
-// "What's new": a card on the Overview after an update (shown once, until Got it), and the full list for the Profile page.
+// "What's new": a card on the Overview after an update (shown on the first visit after an update only), and the full list for the Profile page.
 import { h } from '../dom.js';
 import { APP_VERSION, CHANGES } from '../../data/changelog.js';
 import { fmtLong } from '../format.js';
@@ -10,15 +10,19 @@ const markSeen = () => { try { localStorage.setItem(SEEN, APP_VERSION); } catch 
 
 const items = c => h('ul', { class: 'plain' }, c.items.map(x => h('li', null, x)));
 
-/** Overview card for the newest update. Null once dismissed. */
+let shownThisVisit = false, dismissed = false;
+
+/** Overview card for the newest update. Shown on the first visit after an update (it stays while you use the app, even when the page redraws), then never again. */
 export function whatsNewCard() {
-  if (seen() === APP_VERSION) return null;
+  if (dismissed || (seen() === APP_VERSION && !shownThisVisit)) return null;
+  shownThisVisit = true;
+  markSeen();
   const c = CHANGES[0];
   return h('section', { class: 'card whats-new', id: 'whats-new', 'aria-label': 'What is new' },
     h('p', { class: 'kicker' }, 'Updated to version ' + c.version),
     h('h3', null, c.title), items(c),
     h('div', { class: 'btn-row' },
-      h('button', { class: 'btn small', type: 'button', id: 'wn-ok', onclick: () => { markSeen(); render(); } }, 'Got it'),
+      h('button', { class: 'btn small', type: 'button', id: 'wn-ok', onclick: () => { dismissed = true; render(); } }, 'Got it'),
       h('a', { class: 'btn small secondary', href: '#profile' }, 'All updates')));
 }
 
