@@ -119,7 +119,7 @@ export function subjectsCard(st) {
 export function upcomingCard(st) {
   const t = today();
   const rows = upcoming(context.syllabus.phases, st, 5);
-  return h('section', { class: 'card w-upcoming', 'aria-label': 'Upcoming revisions' }, head('Upcoming Revisions', goBtn('#syllabus', 'View all')),
+  return h('section', { class: 'card w-upcoming', 'aria-label': 'Upcoming revisions' }, head('Upcoming Revisions', goBtn('#revisions', 'View all')),
     rows.length ? h('ul', { class: 'up-list' }, rows.map(r => {
       const label = dueLabel(r.state.due, t);
       return h('li', null, h('a', { href: '#t-' + r.topic.id },

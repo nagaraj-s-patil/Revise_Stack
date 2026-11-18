@@ -151,7 +151,9 @@ export function progressPage() {
   const weakest = weakestTopics(context.syllabus.phases, st, 5);
   const frag = document.createDocumentFragment();
   frag.appendChild(h('h2', null, 'Progress'));
-  frag.appendChild(h('a', { class: 'btn secondary', href: '#analysis', id: 'open-analysis' }, icon('analysis', 20), 'Open Analysis'));
+  frag.appendChild(h('div', { class: 'btn-row' },
+    h('a', { class: 'btn secondary', href: '#analysis', id: 'open-analysis' }, icon('analysis', 20), 'Open Analysis'),
+    h('a', { class: 'btn secondary', href: '#revisions', id: 'open-revisions' }, icon('calendar', 20), 'Revision dates and history')));
   frag.appendChild(overviewCard(st));
   frag.appendChild(readinessCard(st));
   frag.appendChild(learnFirstCard(st));

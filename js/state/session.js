@@ -19,6 +19,7 @@ export const ui = {
   addProjectOpen: false,   // the Add a project form is open
   q: '',               // topic search text (syllabus page)
   pgRange: 30,         // progress chart range in days
+  revTab: 'next',      // Revisions page tab
   pfEdit: false,        // Profile page is showing the edit form
   installDismissed: false
 };

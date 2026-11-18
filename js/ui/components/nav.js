@@ -8,7 +8,7 @@ import { EXTERNAL_LINKS } from '../../core/index.js';
 
 const SIDE = [
   ['today', 'Overview', 'home'], ['syllabus', 'Learning Path', 'path'], ['interview', 'Interview Prep', 'interview'],
-  ['projects', 'Projects', 'projects'], ['progress', 'Progress', 'progress'], ['analysis', 'Analysis', 'analysis'], ['backup', 'Backup', 'backup']
+  ['projects', 'Projects', 'projects'], ['progress', 'Progress', 'progress'], ['revisions', 'Revisions', 'calendar'], ['analysis', 'Analysis', 'analysis'], ['backup', 'Backup', 'backup']
 ];
 const TABS = [['today', 'Home', 'home'], ['syllabus', 'Learning', 'path'], ['interview', 'Interview', 'interview'], ['projects', 'Projects', 'projects'], ['progress', 'Progress', 'progress']];
 

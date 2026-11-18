@@ -1,7 +1,7 @@
 // Hash routes: #today (default), #syllabus, #interview, #projects, #progress, #analysis, #profile, #backup, #t-<topic id>.
 import { context } from '../state/context.js';
 
-const PAGES = ['syllabus', 'interview', 'projects', 'progress', 'analysis', 'profile', 'backup'];
+const PAGES = ['syllabus', 'interview', 'projects', 'progress', 'analysis', 'revisions', 'profile', 'backup'];
 
 export function route() {
   const hash = location.hash.slice(1);

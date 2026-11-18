@@ -1,8 +1,12 @@
 // What changed in the app, newest first. Add a new entry at the top for every update and raise APP_VERSION.
 // The Overview shows the newest entry once after an update; the Profile page keeps the full list.
-export const APP_VERSION = '2.6';
+export const APP_VERSION = '2.7';
 
 export const CHANGES = [
+  { version: '2.7', date: '2026-11-18', title: 'Revisions page', items: [
+    'New Revisions page: every topic with its last test date, score and next revision date, grouped as Overdue, Today and Coming up.',
+    'A History tab lists every test you saved by day, newest first, with the next revision date of each topic.'
+  ] },
   { version: '2.6', date: '2026-11-17', title: 'New welcome picture', items: [
     'The welcome banner on the Overview now shows your Nobita and Doraemon picture in a round frame.'
   ] },

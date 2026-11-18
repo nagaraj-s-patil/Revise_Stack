@@ -149,3 +149,4 @@ circle.ph-1, circle.ph-2, circle.ph-3, circle.ph-4, circle.ph-5, circle.ph-6 { b
 .hp-s2 { bottom: 8%; left: -8%; }
 @media (max-width: 639px) { .hero-pic { width: 112px; margin-right: 0; } .hp-s1 { width: 16px; height: 16px; } .hero-pic img { border-width: 4px; } }
 @media (prefers-reduced-motion: no-preference) { .hero-pic { animation: bob 6s ease-in-out infinite; } }
+.rev-stack { display: flex; flex-direction: column; gap: 12px; }
