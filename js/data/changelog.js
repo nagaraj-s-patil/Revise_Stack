@@ -1,8 +1,12 @@
 // What changed in the app, newest first. Add a new entry at the top for every update and raise APP_VERSION.
 // The Overview shows the newest entry once after an update; the Profile page keeps the full list.
-export const APP_VERSION = '2.8';
+export const APP_VERSION = '2.9';
 
 export const CHANGES = [
+  { version: '2.9', date: '2026-11-20', title: 'Learning Path, second design', items: [
+    'Topics are now cards in a grid, with a coloured top edge for their level. A Cards / List switch lets you go back to rows.',
+    'A jump bar at the top takes you to any phase. A closed phase shows a strip of small squares, one per topic, so you see its state at a glance.'
+  ] },
   { version: '2.8', date: '2026-11-20', title: 'New Learning Path', items: [
     'A progress ring, count chips and an Up next button at the top.',
     'Each phase is a card with its own colour, progress bar and status. Each topic has a status icon.'

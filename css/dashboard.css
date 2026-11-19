@@ -191,3 +191,36 @@ a.topic:hover > svg:last-child { color: var(--accent); }
 .card.lp-top { flex-direction: row; }
 circle.lv-untested { stroke: rgba(255, 255, 255, .85); }
 .lp-bar .syl-search input { border-color: var(--line); box-shadow: var(--shadow); }
+
+/* Learning Path v2: jump bar, phase sections, topic cards */
+.ph-nav { display: flex; gap: 8px; overflow-x: auto; padding: 4px 2px 8px; scrollbar-width: thin; position: sticky; top: 0; z-index: 5; background: var(--page-bg); }
+.ph-jump { display: inline-flex; align-items: center; gap: 8px; flex: none; min-height: 44px; padding: 4px 14px 4px 6px; border: 1px solid var(--line); border-radius: 99px; background: var(--surface); color: var(--fg); font: inherit; font-size: 13px; font-weight: 600; cursor: pointer; box-shadow: var(--shadow); }
+.ph-jump:hover { border-color: var(--accent-fill); }
+.ph-jump b { color: var(--muted); font-variant-numeric: tabular-nums; }
+.ph-dot { width: 30px; height: 30px; border-radius: 50%; display: grid; place-items: center; color: #fff; font-weight: 800; font-size: 13px; }
+.ph-jump-t { max-width: 150px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.phase-sec { background: var(--surface); border: 1px solid var(--line); border-radius: 20px; box-shadow: var(--shadow); overflow: hidden; scroll-margin-top: 70px; }
+.lp-phases { display: flex; flex-direction: column; gap: 16px; }
+@media (min-width: 1280px) { .lp-phases { display: flex; } }
+.ph-head { width: 100%; display: flex; align-items: center; gap: 14px; padding: 16px 18px; border: 0; text-align: left; cursor: pointer; font: inherit; color: var(--fg); min-height: 72px; }
+.ph-tint-1 { background: linear-gradient(100deg, #FFEBD8, var(--surface) 70%); } .ph-tint-2 { background: linear-gradient(100deg, #ECE6FF, var(--surface) 70%); }
+.ph-tint-3 { background: linear-gradient(100deg, #DDF5E6, var(--surface) 70%); } .ph-tint-4 { background: linear-gradient(100deg, #E0ECFF, var(--surface) 70%); }
+.ph-tint-5 { background: linear-gradient(100deg, #FFE0E7, var(--surface) 70%); } .ph-tint-6 { background: linear-gradient(100deg, #F6EBD0, var(--surface) 70%); } .ph-tint-0 { background: var(--surface-2); }
+.ph-bg-0 { background: #6B5E50; }
+.ph-chev { width: 32px; height: 32px; border-radius: 50%; display: grid; place-items: center; background: var(--surface); border: 1px solid var(--line); font-weight: 700; flex: none; }
+.ph-strip { display: flex; gap: 3px; flex-wrap: wrap; margin-top: 8px; }
+.ph-strip i { width: 10px; height: 10px; border-radius: 3px; background: var(--track); }
+.ph-strip .sd-done, .ph-strip .sd-strong { background: var(--strong); } .ph-strip .sd-ok { background: var(--ok); } .ph-strip .sd-weak { background: var(--weak); }
+.tgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; padding: 14px 16px 18px; }
+.tcard { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); border-top: 4px solid var(--track); color: inherit; text-decoration: none; min-height: 132px; transition: transform .15s ease, box-shadow .15s ease; }
+a.tcard:hover { transform: translateY(-3px); box-shadow: 0 12px 26px rgba(185, 58, 8, .14); border-color: var(--accent-fill); }
+.tcard.locked { opacity: .6; }
+.lvb-done, .lvb-strong { border-top-color: var(--strong); } .lvb-ok { border-top-color: var(--ok); } .lvb-weak { border-top-color: var(--weak); }
+.tc-top { display: flex; align-items: center; gap: 8px; }
+.tc-top .score { margin-left: auto; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tc-name { flex: 1; font-size: 15px; line-height: 1.3; overflow-wrap: anywhere; }
+.tc-foot { display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
+.phase-sec > .locknote { padding: 8px 18px 0; }
+.phase-sec > .topics { border-top: 1px solid var(--line); }
+@media (max-width: 639px) { .tgrid { grid-template-columns: 1fr 1fr; gap: 10px; padding: 12px; } .tcard { padding: 12px; min-height: 120px; } .ph-head { padding: 14px; } .ph-nav { margin: 0 -16px; padding: 4px 16px 8px; } }
+.lp-phases { align-items: stretch; }

@@ -12,7 +12,7 @@ import { donut } from '../ui/components/charts.js';
 // Which phases are open and which filter is chosen are remembered on this device, so a refresh puts you back where you were.
 const KEY = 'revise-stack-syllabus-view';
 const loadView = () => { try { return JSON.parse(localStorage.getItem(KEY)) || null; } catch (e) { return null; } };
-const saveView = () => { try { localStorage.setItem(KEY, JSON.stringify({ open: ui.open, filter: ui.filter })); } catch (e) { /* ignore */ } };
+const saveView = () => { try { localStorage.setItem(KEY, JSON.stringify({ open: ui.open, filter: ui.filter, view: ui.lpView })); } catch (e) { /* ignore */ } };
 
 const FILTERS = [['all', 'All'], ['weak', 'Weak'], ['due', 'Due'], ['untested', 'Untested'], ['must', '5★ Must know']];
 
@@ -48,6 +48,45 @@ function summaryCard(core, st, dueCount, next) {
         h('a', { class: 'btn small', href: '#t-' + next.topic.id }, 'Start', icon('arrow', 16))) : null));
 }
 
+const PH = n => ((n - 1) % 6) + 1;
+
+/** A topic as a card: coloured top edge by level, status icon, name, stars, score and level. */
+function topicCard(topic, s, locked) {
+  const body = [
+    h('span', { class: 'tc-top' },
+      h('span', { class: 'tp-ic tp-' + s.level, 'aria-hidden': 'true' }, icon(LEVEL_ICON[s.level] || 'play', 18)),
+      s.isDue ? h('span', { class: 'duepill' }, 'Due') : null,
+      s.last ? h('span', { class: 'score' }, s.last.score + '/' + s.last.total) : s.pre ? h('span', { class: 'score' }, s.pre.last.score + '/' + s.pre.last.total) : null),
+    h('strong', { class: 'tc-name' }, topic.name),
+    h('span', { class: 'tc-foot' }, stars(topic.importance), s.pre ? preBadge(s.pre) : badge(s.level))
+  ];
+  return locked ? h('div', { class: 'tcard locked lvb-' + s.level }, body) : h('a', { class: 'tcard lvb-' + s.level, href: '#t-' + topic.id }, body);
+}
+
+function topicsView(rows, st, locked) {
+  return ui.lpView === 'list'
+    ? h('ul', { class: 'topics' }, rows.map(t => topicRow(t, st[t.id], locked)))
+    : h('div', { class: 'tgrid' }, rows.map(t => topicCard(t, st[t.id], locked)));
+}
+
+function viewToggle() {
+  return h('div', { class: 'pills', role: 'group', 'aria-label': 'Layout' }, [['cards', 'Cards'], ['list', 'List']].map(([k, label]) =>
+    h('button', { class: 'pill', type: 'button', 'aria-pressed': String(ui.lpView === k), onclick: () => { ui.lpView = k; saveView(); render(); } }, label)));
+}
+
+/** Jump bar: one pill per phase with its progress, sticky under the top. */
+function phaseNav(phases, st) {
+  return h('nav', { class: 'ph-nav', 'aria-label': 'Jump to a phase' }, phases.map(phase => {
+    const core = phase.topics.filter(t => t.core);
+    if (!core.length) return null;
+    const done = core.filter(t => st[t.id].level === 'done').length;
+    return h('button', { class: 'ph-jump', type: 'button', onclick: () => {
+      const el = document.getElementById('phase-' + phase.id);
+      if (el) { if (!ui.open[phase.id]) { ui.open[phase.id] = true; saveView(); render(); } document.getElementById('phase-' + phase.id).scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+    } }, h('span', { class: 'ph-dot ph-bg-' + PH(phase.number) }, String(phase.number)), h('span', { class: 'ph-jump-t' }, phase.name), h('b', null, done + '/' + core.length));
+  }));
+}
+
 function searchBox() {
   const input = h('input', { type: 'search', id: 'syl-search', value: ui.q, placeholder: 'Search topics', 'aria-label': 'Search topics', autocomplete: 'off' });
   input.addEventListener('input', () => { ui.q = input.value.trim(); render(); const el = document.getElementById('syl-search'); if (el) { el.focus(); el.setSelectionRange(el.value.length, el.value.length); } });
@@ -74,7 +113,7 @@ export function syllabusPage() {
 
   frag.appendChild(h('h2', { class: 'lp-title' }, 'Learning Path'));
   frag.appendChild(summaryCard(core, st, dueCount, buildQueue(phases, st, today())[0]));
-  frag.appendChild(h('div', { class: 'lp-bar' }, searchBox(), filterChips()));
+  frag.appendChild(h('div', { class: 'lp-bar' }, searchBox(), filterChips(), viewToggle()));
   const list = h('div', { class: 'lp-phases' });
   frag.appendChild(list);
 
@@ -94,6 +133,7 @@ export function syllabusPage() {
     if (saved && saved.open && typeof saved.open === 'object') {
       ui.open = saved.open;
       if (FILTERS.some(f => f[0] === saved.filter)) ui.filter = saved.filter;
+      if (saved.view === 'list' || saved.view === 'cards') ui.lpView = saved.view;
     } else {
       ui.open = {};
       const next = phases.find(p => p.topics.some(t => t.core && st[t.id].level !== 'done'));
@@ -102,6 +142,7 @@ export function syllabusPage() {
   }
 
   let shown = 0;
+  frag.insertBefore(phaseNav(phases, st), list);
   for (const phase of phases) {
     const coreTopics = phase.topics.filter(t => t.core);
     if (!coreTopics.length) continue;
@@ -111,18 +152,20 @@ export function syllabusPage() {
     const doneCount = coreTopics.filter(t => st[t.id].level === 'done').length;
     const pshare = doneCount / coreTopics.length;
     const status = doneCount === coreTopics.length ? ['Complete', 'done'] : coreTopics.some(t => st[t.id].level !== 'untested') ? ['In progress', 'prog'] : ['Not started', 'none'];
-    const details = h('details', { class: 'phase' },
-      h('summary', null,
-        h('span', { class: 'ph-num ph-bg-' + (((phase.number - 1) % 6) + 1) }, String(phase.number)),
-        h('span', { class: 'phase-title' },
-          h('h3', null, phase.name),
-          h('small', null, doneCount + ' of ' + coreTopics.length + ' Done'),
-          h('span', { class: 'pbar ph-mini', role: 'img', 'aria-label': Math.round(pshare * 100) + '% of core topics Done' }, h('span', { style: 'width:' + Math.round(pshare * 100) + '%' }))),
-        h('span', { class: 'phase-right' }, h('span', { class: 'ph-status ps-' + status[1] }, status[0]))),
-      h('ul', { class: 'topics' }, rows.map(t => topicRow(t, st[t.id], false))));
-    details.open = ui.filter !== 'all' || !!ui.q || !!ui.open[phase.id];
-    details.addEventListener('toggle', () => { if (ui.filter === 'all') { ui.open[phase.id] = details.open; saveView(); } });
-    list.appendChild(details);
+    const isOpen = ui.filter !== 'all' || !!ui.q || !!ui.open[phase.id];
+    const head = h('button', { class: 'ph-head ph-tint-' + PH(phase.number), type: 'button', 'aria-expanded': String(isOpen), onclick: () => {
+      if (ui.filter !== 'all' || ui.q) return;
+      ui.open[phase.id] = !isOpen; saveView(); render();
+    } },
+      h('span', { class: 'ph-num ph-bg-' + PH(phase.number) }, String(phase.number)),
+      h('span', { class: 'phase-title' },
+        h('h3', null, phase.name),
+        h('small', null, doneCount + ' of ' + coreTopics.length + ' Done'),
+        h('span', { class: 'pbar ph-mini', role: 'img', 'aria-label': Math.round(pshare * 100) + '% of core topics Done' }, h('span', { style: 'width:' + Math.round(pshare * 100) + '%' })),
+        isOpen ? null : h('span', { class: 'ph-strip', 'aria-hidden': 'true' }, coreTopics.map(t => h('i', { class: 'sd-' + st[t.id].level })))),
+      h('span', { class: 'ph-status ps-' + status[1] }, status[0]),
+      h('span', { class: 'ph-chev', 'aria-hidden': 'true' }, isOpen ? '\u2212' : '+'));
+    list.appendChild(h('section', { class: 'phase-sec' + (isOpen ? ' open' : ''), id: 'phase-' + phase.id }, head, isOpen ? topicsView(rows, st, false) : null));
   }
 
   // topics that wait until the core is Strong or Done
@@ -131,22 +174,21 @@ export function syllabusPage() {
     .filter(x => x.rows.length);
   if (later.length) {
     const count = later.reduce((n, x) => n + x.rows.length, 0);
-    const details = h('details', { class: 'phase' },
-      h('summary', null,
-        h('span', { class: 'phase-title' },
-          h('h3', null, 'Later'),
-          h('small', null, count + ' topics · ' + (unlocked ? 'unlocked' : 'locked'))),
-        h('span', { class: 'phase-right' })));
-    if (!unlocked) {
-      details.appendChild(h('p', { class: 'locknote' },
-        'These unlock when every core topic is Strong or Done. Security, DevOps, microservices and the rest wait until the core is solid.'));
+    const isOpen = ui.filter !== 'all' || !!ui.open.later;
+    const head = h('button', { class: 'ph-head ph-tint-0', type: 'button', 'aria-expanded': String(isOpen), onclick: () => { ui.open.later = !isOpen; saveView(); render(); } },
+      h('span', { class: 'ph-num ph-bg-0' }, icon('clock', 20)),
+      h('span', { class: 'phase-title' }, h('h3', null, 'Later'), h('small', null, count + ' topics \u00b7 ' + (unlocked ? 'unlocked' : 'locked'))),
+      h('span', { class: 'ph-status ps-none' }, unlocked ? 'Unlocked' : 'Locked'),
+      h('span', { class: 'ph-chev', 'aria-hidden': 'true' }, isOpen ? '\u2212' : '+'));
+    const sec = h('section', { class: 'phase-sec' + (isOpen ? ' open' : ''), id: 'phase-later' }, head);
+    if (isOpen) {
+      if (!unlocked) sec.appendChild(h('p', { class: 'locknote' }, 'These unlock when every core topic is Strong or Done. Security, DevOps, microservices and the rest wait until the core is solid.'));
+      for (const x of later) {
+        sec.appendChild(h('p', { class: 'locknote', style: 'font-weight:600;color:var(--fg)' }, 'Phase ' + x.phase.number + ' \u00b7 ' + x.phase.name));
+        sec.appendChild(topicsView(x.rows, st, !unlocked));
+      }
     }
-    for (const x of later) {
-      details.appendChild(h('p', { class: 'locknote', style: 'font-weight:600;color:var(--fg)' }, 'Phase ' + x.phase.number + ' · ' + x.phase.name));
-      details.appendChild(h('ul', { class: 'topics' }, x.rows.map(t => topicRow(t, st[t.id], !unlocked))));
-    }
-    details.open = ui.filter !== 'all';
-    list.appendChild(details);
+    list.appendChild(sec);
     shown += count;
   }
 
