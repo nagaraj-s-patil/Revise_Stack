@@ -1,8 +1,12 @@
 // What changed in the app, newest first. Add a new entry at the top for every update and raise APP_VERSION.
 // The Overview shows the newest entry once after an update; the Profile page keeps the full list.
-export const APP_VERSION = '2.7';
+export const APP_VERSION = '2.8';
 
 export const CHANGES = [
+  { version: '2.8', date: '2026-11-20', title: 'New Learning Path', items: [
+    'A progress ring, count chips and an Up next button at the top.',
+    'Each phase is a card with its own colour, progress bar and status. Each topic has a status icon.'
+  ] },
   { version: '2.7', date: '2026-11-18', title: 'Revisions page', items: [
     'New Revisions page: every topic with its last test date, score and next revision date, grouped as Overdue, Today and Coming up.',
     'A History tab lists every test you saved by day, newest first, with the next revision date of each topic.'

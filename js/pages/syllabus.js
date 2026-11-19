@@ -1,11 +1,13 @@
 // Syllabus page: core progress, filter chips, phases with their topics, and the locked "Later" group.
 import { h } from '../ui/dom.js';
-import { allTopics, countLevels, isUnlocked } from '../core/index.js';
+import { allTopics, countLevels, isUnlocked, buildQueue, today } from '../core/index.js';
 import { context } from '../state/context.js';
 import { states } from '../state/selectors.js';
 import { ui } from '../state/session.js';
 import { render } from '../ui/render.js';
 import { badge, preBadge, stars } from '../ui/components/badge.js';
+import { icon } from '../ui/components/icons.js';
+import { donut } from '../ui/components/charts.js';
 
 // Which phases are open and which filter is chosen are remembered on this device, so a refresh puts you back where you were.
 const KEY = 'revise-stack-syllabus-view';
@@ -14,6 +16,8 @@ const saveView = () => { try { localStorage.setItem(KEY, JSON.stringify({ open: 
 
 const FILTERS = [['all', 'All'], ['weak', 'Weak'], ['due', 'Due'], ['untested', 'Untested'], ['must', '5★ Must know']];
 
+const LEVEL_ICON = { done: 'check', strong: 'check', ok: 'clock', weak: 'flame', untested: 'play' };
+
 function topicRow(topic, s, locked) {
   const meta = h('span', { class: 'meta' },
     s.isDue ? h('span', { class: 'duepill' }, 'Due') : null,
@@ -21,32 +25,27 @@ function topicRow(topic, s, locked) {
     s.pre ? preBadge(s.pre) : badge(s.level));
   const name = h('span', { class: 'name' }, topic.name,
     h('span', { class: 'tag', style: 'display:block' }, stars(topic.importance), topic.tag === 'UNSET' ? '' : '  ' + topic.tag));
+  const lead = h('span', { class: 'tp-ic tp-' + s.level, 'aria-hidden': 'true' }, icon(LEVEL_ICON[s.level] || 'play', 18));
   return h('li', null, locked
-    ? h('div', { class: 'topic locked' }, name, meta)
-    : h('a', { class: 'topic', href: '#t-' + topic.id }, name, meta));
+    ? h('div', { class: 'topic locked' }, lead, name, meta)
+    : h('a', { class: 'topic', href: '#t-' + topic.id }, lead, name, meta, icon('arrow', 16)));
 }
 
-function summaryCard(core, st, dueCount) {
+function summaryCard(core, st, dueCount, next) {
   const counts = countLevels(core, st);
-  const width = n => (n / core.length * 100).toFixed(2) + '%';
-  return h('section', { class: 'summary', 'aria-label': 'Core progress' },
-    h('div', { class: 'summary-head' },
+  const parts = [['done', 'Done'], ['strong', 'Strong'], ['ok', 'OK'], ['weak', 'Weak'], ['untested', 'Untested']].map(([k, label]) => ({ label, n: counts[k], cls: 'lv-' + k }));
+  const share = core.length ? Math.round(counts.done / core.length * 100) : 0;
+  return h('section', { class: 'lp-top card', 'aria-label': 'Core progress' },
+    donut(parts, share + '%', 'Done', counts.done + ' of ' + core.length + ' core topics Done'),
+    h('div', { class: 'lp-top-main' },
       h('h2', null, counts.done + ' of ' + core.length + ' core topics Done'),
-      h('span', { class: 'small muted' }, dueCount ? dueCount + ' due for revision' : 'Nothing due')),
-    h('div', {
-      class: 'bar', role: 'img',
-      'aria-label': counts.done + ' done, ' + counts.strong + ' strong, ' + counts.ok + ' OK, ' + counts.weak + ' weak, ' + counts.untested + ' untested'
-    },
-    h('span', { class: 'b-done', style: 'width:' + width(counts.done) }),
-    h('span', { class: 'b-strong', style: 'width:' + width(counts.strong) }),
-    h('span', { class: 'b-ok', style: 'width:' + width(counts.ok) }),
-    h('span', { class: 'b-weak', style: 'width:' + width(counts.weak) })),
-    h('div', { class: 'counts' },
-      h('span', null, h('b', null, counts.done), ' Done'),
-      h('span', null, h('b', null, counts.strong), ' Strong'),
-      h('span', null, h('b', null, counts.ok), ' OK'),
-      h('span', null, h('b', null, counts.weak), ' Weak'),
-      h('span', null, h('b', null, counts.untested), ' Untested')));
+      h('p', { class: 'small muted' }, dueCount ? dueCount + ' due for revision' : 'Nothing due for revision'),
+      h('div', { class: 'lp-counts' }, [['done', 'Done'], ['strong', 'Strong'], ['ok', 'OK'], ['weak', 'Weak'], ['untested', 'Untested']].map(([k, label]) =>
+        h('span', { class: 'lp-count lc-' + k }, h('b', null, counts[k]), ' ' + label))),
+      next ? h('div', { class: 'lp-next' },
+        h('span', { class: 'small muted' }, next.kind === 'revision' ? 'Revision due' : 'Up next'),
+        h('strong', null, next.topic.name),
+        h('a', { class: 'btn small', href: '#t-' + next.topic.id }, 'Start', icon('arrow', 16))) : null));
 }
 
 function searchBox() {
@@ -73,9 +72,11 @@ export function syllabusPage() {
   const unlocked = isUnlocked(phases, st);
   const frag = document.createDocumentFragment();
 
-  frag.appendChild(summaryCard(core, st, dueCount));
-  frag.appendChild(searchBox());
-  frag.appendChild(filterChips());
+  frag.appendChild(h('h2', { class: 'lp-title' }, 'Learning Path'));
+  frag.appendChild(summaryCard(core, st, dueCount, buildQueue(phases, st, today())[0]));
+  frag.appendChild(h('div', { class: 'lp-bar' }, searchBox(), filterChips()));
+  const list = h('div', { class: 'lp-phases' });
+  frag.appendChild(list);
 
   const matches = t => {
     const s = st[t.id];
@@ -108,16 +109,20 @@ export function syllabusPage() {
     if (!rows.length) continue;
     shown += rows.length;
     const doneCount = coreTopics.filter(t => st[t.id].level === 'done').length;
+    const pshare = doneCount / coreTopics.length;
+    const status = doneCount === coreTopics.length ? ['Complete', 'done'] : coreTopics.some(t => st[t.id].level !== 'untested') ? ['In progress', 'prog'] : ['Not started', 'none'];
     const details = h('details', { class: 'phase' },
       h('summary', null,
+        h('span', { class: 'ph-num ph-bg-' + (((phase.number - 1) % 6) + 1) }, String(phase.number)),
         h('span', { class: 'phase-title' },
-          h('h3', null, 'Phase ' + phase.number + ' · ' + phase.name),
-          h('small', null, doneCount + ' of ' + coreTopics.length + ' Done')),
-        h('span', { class: 'phase-right' })),
+          h('h3', null, phase.name),
+          h('small', null, doneCount + ' of ' + coreTopics.length + ' Done'),
+          h('span', { class: 'pbar ph-mini', role: 'img', 'aria-label': Math.round(pshare * 100) + '% of core topics Done' }, h('span', { style: 'width:' + Math.round(pshare * 100) + '%' }))),
+        h('span', { class: 'phase-right' }, h('span', { class: 'ph-status ps-' + status[1] }, status[0]))),
       h('ul', { class: 'topics' }, rows.map(t => topicRow(t, st[t.id], false))));
     details.open = ui.filter !== 'all' || !!ui.q || !!ui.open[phase.id];
     details.addEventListener('toggle', () => { if (ui.filter === 'all') { ui.open[phase.id] = details.open; saveView(); } });
-    frag.appendChild(details);
+    list.appendChild(details);
   }
 
   // topics that wait until the core is Strong or Done
@@ -141,7 +146,7 @@ export function syllabusPage() {
       details.appendChild(h('ul', { class: 'topics' }, x.rows.map(t => topicRow(t, st[t.id], !unlocked))));
     }
     details.open = ui.filter !== 'all';
-    frag.appendChild(details);
+    list.appendChild(details);
     shown += count;
   }
 
